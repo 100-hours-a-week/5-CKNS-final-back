@@ -54,30 +54,30 @@ jobs:
 
       # Beanstalk 플러그인을 사용
       # 미리 생성해둔 IAM 인증키를 사용
-#      - name: Beanstalk Deploy
-#        uses: einaregilsson/beanstalk-deploy@v20
-#        with:
-#          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          application_name: TravelDay
-#          environment_name: TravelDay-env
-#          region: ap-northeast-2
-#          deployment_package: Dockerrun.aws.json
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: TravelDay
+          environment_name: TravelDay-env
+          region: ap-northeast-2
+          deployment_package: .deploy/Dockerrun.aws.json
+
+#      - run: |
+#          mkdir -p ~/.aws
+#          echo "[eb-cli]
+#          aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" > ~/.aws/credentials
 #
-      - run: |
-          mkdir -p ~/.aws
-          echo "[eb-cli]
-          aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" > ~/.aws/credentials 
-          
-          cd .deploy
-          curl -O https://bootstrap.pypa.io/get-pip.py
-          python get-pip.py
-          pip install awsebcli --upgrade --user
-          eb --version
-          eb init
-          eb deploy
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ap-northeast-2
+#          cd .deploy
+#          curl -O https://bootstrap.pypa.io/get-pip.py
+#          python get-pip.py
+#          pip install awsebcli --upgrade --user
+#          eb --version
+#          eb init
+#          eb deploy
+#        env:
+#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          AWS_DEFAULT_REGION: ap-northeast-2
