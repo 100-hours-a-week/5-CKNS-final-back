@@ -75,6 +75,7 @@ jobs:
           python get-pip.py
           pip install awsebcli --upgrade --user
           eb --version
+          eb init
           eb deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
