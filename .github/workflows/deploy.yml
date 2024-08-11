@@ -38,8 +38,8 @@ jobs:
       - name: Docker build
         run: |
           docker build -t travelday .
-          docker tag travelday ss0ming/travelday:latest
-          docker push ss0ming/travelday:latest
+          docker tag travelday ghcr.io/ss0ming/travelday:latest
+          docker push ghcr.io/ss0ming/travelday:latest
         # 도커 이미지 빌드하고 push
 
       - name: List build directory
