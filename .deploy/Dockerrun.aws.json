@@ -1,5 +1,9 @@
 {
   "AWSEBDockerrunVersion": "1",
+  "Authentication": {
+    "Bucket": "elasticbeanstalk-ap-northeast-2-863518438560",
+    "Key": "ss0mingcfg"
+  },
   "Image": {
     "Name": "ghcr.io/ss0ming/travelday:latest",
     "Update": "true"
