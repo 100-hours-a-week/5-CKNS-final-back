@@ -63,6 +63,7 @@ jobs:
           environment_name: TravelDay-env
           region: ap-northeast-2
           deployment_package: .deploy/Dockerrun.aws.json
+          version_label: ${{github.run_id}}
 
 #      - run: |
 #          mkdir -p ~/.aws
