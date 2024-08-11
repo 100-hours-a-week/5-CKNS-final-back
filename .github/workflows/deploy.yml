@@ -70,7 +70,6 @@ jobs:
           aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" > ~/.aws/credentials 
           
-          cd deploy
           curl -O https://bootstrap.pypa.io/get-pip.py
           python get-pip.py --use
           pip install awsebcli --upgrade --user
