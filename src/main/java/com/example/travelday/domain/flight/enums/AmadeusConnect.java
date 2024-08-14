@@ -1,4 +1,4 @@
-package com.example.travelday.domain.flight.service;
+package com.example.travelday.domain.flight.enums;
 
 import com.amadeus.Amadeus;
 import com.amadeus.Params;
