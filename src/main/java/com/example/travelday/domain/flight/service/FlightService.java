@@ -36,11 +36,11 @@ public class FlightService {
             }
         }
 
-        // Redis에 데이터가 없거나 문제가 있을 경우 Amadeus API 호출
+        // Redis 데이터가 없거나 문제가 있을 경우 Amadeus API 호출
         FlightOfferSearch[] flightOffers = amadeusConnect.flights(origin, destination, departDate, adults, returnDate);
 
         try {
-            // Redis에 데이터 저장 (TTL 설정)
+            // Redis 데이터 저장 (TTL 설정)
             String jsonData = objectMapper.writeValueAsString(flightOffers);
             valueOperations.set(redisKey, jsonData, Duration.ofSeconds(redisTTL));
         } catch (JsonProcessingException e) {
