@@ -7,6 +7,9 @@
 
 application-my.yml
 
+# Ignore TravelDayFirebaseService.json
+src/main/resources/properties/TravelDayFirebaseService.json
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
