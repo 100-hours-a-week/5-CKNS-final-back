@@ -39,4 +39,10 @@ dependencies {
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // amadeus
+    implementation 'com.amadeus:amadeus-java:9.0.0'
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
