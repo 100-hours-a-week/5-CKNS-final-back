@@ -26,6 +26,29 @@ jobs:
         run: ./gradlew clean build
         # Gradle을 사용하여 프로젝트를 빌드
 
+      - name: Create MySQL configuration file
+        run: |
+          cd ./src/main/resources
+          touch mysql-config.yml
+          echo "mysql:" > mysql-config.yml
+          echo "  host: ${{ secrets.MYSQL_HOST }}" >> mysql-config.yml
+          echo "  port: ${{ secrets.MYSQL_PORT }}" >> mysql-config.yml
+          echo "  database: ${{ secrets.MYSQL_DATABASE }}" >> mysql-config.yml
+          echo "  username: ${{ secrets.MYSQL_USERNAME }}" >> mysql-config.yml
+          echo "  password: ${{ secrets.MYSQL_PASSWORD }}" >> mysql-config.yml
+        shell: bash
+        # MySQL 연결 정보를 담은 yaml 파일 생성
+
+#      - name: Create Redis configuration file
+#        run: |
+#          cd ./src/main/resources
+#          touch redis-config.yml
+#          echo "redis:" > redis-config.yml
+#          echo "  host: ${{ secrets.REDIS_HOST }}" >> redis-config.yml
+#          echo "  port: ${{ secrets.REDIS_PORT }}" >> redis-config.yml
+#          echo "  password: ${{ secrets.REDIS_PASSWORD }}" >> redis-config.yml
+#        shell: bash
+#        # Redis 연결 정보를 담은 yaml 파일 생성
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
@@ -33,7 +56,6 @@ jobs:
           registry: ghcr.io
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}
-
 
       - name: Docker build
         run: |
@@ -44,16 +66,8 @@ jobs:
 
       - name: List build directory
         run: ls -al build/libs
-#
-#      - name: Upload build artifact
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: build-artifact
-#          path: build/libs/TravelDay-0.0.1-SNAPSHOT.jar
-#        # 빌드된 JAR 파일을 아티팩트로 업로드함
+        # 빌드 디렉터리 내용을 나열
 
-      # Beanstalk 플러그인을 사용
-      # 미리 생성해둔 IAM 인증키를 사용
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@v20
         with:
@@ -64,21 +78,4 @@ jobs:
           region: ap-northeast-2
           deployment_package: .deploy/Dockerrun.aws.json
           version_label: ${{github.run_id}}
-
-#      - run: |
-#          mkdir -p ~/.aws
-#          echo "[eb-cli]
-#          aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" > ~/.aws/credentials
-#
-#          cd .deploy
-#          curl -O https://bootstrap.pypa.io/get-pip.py
-#          python get-pip.py
-#          pip install awsebcli --upgrade --user
-#          eb --version
-#          eb init
-#          eb deploy
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          AWS_DEFAULT_REGION: ap-northeast-2
+        # AWS Beanstalk에 배포

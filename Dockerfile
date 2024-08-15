@@ -1,6 +1,37 @@
-# 스프링 부트 프로젝트 빌드 및 jar 파일 생성
+# Use a base image with JDK 17 for building the project
+FROM openjdk:17-jdk-slim as builder
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the Gradle wrapper and other necessary files
+COPY gradlew gradlew
+COPY gradle gradle
+COPY build.gradle build.gradle
+COPY settings.gradle settings.gradle
+COPY src src
+
+# Grant execute permission to the Gradle wrapper
+RUN chmod +x gradlew
+
+# Build the project and create the JAR file
+RUN ./gradlew clean build
+
+# Use a minimal base image to run the application
 FROM openjdk:17-jdk-slim
-CMD ["./gradlew", "clean", "build"]
+
+# Set an argument for the JAR file path (built in the previous stage)
 ARG JAR_FILE_PATH=build/libs/TravelDay-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE_PATH} app.jar
+
+# Copy the JAR file from the previous build stage
+COPY --from=builder /app/${JAR_FILE_PATH} app.jar
+
+# Copy the configuration files into the image
+COPY src/main/resources/mysql-config.yml /app/config/
+COPY src/main/resources/redis-config.yml /app/config/
+
+# Expose the port your application runs on
+EXPOSE 8080
+
+# Set the entry point to run the Java application
 ENTRYPOINT ["java", "-jar", "app.jar"]
