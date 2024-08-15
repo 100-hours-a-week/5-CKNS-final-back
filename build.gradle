@@ -42,7 +42,6 @@ dependencies {
 
     // amadeus
     implementation 'com.amadeus:amadeus-java:9.0.0'
-    implementation 'com.google.code.gson:gson:2.8.9'
 
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
