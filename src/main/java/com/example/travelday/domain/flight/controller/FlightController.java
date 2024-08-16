@@ -19,11 +19,6 @@ public class FlightController {
 
     private final FlightService flightService;
 
-    @GetMapping("/")
-    public String index() {
-        return "Hello, World!";
-    }
-
     @GetMapping("/flights")
     public ResponseEntity<ApiResponseEntity<Object>> getFlightOffers(@RequestParam(required=true) String origin,
                                                         @RequestParam(required=true) String destination,
