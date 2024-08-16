@@ -26,10 +26,6 @@ ARG JAR_FILE_PATH=build/libs/TravelDay-0.0.1-SNAPSHOT.jar
 # Copy the JAR file from the previous build stage
 COPY --from=builder /app/${JAR_FILE_PATH} app.jar
 
-# Copy the configuration files into the image
-COPY src/main/resources/mysql-config.yml /app/config/
-#COPY src/main/resources/redis-config.yml /app/config/
-
 # Expose the port your application runs on
 EXPOSE 8080
 

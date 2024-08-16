@@ -22,21 +22,66 @@ jobs:
         run: chmod +x gradlew
         # Gradle wrapper 파일에 실행 권한을 부여함
 
+#      - name: Build with Gradle
+#        run: ./gradlew clean build
+#        # Gradle을 사용하여 프로젝트를 빌드
+
+#      - name: Create application-my.yml file
+#        run: |
+#          cd ./src/main/resources
+#          touch application-my.yml
+#          echo "amadeus:" > application-my.yml
+#          echo "  api:" >> application-my.yml
+#          echo "    key: ${{ secrets.AMADEUS_API_KEY }}" >> application-my.yml
+#          echo "    secret: ${{ secrets.AMADEUS_API_SECRET }}" >> application-my.yml
+#          echo "spring:" >> application-my.yml
+#          echo "  data:" >> application-my.yml
+#          echo "    redis:" >> application-my.yml
+#          echo "      host: ${{ secrets.REDIS_HOST }}" >> application-my.yml
+#          echo "      port: ${{ secrets.REDIS_PORT }}" >> application-my.yml
+#          echo "      password: ${{ secrets.REDIS_PASSWORD }}" >> application-my.yml
+#          echo "      timeout: 89000" >> application-my.yml
+#        shell: bash
+        # application-my.yml 파일을 생성하고 설정을 삽입
+
+      - name: Create application-my.yml file
+        run: |
+          cd ./src/main/resources
+          touch application-my.yml
+          echo "amadeus:" > application-my.yml
+          echo "  api:" >> application-my.yml
+          echo "    key: ${{ secrets.AMADEUS_API_KEY }}" >> application-my.yml
+          echo "    secret: ${{ secrets.AMADEUS_API_SECRET }}" >> application-my.yml
+          echo "spring:" >> application-my.yml
+          echo "  data:" >> application-my.yml
+          echo "    redis:" >> application-my.yml
+          echo "      host: ${{ secrets.REDIS_HOST }}" >> application-my.yml
+          echo "      port: ${{ secrets.REDIS_PORT }}" >> application-my.yml
+          echo "      password: ${{ secrets.REDIS_PASSWORD }}" >> application-my.yml
+          echo "      timeout: 89000" >> application-my.yml
+          echo "  datasource:" >> application-my.yml
+          echo "    url: jdbc:mysql://${{ secrets.MYSQL_HOST }}:${{ secrets.MYSQL_PORT }}/${{ secrets.MYSQL_DATABASE }}" >> application-my.yml
+          echo "    username: ${{ secrets.MYSQL_USERNAME }}" >> application-my.yml
+          echo "    password: ${{ secrets.MYSQL_PASSWORD }}" >> application-my.yml
+          echo "    driver-class-name: com.mysql.cj.jdbc.Driver" >> application-my.yml
+        shell: bash
+
       - name: Build with Gradle
         run: ./gradlew clean build
         # Gradle을 사용하여 프로젝트를 빌드
 
-      - name: Create MySQL configuration file
-        run: |
-          cd ./src/main/resources
-          touch mysql-config.yml
-          echo "mysql:" > mysql-config.yml
-          echo "  host: ${{ secrets.MYSQL_HOST }}" >> mysql-config.yml
-          echo "  port: ${{ secrets.MYSQL_PORT }}" >> mysql-config.yml
-          echo "  database: ${{ secrets.MYSQL_DATABASE }}" >> mysql-config.yml
-          echo "  username: ${{ secrets.MYSQL_USERNAME }}" >> mysql-config.yml
-          echo "  password: ${{ secrets.MYSQL_PASSWORD }}" >> mysql-config.yml
-        shell: bash
+#      - name: Create MySQL configuration file
+#        run: |
+#          cd ./src/main/resources
+#          touch mysql-config.yml0
+#          echo "mysql:" > mysql-config.yml
+#          echo "  host: ${{ secrets.MYSQL_HOST }}" >> mysql-config.yml
+#          echo "  port: ${{ secrets.MYSQL_PORT }}" >> mysql-config.yml
+#          echo "  database: ${{ secrets.MYSQL_DATABASE }}" >> mysql-config.yml
+#          echo "  username: ${{ secrets.MYSQL_USERNAME }}" >> mysql-config.yml
+#          echo "  password: ${{ secrets.MYSQL_PASSWORD }}" >> mysql-config.yml
+#        shell: bash
+
         # MySQL 연결 정보를 담은 yaml 파일 생성
 
 #      - name: Create Redis configuration file
