@@ -4,6 +4,7 @@ import com.example.travelday.domain.user.entity.User;
 import com.example.travelday.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,4 +39,20 @@ public class Invitation extends BaseTimeEntity {
 
     @Column(name = "update_At")
     private LocalDateTime updatedAt;
+
+    @Builder
+    public Invitation(TravelRoom travelRoom, User inviter, User invitee, InvitationStatus status) {
+        this.travelRoom = travelRoom;
+        this.inviter = inviter;
+        this.invitee = invitee;
+        this.status = status;
+    }
+
+    public void reject() {
+        this.status = InvitationStatus.REJECTED;
+    }
+
+    public void accept() {
+        this.status = InvitationStatus.ACCEPTED;
+    }
 }
