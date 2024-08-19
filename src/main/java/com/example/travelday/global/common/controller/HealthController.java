@@ -17,7 +17,6 @@ public class HealthController {
     public record HealthResponse(
         String message
     ) {
-
         public static HealthResponse of() {
             return new HealthResponse("ok");
         }
