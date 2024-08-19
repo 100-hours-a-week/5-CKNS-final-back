@@ -6,8 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.util.List;
+
+@EnableRedisRepositories
 @Configuration
 public class RedisConfig {
 
@@ -26,27 +30,18 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, String> redisTemplate(LettuceConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-
-        // 일반적인 key:value의 경우 시리얼라이저
+    public RedisTemplate<String, List<Object>> redisTemplate() {
+        RedisTemplate<String, List<Object>> redisTemplate = new RedisTemplate<>();
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
-
-        // Hash를 사용할 경우 시리얼라이저
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new StringRedisSerializer());
-
-        // 모든 경우
-        redisTemplate.setDefaultSerializer(new StringRedisSerializer());
-
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
         return redisTemplate;
     }
 
     @Bean
-    public ValueOperations<String, String> valueOperations(RedisTemplate<String, String> redisTemplate) {
+    public ValueOperations<String, List<Object>> valueOperations(RedisTemplate<String, List<Object>> redisTemplate) {
         return redisTemplate.opsForValue();
     }
-
 }

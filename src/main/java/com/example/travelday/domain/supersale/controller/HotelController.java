@@ -1,7 +1,7 @@
-package com.example.travelday.domain.hotel.controller;
+package com.example.travelday.domain.supersale.controller;
 
-import com.example.travelday.domain.hotel.dto.response.HotelResDto;
-import com.example.travelday.domain.hotel.service.HotelService;
+import com.example.travelday.domain.supersale.dto.response.HotelResDto;
+import com.example.travelday.domain.supersale.service.HotelService;
 import com.example.travelday.global.common.ApiResponseEntity;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
