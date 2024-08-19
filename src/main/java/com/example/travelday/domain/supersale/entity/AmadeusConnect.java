@@ -1,8 +1,9 @@
-package com.example.travelday.domain.hotel.enums;
+package com.example.travelday.domain.supersale.entity;
 
 import com.amadeus.Amadeus;
 import com.amadeus.Params;
 import com.amadeus.exceptions.ResponseException;
+import com.amadeus.resources.FlightOfferSearch;
 import com.amadeus.resources.Hotel;
 import com.amadeus.resources.HotelOfferSearch;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,11 +23,6 @@ public class AmadeusConnect {
                 .build();
     }
 
-    public Hotel[] location(String cityCode) throws ResponseException {
-        return amadeus.referenceData.locations.hotels.byCity.get(Params
-                .with("cityCode", cityCode));
-    }
-
     public Hotel[] hotelsByGeocode(double latitude, double longitude) throws ResponseException {
         return amadeus.referenceData.locations.hotels.byGeocode.get(Params
                 .with("latitude", latitude)
@@ -36,5 +32,15 @@ public class AmadeusConnect {
     public HotelOfferSearch[] hotelOffers(List<String> hotelIds) throws ResponseException {
         return amadeus.shopping.hotelOffersSearch.get(Params
                 .with("hotelIds", hotelIds));
+    }
+
+    public FlightOfferSearch[] flights(String origin, String destination, String departDate, String adults, String returnDate) throws ResponseException {
+        return amadeus.shopping.flightOffersSearch.get(
+                Params.with("originLocationCode", origin)
+                        .and("destinationLocationCode", destination)
+                        .and("departureDate", departDate)
+                        .and("returnDate", returnDate)
+                        .and("adults", adults)
+                        .and("max", 3));
     }
 }

@@ -5,5 +5,7 @@ spring:
     active: local
     include:
         - my
+#        - mysql
+
 
 
