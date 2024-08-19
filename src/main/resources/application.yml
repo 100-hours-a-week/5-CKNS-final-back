@@ -3,7 +3,9 @@ spring:
     name: TravelDay
   profiles:
     active: local
-    include: my
+    include:
+        - my
+#        - mysql
 
 
 
