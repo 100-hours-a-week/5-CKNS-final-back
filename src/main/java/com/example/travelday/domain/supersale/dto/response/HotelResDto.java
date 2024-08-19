@@ -1,4 +1,4 @@
-package com.example.travelday.domain.hotel.dto.response;
+package com.example.travelday.domain.supersale.dto.response;
 
 import com.amadeus.resources.HotelOfferSearch;
 import lombok.Builder;
