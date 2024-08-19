@@ -64,6 +64,13 @@ jobs:
           echo "    username: ${{ secrets.MYSQL_USERNAME }}" >> application-my.yml
           echo "    password: ${{ secrets.MYSQL_PASSWORD }}" >> application-my.yml
           echo "    driver-class-name: com.mysql.cj.jdbc.Driver" >> application-my.yml
+          echo "security:" >> application-my.yml
+          echo "  oauth2:" >> application-my.yml
+          echo "    client:" >> application-my.yml
+          echo "      registration:" >> application-my.yml
+          echo "        kakao:" >> application-my.yml
+          echo "          client-id: ${{ secrets.KAKAO_CLIENT_ID }}" >> application-my.yml
+          echo "          client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}" >> application-my.yml
         shell: bash
 
       - name: Build with Gradle
