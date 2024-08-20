@@ -71,6 +71,7 @@ jobs:
           echo "        kakao:" >> application-my.yml
           echo "          client-id: ${{ secrets.KAKAO_CLIENT_ID }}" >> application-my.yml
           echo "          client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}" >> application-my.yml
+          echo "ClientURL: "${{ secrets.FRONT_DEPLOY_URL }}" >> application-my.yml
         shell: bash
 
       - name: Build with Gradle
@@ -129,5 +130,5 @@ jobs:
           environment_name: TravelDay-env
           region: ap-northeast-2
           deployment_package: .deploy/Dockerrun.aws.json
-          version_label: ${{github.run_id}}-{{github.sha}}
+          version_label: ${{github.run_id}}-${{github.sha}}
         # AWS Beanstalk에 배포
