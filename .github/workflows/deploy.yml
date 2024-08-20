@@ -71,7 +71,7 @@ jobs:
           echo "        kakao:" >> application-my.yml
           echo "          client-id: ${{ secrets.KAKAO_CLIENT_ID }}" >> application-my.yml
           echo "          client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}" >> application-my.yml
-          echo "ClientURL: "${{ secrets.FRONT_DEPLOY_URL }}" >> application-my.yml
+          echo "ClientURL: ${{ secrets.FRONT_DEPLOY_URL }}" >> application-my.yml
         shell: bash
 
       - name: Build with Gradle
