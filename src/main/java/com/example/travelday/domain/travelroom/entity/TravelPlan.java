@@ -13,7 +13,7 @@ public class TravelPlan {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "travel_plan_id")
+        @Column(name = "id")
         private Long id;
 
         @JoinColumn(name = "travel_room_id", nullable = false)

@@ -4,7 +4,7 @@ import com.amadeus.exceptions.ResponseException;
 import com.amadeus.resources.Hotel;
 import com.amadeus.resources.HotelOfferSearch;
 import com.example.travelday.domain.supersale.dto.response.HotelResDto;
-import com.example.travelday.domain.supersale.entity.AmadeusConnect;
+import com.example.travelday.domain.supersale.utils.AmadeusConnect;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
