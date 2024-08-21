@@ -1,14 +1,13 @@
 package com.example.travelday.domain.travelroom.entity;
 
 import com.example.travelday.domain.auth.entity.Member;
+import com.example.travelday.domain.travelroom.enums.InvitationStatus;
 import com.example.travelday.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -36,9 +35,6 @@ public class Invitation extends BaseTimeEntity {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private InvitationStatus status;
-
-    @Column(name = "update_At")
-    private LocalDateTime updatedAt;
 
     @Builder
     public Invitation(TravelRoom travelRoom, Member inviter, Member invitee, InvitationStatus status) {
