@@ -14,7 +14,7 @@ public class UserTravelRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_travel_room_id")
+    @Column(name = "id")
     private Long id;
 
     @JoinColumn(name = "user_id", nullable = false)
@@ -25,4 +25,10 @@ public class UserTravelRoom {
     @ManyToOne(fetch = FetchType.LAZY)
     private TravelRoom travelRoom;
 
+    public static UserTravelRoom create(TravelRoom savedTravelRoom, Member member) {
+        UserTravelRoom userTravelRoom = new UserTravelRoom();
+        userTravelRoom.member = member;
+        userTravelRoom.travelRoom = savedTravelRoom;
+        return userTravelRoom;
+    }
 }
