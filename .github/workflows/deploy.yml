@@ -46,6 +46,7 @@ jobs:
 
       - name: Create application-my.yml file
         run: |
+          mkdir -p ./src/main/resources
           cd ./src/main/resources
           touch application-my.yml
           echo "amadeus:" > application-my.yml
