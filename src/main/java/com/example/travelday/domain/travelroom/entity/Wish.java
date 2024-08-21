@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "wishlist")
+@Table(name = "wish")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Wishlist {
+public class Wish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
