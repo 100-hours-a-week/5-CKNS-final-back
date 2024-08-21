@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: TravelDay
+  profiles:
+    active: local
+    include:
+        - my
+#        - mysql
+
+
+
