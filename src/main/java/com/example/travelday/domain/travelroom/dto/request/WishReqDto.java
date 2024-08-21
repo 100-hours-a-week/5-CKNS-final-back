@@ -1,17 +1,19 @@
 package com.example.travelday.domain.travelroom.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
 public record WishReqDto(
-        @NotBlank(message = "장소 이름이 없습니다.")
+
+        @NotBlank
         String name,
 
-        @NotBlank(message = "위도가 없습니다.")
+        @NotNull
         double latitude,
 
-        @NotBlank(message = "경도가 없습니다.")
+        @NotNull
         double longitude
 ) {
 }

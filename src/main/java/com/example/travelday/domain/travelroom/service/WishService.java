@@ -8,18 +8,22 @@ import com.example.travelday.domain.travelroom.repository.TravelRoomRepository;
 import com.example.travelday.domain.travelroom.repository.WishRepository;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class WishService {
 
-    WishRepository wishRepository;
+    private final WishRepository wishRepository;
 
-    TravelRoomRepository travelRoomRepository;
+    private final TravelRoomRepository travelRoomRepository;
 
     @Transactional(readOnly = true)
     public List<WishlistResDto> getWishlist(final Long travelRoomId) {
@@ -35,9 +39,10 @@ public class WishService {
 
     @Transactional
     public void addWish(final Long travelRoomId, WishReqDto wishReqDto) {
-        TravelRoom travelRoom = travelRoomRepository.findRoomById(travelRoomId)
-                .orElseThrow(() -> new CustomException(ErrorCode.TRAVELROOM_NOT_FOUND));
-
+        log.info("============= 서비스 ===============");
+        TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+        log.info(String.valueOf(travelRoom));
         Wish wishlist = Wish.addOf(wishReqDto, travelRoom);
         wishRepository.save(wishlist);
     }
