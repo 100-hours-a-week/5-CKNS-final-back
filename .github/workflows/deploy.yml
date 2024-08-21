@@ -26,7 +26,6 @@ jobs:
 #        run: ./gradlew clean build
 #        # Gradle을 사용하여 프로젝트를 빌드
 
-
       - name: Create application-my.yml file
         run: |
           mkdir -p ./src/main/resources
@@ -50,7 +49,7 @@ jobs:
           echo "      host: ${{ secrets.REDIS_HOST }}" >> application-my.yml
           echo "      port: ${{ secrets.REDIS_PORT }}" >> application-my.yml
           echo "      password: ${{ secrets.REDIS_PASSWORD }}" >> application-my.yml
-          echo "      timeout: 89000" >> application-my.yml
+          echo "      timeout: 86400" >> application-my.yml
           echo "  security:" >> application-my.yml
           echo "    oauth2:" >> application-my.yml
           echo "      client:" >> application-my.yml
