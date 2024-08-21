@@ -18,7 +18,7 @@ public class TravelRoom extends BaseTimeEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "travel_room_name")
+    @Column(name = "name")
     private String name;
 
     public static TravelRoom create(String name) {

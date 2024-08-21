@@ -34,13 +34,13 @@ public class Member extends BaseTimeEntity {
     private SocialType socialType;
 
     @CreatedDate
-    @Column(name = "reg_date", updatable = false, nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "created_at", updatable = false, nullable = false, columnDefinition = "DATETIME")
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Comment("등록일자")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "upd_date", nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME")
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Comment("수정일자")
     private LocalDateTime updatedAt;
