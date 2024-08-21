@@ -27,6 +27,7 @@ public enum ErrorCode {
     // user error
     NICKNAME_ALREADY_TAKEN(HttpStatus.CONFLICT, "NICKNAME-001", "이미 사용 중인 닉네임입니다."),
     NICKNAME_CREATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "NICKNAME-005", "닉네임 생성에 실패했습니다."),
+    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "TR001", "존재하지 않는 회원입니다."),
 
     //notification error
     NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "NOTIFICATION-001", "알림을 찾을 수 없습니다."),
