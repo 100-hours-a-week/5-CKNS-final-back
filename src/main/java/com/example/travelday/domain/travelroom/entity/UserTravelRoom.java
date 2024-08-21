@@ -1,6 +1,6 @@
 package com.example.travelday.domain.travelroom.entity;
 
-import com.example.travelday.domain.user.entity.User;
+import com.example.travelday.domain.auth.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,7 +19,7 @@ public class UserTravelRoom {
 
     @JoinColumn(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private Member member;
 
     @JoinColumn(name = "travel_room_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
