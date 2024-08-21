@@ -21,6 +21,10 @@ public enum ErrorCode {
     // flight error
     FAIL_TO_GET_FLIGHT_INFO(HttpStatus.INTERNAL_SERVER_ERROR,"FL001", "항공권 오류"),
 
+    // travel room error
+    TRAVELROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, "TR001", "존재하지 않는 여행방입니다."),
+
+    // 서버 오류
     // travelRoom error,
     TRAVEL_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "TR001", "여행방을 찾을 수 없습니다."),
 
