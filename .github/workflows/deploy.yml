@@ -110,4 +110,5 @@ jobs:
           region: ap-northeast-2
           deployment_package: .deploy/Dockerrun.aws.json
           version_label: ${{github.run_id}}-${{github.sha}}
+          use_existing_version_if_available : true
         # AWS Beanstalk에 배포
