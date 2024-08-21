@@ -69,8 +69,6 @@ jobs:
           echo "          token-uri: https://kauth.kakao.com/oauth/token" >> application-my.yml
           echo "          user-info-uri: https://kapi.kakao.com/v2/user/me" >> application-my.yml
           echo "          user-name-attribute: id" >> application-my.yml
-          echo "oauth2:" >> application-my.yml
-          echo "  redirect-url: https://www.thetravelday.co.kr/" >> application-my.yml
           echo "jwt:" >> application-my.yml
           echo "  secret: ${{ secrets.JWT_SECRET }}" >> application-my.yml
           echo "  access-token-expiration: 1800 # 30분" >> application-my.yml
