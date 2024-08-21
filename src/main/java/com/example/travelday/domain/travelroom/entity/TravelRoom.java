@@ -15,10 +15,15 @@ public class TravelRoom extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "travel_room_id")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "travel_room_name")
     private String name;
 
+    public static TravelRoom create(String name) {
+        TravelRoom travelRoom = new TravelRoom();
+        travelRoom.name = name;
+        return travelRoom;
+    }
 }

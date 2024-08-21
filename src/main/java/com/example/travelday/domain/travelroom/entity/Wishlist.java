@@ -13,7 +13,7 @@ public class Wishlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "wishlist_id")
+    @Column(name = "id")
     private Long id;
 
     @JoinColumn(name = "travelroom_id", nullable = false)

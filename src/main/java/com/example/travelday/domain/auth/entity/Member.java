@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class Member extends BaseTimeEntity {
 
     @Id
-    @Column(name = "user_id", length = 50, nullable = false, updatable = false)
+    @Column(name = "id", length = 50, nullable = false, updatable = false)
     @Comment("아이디")
     private String userId;
 
