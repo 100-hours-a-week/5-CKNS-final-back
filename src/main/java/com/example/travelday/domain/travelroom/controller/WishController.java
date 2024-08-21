@@ -1,7 +1,7 @@
 package com.example.travelday.domain.travelroom.controller;
 
 import com.example.travelday.domain.travelroom.dto.request.WishReqDto;
-import com.example.travelday.domain.travelroom.dto.response.WishlistResDto;
+import com.example.travelday.domain.travelroom.dto.response.WishResDto;
 import com.example.travelday.domain.travelroom.service.WishService;
 import com.example.travelday.global.common.ApiResponseEntity;
 import com.example.travelday.global.common.ResponseText;
@@ -25,7 +25,7 @@ public class WishController {
      * 위시리스트 조회
      */
     @GetMapping()
-    public ResponseEntity<ApiResponseEntity<List<WishlistResDto>>> getWishlist(@PathVariable Long travelRoomId) {
+    public ResponseEntity<ApiResponseEntity<List<WishResDto>>> getWishlist(@PathVariable Long travelRoomId) {
         return ResponseEntity.ok(ApiResponseEntity.of(wishService.getWishlist(travelRoomId)));
     }
 

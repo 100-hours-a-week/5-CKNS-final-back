@@ -1,7 +1,7 @@
 package com.example.travelday.domain.travelroom.service;
 
 import com.example.travelday.domain.travelroom.dto.request.WishReqDto;
-import com.example.travelday.domain.travelroom.dto.response.WishlistResDto;
+import com.example.travelday.domain.travelroom.dto.response.WishResDto;
 import com.example.travelday.domain.travelroom.entity.TravelRoom;
 import com.example.travelday.domain.travelroom.entity.Wish;
 import com.example.travelday.domain.travelroom.repository.TravelRoomRepository;
@@ -26,25 +26,24 @@ public class WishService {
     private final TravelRoomRepository travelRoomRepository;
 
     @Transactional(readOnly = true)
-    public List<WishlistResDto> getWishlist(final Long travelRoomId) {
+    public List<WishResDto> getWishlist(final Long travelRoomId) {
         List<Wish> wishList = wishRepository.findAllByTravelRoomId(travelRoomId);
-        List<WishlistResDto> wishlistResDtos = new ArrayList<>();
+        List<WishResDto> wishResDtos = new ArrayList<>();
 
         for (Wish wish : wishList) {
-            wishlistResDtos.add(WishlistResDto.of(wish));
+            wishResDtos.add(WishResDto.of(wish));
         }
 
-        return wishlistResDtos;
+        return wishResDtos;
     }
 
     @Transactional
     public void addWish(final Long travelRoomId, WishReqDto wishReqDto) {
-        log.info("============= 서비스 ===============");
         TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
-        log.info(String.valueOf(travelRoom));
-        Wish wishlist = Wish.addOf(wishReqDto, travelRoom);
-        wishRepository.save(wishlist);
+
+        Wish wish = Wish.addOf(wishReqDto, travelRoom);
+        wishRepository.save(wish);
     }
 
     @Transactional
