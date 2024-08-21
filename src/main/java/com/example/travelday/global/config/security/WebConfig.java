@@ -1,4 +1,4 @@
-package com.example.travelday.global.config;
+package com.example.travelday.global.config.security;
 
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
