@@ -1,4 +1,4 @@
-package com.example.travelday.domain.supersale.entity;
+package com.example.travelday.domain.supersale.utils;
 
 import com.amadeus.Amadeus;
 import com.amadeus.Params;
