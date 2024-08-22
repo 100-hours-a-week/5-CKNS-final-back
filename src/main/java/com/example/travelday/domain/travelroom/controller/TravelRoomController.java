@@ -29,7 +29,7 @@ public class TravelRoomController {
         return ResponseEntity.ok(ApiResponseEntity.of(travelRooms));
     }
 
-    /**1
+    /**
      * 여행방 단일 조회
      */
     @GetMapping("/{travelRoomId}")
