@@ -13,4 +13,11 @@ public class ResponseText {
     public static final String SUCCESS_DELETE_WISH = "위시 삭제 성공";
 
     public static final String SUCCESS_CREATE_TRAVELROOM = "여행방 생성 성공";
+
+    public static final String SUCCESS_CREATE_TRAVELPLAN = "여행 일정 생성 성공";
+
+    public static final String SUCCESS_UPDATE_TRAVELPLAN = "여행 일정 갱신 성공";
+
+    public static final String SUCCESS_DELETE_TRAVELPLAN = "여행 일정 삭제 성공";
+
 }
