@@ -9,6 +9,7 @@ import com.example.travelday.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class FlightService {
 
     private final AmadeusConnect amadeusConnect;
 
-    private final ValueOperations<String, List<Object>> valueOperations;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Value("${spring.data.redis.timeout}")
     private long redisTTL;
@@ -33,14 +34,11 @@ public class FlightService {
         try {
             String redisKey = "flightOffer:" + origin + ":" + destination + ":" + departDate + ":" + returnDate + ":" + adults;
 
-            //  Redis에서 데이터 조회
-            List<Object> cachedData = valueOperations.get(redisKey);
+            // Redis에서 데이터 조회
+            ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+            List<FlightResDto> cachedData = (List<FlightResDto>) valueOperations.get(redisKey);
             if (cachedData != null) {
-                List<FlightResDto> flightResDtos = new ArrayList<>();
-                for (Object flight : cachedData) {
-                    flightResDtos.add((FlightResDto) flight);
-                }
-                return flightResDtos;
+                return cachedData;
             }
 
             // Redis 데이터가 없거나 문제가 있을 경우 Amadeus API 호출
@@ -52,7 +50,7 @@ public class FlightService {
             }
 
             // Redis에 데이터 저장 (TTL 설정)
-            valueOperations.set(redisKey, Collections.singletonList(flightResDtos), Duration.ofSeconds(redisTTL));
+            valueOperations.set(redisKey, flightResDtos, Duration.ofSeconds(redisTTL));
 
             return flightResDtos;
         } catch (ResponseException e) {
