@@ -23,9 +23,10 @@ public enum ErrorCode {
 
     // travel room error
     TRAVELROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, "TR001", "존재하지 않는 여행방입니다."),
-
-    // travelRoom error,
     TRAVEL_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "TR001", "여행방을 찾을 수 없습니다."),
+
+    // travel plan error
+    TRAVEL_PLAN_NOT_FOUND(HttpStatus.BAD_REQUEST, "TP001", "존재하지 않는 여행 일정입니다."),
 
     // user error
     NICKNAME_ALREADY_TAKEN(HttpStatus.CONFLICT, "NICKNAME-001", "이미 사용 중인 닉네임입니다."),
