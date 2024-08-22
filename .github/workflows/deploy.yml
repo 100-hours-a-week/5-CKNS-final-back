@@ -32,50 +32,6 @@ jobs:
           cd ./src/main/resources
           touch application-my.yml
           echo "${{ secrets.APPLICATION_MY_YML_CONTENT }}" > application-my.yml
-          # echo "amadeus:" > application-my.yml
-          # echo "  api:" >> application-my.yml
-          # echo "    key: ${{ secrets.AMADEUS_API_KEY }}" >> application-my.yml
-          # echo "    secret: ${{ secrets.AMADEUS_API_SECRET }}" >> application-my.yml
-          # echo "spring:" >> application-my.yml
-          # echo "  jpa:" >> application-my.yml
-          # echo "    hibernate:" >> application-my.yml
-          # echo "      ddl-auto: none" >> application-my.yml
-          # echo "  datasource:" >> application-my.yml
-          # echo "    url: jdbc:mysql://${{ secrets.MYSQL_HOST }}:${{ secrets.MYSQL_PORT }}/${{ secrets.MYSQL_DATABASE }}" >> application-my.yml
-          # echo "    username: ${{ secrets.MYSQL_USERNAME }}" >> application-my.yml
-          # echo "    password: ${{ secrets.MYSQL_PASSWORD }}" >> application-my.yml
-          # echo "    driver-class-name: com.mysql.cj.jdbc.Driver" >> application-my.yml
-          # echo "  data:" >> application-my.yml
-          # echo "    redis:" >> application-my.yml
-          # echo "      host: ${{ secrets.REDIS_HOST }}" >> application-my.yml
-          # echo "      port: ${{ secrets.REDIS_PORT }}" >> application-my.yml
-          # echo "      password: ${{ secrets.REDIS_PASSWORD }}" >> application-my.yml
-          # echo "      timeout: 86400" >> application-my.yml
-          # echo "  security:" >> application-my.yml
-          # echo "    oauth2:" >> application-my.yml
-          # echo "      client:" >> application-my.yml
-          # echo "        registration:" >> application-my.yml
-          # echo "          kakao:" >> application-my.yml
-          # echo "            client-id: ${{ secrets.KAKAO_CLIENT_ID }}" >> application-my.yml
-          # echo "            client-secret: ${{ secrets.KAKAO_CLIENT_SECRET }}" >> application-my.yml
-          # echo "            redirect-uri: https://api.thetravelday.co.kr/login/oauth2/code/kakao" >> application-my.yml
-          # echo "            client-authentication-method: client_secret_post" >> application-my.yml
-          # echo "            authorization-grant-type: authorization_code" >> application-my.yml
-          # echo "            scope: profile_nickname" >> application-my.yml
-          # echo "            client-name: Kakao" >> application-my.yml
-          # echo "      provider:" >> application-my.yml
-          # echo "        kakao:" >> application-my.yml
-          # echo "          authorization-uri: https://kauth.kakao.com/oauth/authorize" >> application-my.yml
-          # echo "          token-uri: https://kauth.kakao.com/oauth/token" >> application-my.yml
-          # echo "          user-info-uri: https://kapi.kakao.com/v2/user/me" >> application-my.yml
-          # echo "          user-name-attribute: id" >> application-my.yml
-          # echo "oauth2:" >> application-my.yml
-          # echo "  redirect-url: ${{ secrets.FRONT_DEPLOY_URL }}" >> application-my.yml
-          # echo "jwt:" >> application-my.yml
-          # echo "  secret: ${{ secrets.JWT_SECRET }}" >> application-my.yml
-          # echo "  access-token-expiration: 1800 # 30분" >> application-my.yml
-          # echo "  refresh-token-expiration: 604800 # 7일" >> application-my.yml
-          # echo "ClientURL: ${{ secrets.FRONT_DEPLOY_URL }}" >> application-my.yml
         shell: bash
         # application-my.yml 파일을 생성하고 설정을 삽입
 
