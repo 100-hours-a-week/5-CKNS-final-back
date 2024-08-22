@@ -3,6 +3,7 @@ package com.example.travelday.global.config.security;
 import com.example.travelday.global.auth.jwt.component.JwtAccessDeniedHandler;
 import com.example.travelday.global.auth.jwt.component.JwtAuthenticationEntryPoint;
 import com.example.travelday.global.auth.jwt.component.JwtTokenProvider;
+import com.example.travelday.global.auth.jwt.filter.JwtAuthenticationFilter;
 import com.example.travelday.global.auth.oauth.component.OAuth2LoginFailureHandler;
 import com.example.travelday.global.auth.oauth.component.OAuth2LoginSuccessHandler;
 import com.example.travelday.global.auth.oauth.service.CustomOAuth2UserService;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -50,7 +52,8 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
                         .successHandler(oAuth2LoginSuccessHandler)
                         .failureHandler(oAuth2LoginFailureHandler)
-                );
+                )
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
