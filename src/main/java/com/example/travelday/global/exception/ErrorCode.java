@@ -23,10 +23,10 @@ public enum ErrorCode {
 
     // travel room error
     TRAVELROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, "TR001", "존재하지 않는 여행방입니다."),
-
-    // 서버 오류
-    // travelRoom error,
     TRAVEL_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "TR001", "여행방을 찾을 수 없습니다."),
+
+    // travel plan error
+    TRAVEL_PLAN_NOT_FOUND(HttpStatus.BAD_REQUEST, "TP001", "존재하지 않는 여행 일정입니다."),
 
     // user error
     NICKNAME_ALREADY_TAKEN(HttpStatus.CONFLICT, "NICKNAME-001", "이미 사용 중인 닉네임입니다."),
@@ -39,6 +39,9 @@ public enum ErrorCode {
     NOTIFICATION_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "NOTIFICATION-003", "알림 전송에 실패했습니다."),
     NOTIFICATION_SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "NOTIFICATION-004", "알림 서비스가 이용 불가능합니다."),
     INVALID_NOTIFICATION_PAYLOAD(HttpStatus.BAD_REQUEST, "NOTIFICATION-005", "알림 내용이 유효하지 않습니다."),
+
+    // wish error
+    WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WH001", "위시를 찾을 수 없습니다."),
 
     // server error
     SEVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SV001", "서버 오류");

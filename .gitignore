@@ -6,6 +6,7 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 application-my.yml
+application-dev.yml
 
 # Ignore TravelDayFirebaseService.json
 src/main/resources/properties/TravelDayFirebaseService.json

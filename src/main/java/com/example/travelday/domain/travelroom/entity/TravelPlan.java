@@ -1,7 +1,9 @@
 package com.example.travelday.domain.travelroom.entity;
 
+import com.example.travelday.domain.travelroom.dto.request.TravelPlanReqDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,15 +25,36 @@ public class TravelPlan {
         @Column(name = "name", nullable = false)
         private String name;
 
-        @Column(name = "day", nullable = false)
-        private int day;
+        @Column(name = "scheduled_day", nullable = false)
+        private int scheduledDay;
 
-        @Column(name = "order", nullable = false)
-        private int order;
+        @Column(name = "position", nullable = false)
+        private int position;
 
         @Column(name = "latitude", nullable = false)
         private double latitude;
 
         @Column(name = "longitude", nullable = false)
         private double longitude;
+
+        @Builder
+        public TravelPlan(TravelRoom travelRoom, String name, int scheduledDay, int position, double latitude, double longitude) {
+                this.travelRoom = travelRoom;
+                this.name = name;
+                this.scheduledDay = scheduledDay;
+                this.position = position;
+                this.latitude = latitude;
+                this.longitude = longitude;
+        }
+
+        public static TravelPlan addOf(TravelPlanReqDto travelPlanReqDto, TravelRoom travelRoom, int position) {
+                return TravelPlan.builder()
+                                .travelRoom(travelRoom)
+                                .name(travelPlanReqDto.name())
+                                .scheduledDay(travelPlanReqDto.scheduledDay())
+                                .position(position)
+                                .latitude(travelPlanReqDto.latitude())
+                                .longitude(travelPlanReqDto.longitude())
+                                .build();
+        }
 }
