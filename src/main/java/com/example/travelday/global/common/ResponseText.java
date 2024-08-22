@@ -18,6 +18,5 @@ public class ResponseText {
 
     public static final String SUCCESS_UPDATE_TRAVELPLAN = "여행 일정 갱신 성공";
 
-    public static final String SUCCESS_DELETE_TRAVELPLAN = "여행 일정 삭제 성공";
-
+    public static final String SUCCESS_CREATE_TRAVELPLANLIST = "여행 일정 목록 생성 성공";
 }
