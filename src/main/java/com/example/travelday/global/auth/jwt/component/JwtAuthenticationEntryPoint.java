@@ -15,15 +15,11 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import java.io.IOException;
 
 @Component
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-//    @Qualifier("handlerExceptionResolver")
+    @Qualifier("handlerExceptionResolver")
     private final HandlerExceptionResolver resolver;
-
-    public JwtAuthenticationEntryPoint(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
-        this.resolver = resolver;
-    }
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
