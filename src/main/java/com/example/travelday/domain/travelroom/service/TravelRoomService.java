@@ -55,7 +55,8 @@ public class TravelRoomService {
      */
     @Transactional
     public void createTravelRoom(TravelRoomCreateReqDto requestDto) {
-        TravelRoom travelRoom = TravelRoom.create(requestDto.name());
+        // TODO: @AuthenticationPrincipal 사용해서 현재 로그인한 사용자 정보 가져오기, 현재는 임시로 userId로 사용
+        TravelRoom travelRoom = TravelRoom.addOf(requestDto);
         TravelRoom savedTravelRoom = travelRoomRepository.save(travelRoom);
         log.info("TravelRoom created: {}", savedTravelRoom);
 
