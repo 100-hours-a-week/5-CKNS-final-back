@@ -2,6 +2,7 @@ package com.example.travelday.domain.travelroom.service;
 
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
+import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomResDto;
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomCreateReqDto;
 import com.example.travelday.domain.travelroom.entity.TravelRoom;
@@ -29,9 +30,6 @@ public class TravelRoomService {
 
     private final MemberRepository memberRepository;
 
-    /**
-     * 여행 방 목록 조회
-     */
     @Transactional(readOnly = true)
     public List<TravelRoomResDto> getAllTravelRoom() {
         return travelRoomRepository.findAll()
@@ -40,9 +38,6 @@ public class TravelRoomService {
                     .collect(Collectors.toList());
     }
 
-    /**
-     * 여행 방 단일 조회
-     */
     @Transactional(readOnly = true)
     public TravelRoomResDto getTravelRoomById(Long travelRoomId) {
         TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
@@ -50,9 +45,6 @@ public class TravelRoomService {
         return TravelRoomResDto.fromEntity(travelRoom);
     }
 
-    /**
-     * 여행 방 생성
-     */
     @Transactional
     public void createTravelRoom(TravelRoomCreateReqDto requestDto) {
         // TODO: @AuthenticationPrincipal 사용해서 현재 로그인한 사용자 정보 가져오기, 현재는 임시로 userId로 사용
@@ -66,9 +58,15 @@ public class TravelRoomService {
         userTravelRoomRepository.save(userTravelRoom);
     }
 
-    /**
-     * 여행 방 삭제
-     */
+    @Transactional
+    public void updateTravelRoom (Long travelRoomId, TravelRoomReqDto requestDto) {
+        TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
+                                    .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+
+        travelRoom.update(requestDto);
+        travelRoomRepository.save(travelRoom);
+    }
+
     @Transactional
     public void deleteTravelRoom(Long travelRoomId) {
         TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
