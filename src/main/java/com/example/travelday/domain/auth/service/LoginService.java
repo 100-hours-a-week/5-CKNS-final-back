@@ -25,7 +25,7 @@ public class LoginService {
         final String refreshToken = CookieUtils.getCookieValue(request.getCookies(), TokenName.USER_REFRESH_TOKEN.name());
 
         // Redis에 저장된 Refresh Token 삭제
-        redisTemplate.delete(refreshToken);
+        //redisTemplate.delete(refreshToken);
 
         // Refresh Token 쿠키 삭제
         Cookie cookie = CookieUtils.getCookieForRemove(TokenName.USER_REFRESH_TOKEN.name());
