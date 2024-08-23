@@ -29,5 +29,7 @@ COPY --from=builder /app/${JAR_FILE_PATH} app.jar
 # Expose the port your application runs on
 EXPOSE 8080
 
-# Set the entry point to run the Java application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Set the entry point to run the Java application with a specific Spring profile and logging
+#ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=my", "--spring.config.name=application-my"]
+#ENTRYPOINT ["java", "-Dspring.profiles.active=my", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=my", "-Dlogging.file.name=/app/logs/app.log", "-jar", "/app.jar"]
