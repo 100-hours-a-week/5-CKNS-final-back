@@ -5,6 +5,8 @@ import lombok.Builder;
 @Builder
 public record TravelRoomCreateReqDto(
     String name,
-    String userId
+    String userId,
+    String startDate,
+    String endDate
 ) {
 }
