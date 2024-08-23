@@ -39,8 +39,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         RefreshTokenDto refreshTokenDto = tokenDto.refreshTokenDto();
 
         // Refresh Token을 Redis에 저장
-//        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-//        valueOperations.set(refreshTokenDto.token(), authentication.getName(), refreshTokenDto.getExpiresInSecond(), TimeUnit.SECONDS);
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(refreshTokenDto.token(), authentication.getName(), refreshTokenDto.getExpiresInSecond(), TimeUnit.SECONDS);
 
         // Refresh Token을 쿠키에 담아서 전달
         Cookie cookie = CookieUtils.createCookie(TokenName.USER_REFRESH_TOKEN.name(), refreshTokenDto.token(), refreshTokenDto.getExpiresInSecond());
