@@ -6,6 +6,8 @@ import com.example.travelday.domain.supersale.dto.response.FlightResDto;
 import com.example.travelday.domain.supersale.utils.AmadeusConnect;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,9 +15,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -24,8 +26,8 @@ import java.util.List;
 public class FlightService {
 
     private final AmadeusConnect amadeusConnect;
-
     private final RedisTemplate<String, Object> redisTemplate;
+    private final Gson gson = new Gson();
 
     @Value("${spring.data.redis.timeout}")
     private long redisTTL;
@@ -36,8 +38,14 @@ public class FlightService {
 
             // Redis에서 데이터 조회
             ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
-            List<FlightResDto> cachedData = (List<FlightResDto>) valueOperations.get(redisKey);
-            if (cachedData != null) {
+            String cachedDataJson = (String) valueOperations.get(redisKey);
+            if (cachedDataJson != null) {
+                log.info("======================캐시있졍======================");
+
+                // JSON 문자열을 List<FlightResDto>로 변환
+                Type listType = new TypeToken<List<FlightResDto>>() {}.getType();
+                List<FlightResDto> cachedData = gson.fromJson(cachedDataJson, listType);
+
                 return cachedData;
             }
 
@@ -49,8 +57,9 @@ public class FlightService {
                 flightResDtos.add(FlightResDto.of(flight));
             }
 
-            // Redis에 데이터 저장 (TTL 설정)
-            valueOperations.set(redisKey, flightResDtos, Duration.ofSeconds(redisTTL));
+            // List<FlightResDto>를 JSON 문자열로 변환 후 Redis에 저장
+            String flightResDtosJson = gson.toJson(flightResDtos);
+            valueOperations.set(redisKey, flightResDtosJson, Duration.ofSeconds(redisTTL));
 
             return flightResDtos;
         } catch (ResponseException e) {
