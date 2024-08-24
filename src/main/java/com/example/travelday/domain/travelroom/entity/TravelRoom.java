@@ -1,9 +1,12 @@
 package com.example.travelday.domain.travelroom.entity;
 
 
+import com.example.travelday.domain.travelroom.dto.request.TravelRoomCreateReqDto;
+import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
 import com.example.travelday.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,9 +24,30 @@ public class TravelRoom extends BaseTimeEntity {
     @Column(name = "name")
     private String name;
 
-    public static TravelRoom create(String name) {
-        TravelRoom travelRoom = new TravelRoom();
-        travelRoom.name = name;
-        return travelRoom;
+    @Column(name = "start_date")
+    private String startDate;
+
+    @Column(name = "end_date")
+    private String endDate;
+
+    @Builder
+    public TravelRoom(String name, String startDate, String endDate) {
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public static TravelRoom addOf(TravelRoomCreateReqDto requestDto) {
+        return TravelRoom.builder()
+                    .name(requestDto.name())
+                    .startDate(requestDto.startDate())
+                    .endDate(requestDto.endDate())
+                    .build();
+    }
+
+    public void update(TravelRoomReqDto requestDto) {
+        this.name = requestDto.name();
+        this.startDate = requestDto.startDate();
+        this.endDate = requestDto.endDate();
     }
 }

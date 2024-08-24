@@ -1,6 +1,7 @@
 package com.example.travelday.domain.travelroom.controller;
 
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomCreateReqDto;
+import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomResDto;
 import com.example.travelday.domain.travelroom.service.TravelRoomService;
 import com.example.travelday.global.common.ApiResponseEntity;
@@ -55,4 +56,15 @@ public class TravelRoomController {
         travelRoomService.deleteTravelRoom(travelRoomId);
         return ResponseEntity.ok(ApiResponseEntity.of(null));
     }
+
+    /**
+     * 여행방 수정
+     */
+    @PostMapping("/{travelRoomId}")
+    public ResponseEntity<ApiResponseEntity<String>> updateTravelRoom(@PathVariable Long travelRoomId, @RequestBody TravelRoomReqDto requestDto) {
+        travelRoomService.updateTravelRoom(travelRoomId, requestDto);
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_TRAVELROOM));
+    }
+
+
 }

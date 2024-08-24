@@ -3,9 +3,8 @@ package com.example.travelday.domain.travelroom.dto.request;
 import lombok.Builder;
 
 @Builder
-public record TravelRoomCreateReqDto(
+public record TravelRoomReqDto(
     String name,
-    String userId,
     String startDate,
     String endDate
 ) {

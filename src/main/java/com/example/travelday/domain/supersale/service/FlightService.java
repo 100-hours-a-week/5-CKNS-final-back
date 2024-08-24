@@ -36,11 +36,9 @@ public class FlightService {
         try {
             String redisKey = "flightOffer:" + origin + ":" + destination + ":" + departDate + ":" + returnDate + ":" + adults;
 
-            // Redis에서 데이터 조회
             ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
             String cachedDataJson = (String) valueOperations.get(redisKey);
             if (cachedDataJson != null) {
-                log.info("======================캐시있졍======================");
 
                 // JSON 문자열을 List<FlightResDto>로 변환
                 Type listType = new TypeToken<List<FlightResDto>>() {}.getType();
