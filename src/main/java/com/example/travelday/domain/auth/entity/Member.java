@@ -57,4 +57,8 @@ public class Member extends BaseTimeEntity {
         this.socialType = socialType;
         this.updatedBy = updatedBy;
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
