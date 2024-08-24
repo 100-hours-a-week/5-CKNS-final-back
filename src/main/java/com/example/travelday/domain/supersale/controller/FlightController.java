@@ -1,15 +1,14 @@
 package com.example.travelday.domain.supersale.controller;
 
 import com.amadeus.exceptions.ResponseException;
+import com.example.travelday.domain.supersale.dto.request.FlightReqDto;
+import com.example.travelday.domain.supersale.dto.response.FlightResDto;
 import com.example.travelday.domain.supersale.service.FlightService;
 import com.example.travelday.global.common.ApiResponseEntity;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @Slf4j
@@ -31,6 +30,14 @@ public class FlightController {
         throws ResponseException {
             log.info("origin: {}, destination: {}, departDate: {}, adults: {}, returnDate: {}", origin, destination, departDate, adults, returnDate);
             return ResponseEntity.ok(ApiResponseEntity.of(flightService.getFlightOffers(origin, destination, departDate, adults, returnDate)));
+    }
+
+    /**
+     * 최저가 항공 상세 조회
+     */
+    @GetMapping("/lowest-price")
+    public ResponseEntity<ApiResponseEntity<FlightResDto>> getLowestPriceFlights(@RequestBody FlightReqDto flightReqDto) {
+        return ResponseEntity.ok(ApiResponseEntity.of(flightService.getLowestPriceFlights(flightReqDto)));
     }
 }
 
