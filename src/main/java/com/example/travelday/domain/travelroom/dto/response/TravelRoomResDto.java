@@ -6,12 +6,16 @@ import lombok.Builder;
 @Builder
 public record TravelRoomResDto(
     Long id,
-    String name
+    String name,
+    String startDate,
+    String endDate
 ) {
     public static TravelRoomResDto fromEntity(TravelRoom travelRoom) {
         return TravelRoomResDto.builder()
-            .id(travelRoom.getId())
-            .name(travelRoom.getName())
-            .build();
+                    .id(travelRoom.getId())
+                    .name(travelRoom.getName())
+                    .startDate(travelRoom.getStartDate())
+                    .endDate(travelRoom.getEndDate())
+                    .build();
     }
 }
