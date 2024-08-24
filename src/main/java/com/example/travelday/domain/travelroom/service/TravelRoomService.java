@@ -52,7 +52,8 @@ public class TravelRoomService {
         TravelRoom savedTravelRoom = travelRoomRepository.save(travelRoom);
         log.info("TravelRoom created: {}", savedTravelRoom);
 
-        Member member = memberRepository.findByUserId(requestDto.userId());
+        Member member = memberRepository.findByUserId(requestDto.userId())
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         UserTravelRoom userTravelRoom = UserTravelRoom.create(savedTravelRoom, member);
         userTravelRoomRepository.save(userTravelRoom);
