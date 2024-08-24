@@ -72,7 +72,7 @@ dependencies {
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 }
-//
+
 //spotless {
 //    java {
 //        googleJavaFormat().aosp()
