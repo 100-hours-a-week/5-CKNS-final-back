@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Slf4j
 @RestController
@@ -33,11 +35,19 @@ public class FlightController {
     }
 
     /**
+     * 최저가 항공 목록 조회
+     */
+    @GetMapping("/lowest-price/list")
+    public ResponseEntity<ApiResponseEntity<List<FlightResDto>>> getLowestPriceFlights() {
+        return ResponseEntity.ok(ApiResponseEntity.of(flightService.getLowestPriceFlights()));
+    }
+
+    /**
      * 최저가 항공 상세 조회
      */
     @GetMapping("/lowest-price")
-    public ResponseEntity<ApiResponseEntity<FlightResDto>> getLowestPriceFlights(@RequestBody FlightReqDto flightReqDto) {
-        return ResponseEntity.ok(ApiResponseEntity.of(flightService.getLowestPriceFlights(flightReqDto)));
+    public ResponseEntity<ApiResponseEntity<FlightResDto>> getLowestPriceFlight(@RequestBody FlightReqDto flightReqDto) {
+        return ResponseEntity.ok(ApiResponseEntity.of(flightService.getLowestPriceFlight(flightReqDto)));
     }
 }
 

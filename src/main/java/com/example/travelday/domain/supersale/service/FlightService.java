@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +80,31 @@ public class FlightService {
         }
     }
 
-    public FlightResDto getLowestPriceFlights(FlightReqDto flightReqDto) {
+    public List<FlightResDto> getLowestPriceFlights() {
+        String[] destinations = {"INC", "FUK", "NRT", "HND", "OKA", "GUM", "BKK", "TPE", "DAD"};
+        String departDate = String.valueOf(LocalDate.now().plusDays(2));
+
+        List<FlightResDto> flightResDtos = new ArrayList<>();
+        for (String des : destinations) {
+            String redisKey = "flightOffer:" + des + ":" + departDate;
+
+            ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+            String cachedDataJson = (String) valueOperations.get(redisKey);
+
+            if (cachedDataJson != null) {
+                Type listType = new TypeToken<List<FlightResDto>>() {}.getType();
+                List<FlightResDto> cachedData = gson.fromJson(cachedDataJson, listType);
+
+                if (!cachedData.isEmpty()) {
+                    flightResDtos.addAll(cachedData);
+                }
+            }
+        }
+
+        return flightResDtos;
+    }
+
+    public FlightResDto getLowestPriceFlight(FlightReqDto flightReqDto) {
         String redisKey = "flightOffer:" + flightReqDto.destination() + ":" + flightReqDto.departDate();
 
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
