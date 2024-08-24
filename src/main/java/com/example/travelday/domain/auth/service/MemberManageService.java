@@ -32,4 +32,12 @@ public class MemberManageService {
     public boolean checkDuplicateNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
     }
+
+    @Transactional
+    public void updateNickname(String userId, String nickname) {
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        member.updateNickname(nickname);
+    }
 }

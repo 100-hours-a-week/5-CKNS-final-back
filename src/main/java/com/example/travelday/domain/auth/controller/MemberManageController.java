@@ -1,5 +1,6 @@
 package com.example.travelday.domain.auth.controller;
 
+import com.example.travelday.domain.auth.dto.request.UpdateNicknameReqDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,4 +38,9 @@ public class MemberManageController {
     }
 
     /** 닉네임 수정 */
+    @PutMapping("/nickname")
+    public ResponseEntity<ApiResponseEntity<String>> updateNickname(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateNicknameReqDto reqDto) {
+        memberManageService.updateNickname(userDetails.getUsername(), reqDto.nickname());
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_NICKNAME));
+    }
 }

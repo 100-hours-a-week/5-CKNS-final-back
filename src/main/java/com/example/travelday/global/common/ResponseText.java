@@ -20,6 +20,8 @@ public class ResponseText {
 
     public static final String SUCCESS_LOGOUT = "로그아웃 성공";
 
+    public static final String SUCCESS_UPDATE_NICKNAME = "닉네임 수정 성공";
+
     public static final String SUCCESS_CREATE_TRAVELPLAN = "여행 일정 생성 성공";
 
     public static final String SUCCESS_UPDATE_TRAVELPLAN = "여행 일정 갱신 성공";
