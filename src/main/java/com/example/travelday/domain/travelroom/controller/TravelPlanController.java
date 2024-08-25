@@ -29,9 +29,8 @@ public class TravelPlanController {
      * 여행 일정 목록 조회
      */
     @GetMapping
-    public ResponseEntity<ApiResponseEntity<List<TravelPlanResDto>>> getTravelPlanList(@PathVariable Long travelRoomId,@AuthenticationPrincipal UserDetails userDetails) {
-        String userId = userDetails.getUsername();
-        List<TravelPlanResDto> travelPlans = travelPlanService.getAllTravelPlan(travelRoomId, userId);
+    public ResponseEntity<ApiResponseEntity<List<TravelPlanResDto>>> getTravelPlanList(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
+        List<TravelPlanResDto> travelPlans = travelPlanService.getAllTravelPlan(travelRoomId, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(travelPlans));
     }
 
@@ -40,8 +39,7 @@ public class TravelPlanController {
      */
     @PostMapping("/overwrite")
     public ResponseEntity<ApiResponseEntity<String>> updateTravelPlan(@PathVariable Long travelRoomId, @RequestBody @Valid TravelPlanListOverwriteDto travelPlanListOverwriteDto, @AuthenticationPrincipal UserDetails userDetails) {
-        String userId = userDetails.getUsername();
-        travelPlanService.updateTravelPlan(travelRoomId, travelPlanListOverwriteDto, userId);
+        travelPlanService.updateTravelPlan(travelRoomId, travelPlanListOverwriteDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_TRAVELPLAN));
     }
 
@@ -50,8 +48,7 @@ public class TravelPlanController {
      */
     @PostMapping("/list")
     public ResponseEntity<ApiResponseEntity<String>> addTravelPlanlist(@PathVariable Long travelRoomId, @RequestBody @Valid TravelPlanListReqDto travelPlanListReqDto, @AuthenticationPrincipal UserDetails userDetails) {
-        String userId = userDetails.getUsername();
-        travelPlanService.addTravelPlanList(travelRoomId, travelPlanListReqDto, userId);
+        travelPlanService.addTravelPlanList(travelRoomId, travelPlanListReqDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_CREATE_TRAVELPLANLIST));
     }
 
@@ -60,8 +57,7 @@ public class TravelPlanController {
      */
     @PostMapping("/direct")
     public ResponseEntity<ApiResponseEntity<String>> addTravelPlanDirect(@PathVariable Long travelRoomId, @RequestBody TravelPlanReqDto travelPlanReqDto, @AuthenticationPrincipal UserDetails userDetails) {
-        String userId = userDetails.getUsername();
-        travelPlanService.addTravelPlanDirect(travelRoomId, travelPlanReqDto, userId);
+        travelPlanService.addTravelPlanDirect(travelRoomId, travelPlanReqDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_CREATE_TRAVELPLAN));
     }
 
@@ -70,8 +66,7 @@ public class TravelPlanController {
      */
     @DeleteMapping("/{travelPlanId}")
     public ResponseEntity<ApiResponseEntity<String>> deleteTravelPlan(@PathVariable Long travelRoomId, @PathVariable Long travelPlanId, @AuthenticationPrincipal UserDetails userDetails) {
-        String userId = userDetails.getUsername();
-        travelPlanService.deleteTravelPlan(travelRoomId, travelPlanId, userId);
+        travelPlanService.deleteTravelPlan(travelRoomId, travelPlanId, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_DELETE_TRAVELPLAN));
     }
 }

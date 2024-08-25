@@ -113,6 +113,7 @@ public class TravelPlanService {
         travelPlanRepository.delete(travelPlan);
     }
 
+    // TODO: Move this method to a separate class
     private void validateMemberInTravelRoom(String userId, Long travelRoomId) {
         Member member = memberRepository.findByUserId(userId)
                             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
