@@ -19,10 +19,7 @@ public class MultiDestinationFlightScheduler {
 
     private final FlightService flightService;
 
-    /**
-     * 인천 -> 여러 목적지 2박 3일 최저가
-     */
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void fetchAndStoreFlightOffers() {
 
         log.info("===== fetchAndStoreFlightOffers for Multiple Destinations =====");
