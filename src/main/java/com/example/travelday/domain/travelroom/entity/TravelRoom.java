@@ -1,7 +1,6 @@
 package com.example.travelday.domain.travelroom.entity;
 
 
-import com.example.travelday.domain.travelroom.dto.request.TravelRoomCreateReqDto;
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
 import com.example.travelday.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -37,7 +36,7 @@ public class TravelRoom extends BaseTimeEntity {
         this.endDate = endDate;
     }
 
-    public static TravelRoom addOf(TravelRoomCreateReqDto requestDto) {
+    public static TravelRoom addOf(TravelRoomReqDto requestDto) {
         return TravelRoom.builder()
                     .name(requestDto.name())
                     .startDate(requestDto.startDate())
