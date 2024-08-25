@@ -2,8 +2,8 @@ package com.example.travelday.domain.travelroom.service;
 
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
+import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomResDto;
-import com.example.travelday.domain.travelroom.dto.request.TravelRoomCreateReqDto;
 import com.example.travelday.domain.travelroom.entity.TravelRoom;
 import com.example.travelday.domain.travelroom.entity.UserTravelRoom;
 import com.example.travelday.domain.travelroom.repository.TravelRoomRepository;
@@ -29,49 +29,73 @@ public class TravelRoomService {
 
     private final MemberRepository memberRepository;
 
-    /**
-     * 여행 방 목록 조회
-     */
     @Transactional(readOnly = true)
-    public List<TravelRoomResDto> getAllTravelRoom() {
-        return travelRoomRepository.findAll()
+    public List<TravelRoomResDto> getAllTravelRoom(String userId) {
+        Member member = memberRepository.findByUserId(userId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        List<Long> travelRoomIds = userTravelRoomRepository.findByMember(member)
+                                        .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND))
+                                        .stream()
+                                        .map(UserTravelRoom::getTravelRoom)
+                                        .map(TravelRoom::getId)
+                                        .collect(Collectors.toList());
+
+        return travelRoomRepository.findAllById(travelRoomIds)
                     .stream()
                     .map(TravelRoomResDto::fromEntity)
                     .collect(Collectors.toList());
     }
 
-    /**
-     * 여행 방 단일 조회
-     */
     @Transactional(readOnly = true)
-    public TravelRoomResDto getTravelRoomById(Long travelRoomId) {
-        TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
-                                    .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+    public TravelRoomResDto getTravelRoomById(Long travelRoomId, String userId) {
+        Member member = memberRepository.findByUserId(userId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        UserTravelRoom userTravelRoom = userTravelRoomRepository.findByMemberAndTravelRoomId(member, travelRoomId)
+                                            .orElseThrow(() -> new CustomException(ErrorCode.USER_DOES_NOT_JOIN_TRAVEL_ROOM));
+
+        TravelRoom travelRoom = userTravelRoom.getTravelRoom();
+
         return TravelRoomResDto.fromEntity(travelRoom);
     }
 
-    /**
-     * 여행 방 생성
-     */
     @Transactional
-    public void createTravelRoom(TravelRoomCreateReqDto requestDto) {
-        TravelRoom travelRoom = TravelRoom.create(requestDto.name());
+    public void createTravelRoom(TravelRoomReqDto requestDto, String userId) {
+        TravelRoom travelRoom = TravelRoom.addOf(requestDto);
         TravelRoom savedTravelRoom = travelRoomRepository.save(travelRoom);
-        log.info("TravelRoom created: {}", savedTravelRoom);
 
-        Member member = memberRepository.findByUserId(requestDto.userId());
+        Member member = memberRepository.findByUserId(userId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         UserTravelRoom userTravelRoom = UserTravelRoom.create(savedTravelRoom, member);
         userTravelRoomRepository.save(userTravelRoom);
     }
 
-    /**
-     * 여행 방 삭제
-     */
     @Transactional
-    public void deleteTravelRoom(Long travelRoomId) {
-        TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
-                                    .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+    public void updateTravelRoom (Long travelRoomId, TravelRoomReqDto requestDto, String userId) {
+        Member member = memberRepository.findByUserId(userId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        UserTravelRoom userTravelRoom = userTravelRoomRepository.findByMemberAndTravelRoomId(member, travelRoomId)
+                                            .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+
+        TravelRoom travelRoom = userTravelRoom.getTravelRoom();
+
+        travelRoom.update(requestDto);
+        travelRoomRepository.save(travelRoom);
+    }
+
+    @Transactional
+    public void deleteTravelRoom(Long travelRoomId, String userId) {
+        Member member = memberRepository.findByUserId(userId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        UserTravelRoom userTravelRoom = userTravelRoomRepository.findByMemberAndTravelRoomId(member, travelRoomId)
+                                            .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+
+        TravelRoom travelRoom = userTravelRoom.getTravelRoom();
+
         travelRoomRepository.delete(travelRoom);
     }
 }

@@ -13,18 +13,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${ClientURL}")
     private String clientURL;
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(@NonNull CorsRegistry registry) {
-                registry.addMapping(("/**"))
-                    .allowedOrigins("http://localhost:3000", "https://www.thetravelday.co.kr")
-                    .allowCredentials(true)
-                    .allowedOrigins(clientURL)
-                    .allowedMethods("GET", "POST", "PUT", "DELETE")
-                    .maxAge(3600);
-            }
-        };
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000", "https://www.thetravelday.co.kr")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .exposedHeaders("*")
+                .maxAge(3600L)
+                .allowCredentials(true);
     }
 }

@@ -2,7 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - test  # test 브랜치 트리거 추가
 
 jobs:
   build:

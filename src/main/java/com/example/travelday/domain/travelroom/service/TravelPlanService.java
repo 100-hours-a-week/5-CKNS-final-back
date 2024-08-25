@@ -1,5 +1,7 @@
 package com.example.travelday.domain.travelroom.service;
 
+import com.example.travelday.domain.auth.entity.Member;
+import com.example.travelday.domain.auth.repository.MemberRepository;
 import com.example.travelday.domain.travelroom.dto.request.TravelPlanListOverwriteDto;
 import com.example.travelday.domain.travelroom.dto.request.TravelPlanListReqDto;
 import com.example.travelday.domain.travelroom.dto.request.TravelPlanOverwriteDto;
@@ -9,7 +11,7 @@ import com.example.travelday.domain.travelroom.entity.TravelPlan;
 import com.example.travelday.domain.travelroom.entity.TravelRoom;
 import com.example.travelday.domain.travelroom.repository.TravelPlanRepository;
 import com.example.travelday.domain.travelroom.repository.TravelRoomRepository;
-import com.example.travelday.domain.travelroom.repository.WishRepository;
+import com.example.travelday.domain.travelroom.repository.UserTravelRoomRepository;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +31,14 @@ public class TravelPlanService {
 
     private final TravelRoomRepository travelRoomRepository;
 
-    private final WishRepository wishRepository;
+    private final MemberRepository memberRepository;
+
+    private final UserTravelRoomRepository userTravelRoomRepository;
 
     @Transactional
-    public List<TravelPlanResDto> getAllTravelPlan(Long travelRoomId) {
+    public List<TravelPlanResDto> getAllTravelPlan(Long travelRoomId, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
 
         List<TravelPlan> travelPlans = travelPlanRepository.findAllByTravelRoomId(travelRoomId);
         List<TravelPlanResDto> travelPlanResDtos = new ArrayList<>();
@@ -44,7 +50,9 @@ public class TravelPlanService {
     }
 
     @Transactional
-    public void addTravelPlanList(Long travelRoomId, TravelPlanListReqDto travelPlanListReqDto) {
+    public void addTravelPlanList(Long travelRoomId, TravelPlanListReqDto travelPlanListReqDto, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
 
         TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
                                     .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
@@ -62,7 +70,9 @@ public class TravelPlanService {
     }
 
     @Transactional
-    public void addTravelPlanDirect(Long travelRoomId, TravelPlanReqDto travelPlanReqDto) {
+    public void addTravelPlanDirect(Long travelRoomId, TravelPlanReqDto travelPlanReqDto, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
 
         TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
                                     .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
@@ -77,7 +87,9 @@ public class TravelPlanService {
     }
 
     @Transactional
-    public void updateTravelPlan(Long travelRoomId, TravelPlanListOverwriteDto travelPlanListOverwriteDto) {
+    public void updateTravelPlan(Long travelRoomId, TravelPlanListOverwriteDto travelPlanListOverwriteDto, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
 
         List<TravelPlanOverwriteDto> overwritePlans = travelPlanListOverwriteDto.body();
 
@@ -91,11 +103,27 @@ public class TravelPlanService {
 
 
     @Transactional
-    public void deleteTravelPlan(Long travelRoomId, Long travelPlanId) {
+    public void deleteTravelPlan(Long travelRoomId, Long travelPlanId, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
 
         TravelPlan travelPlan = travelPlanRepository.findById(travelPlanId)
                                 .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_PLAN_NOT_FOUND));
 
         travelPlanRepository.delete(travelPlan);
     }
+
+    // TODO: Move this method to a separate class
+    private void validateMemberInTravelRoom(String userId, Long travelRoomId) {
+        Member member = memberRepository.findByUserId(userId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        boolean exists = userTravelRoomRepository.findByMemberAndTravelRoomId(member, travelRoomId)
+                                .isPresent();
+
+        if (!exists) {
+            throw new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND);
+        }
+    }
+
 }

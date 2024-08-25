@@ -20,15 +20,15 @@ public class MultiDestinationFlightScheduler {
     /**
      * 인천 -> 여러 목적지 2박 3일 최저가
      */
-    @Scheduled(cron = "0 0 0/12 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void fetchAndStoreFlightOffers() {
         log.info("===== fetchAndStoreFlightOffers for Multiple Destinations =====");
 
-        String origin = "ICN"; // 인천공항
+        String origin = "KIX"; // 인천공항
         String adults = "1";
 
         // 대상 목적지 목록
-        String[] destinations = {"KIX", "FUK", "NRT", "HND", "OKA", "GUM", "BKK", "TPE", "DAD"};
+        String[] destinations = {"INC", "FUK", "NRT", "HND", "OKA", "GUM", "BKK", "TPE", "DAD"};
 
         // 현재 날짜 기준 2일 후 3박 4일
         LocalDate departureDate = LocalDate.now().plusDays(2);

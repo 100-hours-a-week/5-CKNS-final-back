@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.2'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'com.example'
@@ -57,6 +58,9 @@ dependencies {
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+    // gson
+    implementation 'com.google.code.gson:gson:2.11.0'
+
     // oauth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
@@ -68,3 +72,28 @@ dependencies {
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 }
+
+//spotless {
+//    java {
+//        googleJavaFormat().aosp()
+//        importOrder('java', 'javax', 'jakarta', 'org', 'com')
+//        removeUnusedImports()
+//        trimTrailingWhitespace()
+//        endWithNewline()
+//    }
+//}
+//
+//tasks.register('updateGitHooks', Copy) {
+//    from './scripts/pre-commit'
+//    into './.git/hooks'
+//}
+//
+//tasks.register('makeGitHooksExecutable', Exec) {
+//    commandLine 'chmod', '+x', './.git/hooks/pre-commit'
+//    dependsOn updateGitHooks
+//}
+//
+//tasks.named('compileJava') {
+//    dependsOn 'makeGitHooksExecutable'
+//    dependsOn 'spotlessCheck'
+//}
