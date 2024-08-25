@@ -24,6 +24,7 @@ public enum ErrorCode {
 
     // travel room error
     TRAVEL_ROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, "TR001", "존재하지 않는 여행방입니다."),
+    USER_NOT_IN_TRAVEL_ROOM(HttpStatus.BAD_REQUEST, "TR002", "해당 여행방에 없는 회원입니다."),
     USER_DOES_NOT_JOIN_TRAVEL_ROOM(HttpStatus.FORBIDDEN, "TR003", "해당 회원이 속해있는 여행방이 없습니다."),
 
     // travel plan error
