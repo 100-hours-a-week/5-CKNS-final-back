@@ -34,12 +34,11 @@ public class AmadeusConnect {
                 .with("hotelIds", hotelIds));
     }
 
-    public FlightOfferSearch[] flights(String origin, String destination, String departDate, String adults, String returnDate) throws ResponseException {
+    public FlightOfferSearch[] flights(String origin, String destination, String departDate, String adults) throws ResponseException {
         return amadeus.shopping.flightOffersSearch.get(
                 Params.with("originLocationCode", origin)
                         .and("destinationLocationCode", destination)
                         .and("departureDate", departDate)
-                        .and("returnDate", returnDate)
                         .and("adults", adults)
                         .and("max", 250));
     }
