@@ -37,22 +37,14 @@ public class FlightService {
     @Value("${spring.data.redis.timeout}")
     private long redisTTL;
 
-    public List<FlightResDto> getFlightOffers(String origin, String destination, String departDate, String adults, String returnDate) throws ResponseException {
+    public void getFlightOffers(String origin, String destination, String departDate, String adults) throws ResponseException {
         try {
             String redisKey = "flightOffer:" + destination + ":" + departDate;
 
             ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
             String cachedDataJson = (String) valueOperations.get(redisKey);
-            if (cachedDataJson != null) {
 
-                // JSON 문자열을 List<FlightResDto>로 변환
-                Type listType = new TypeToken<List<FlightResDto>>() {}.getType();
-                List<FlightResDto> cachedData = gson.fromJson(cachedDataJson, listType);
-
-                return cachedData;
-            }
-
-            FlightOfferSearch[] flightOffersJson = amadeusConnect.flights(origin, destination, departDate, adults, returnDate);
+            FlightOfferSearch[] flightOffersJson = amadeusConnect.flights(origin, destination, departDate, adults);
 
             // flightOffersJson을 JSON 문자열로 변환
             String flightOffersJsonString = gson.toJson(flightOffersJson);
@@ -73,7 +65,6 @@ public class FlightService {
             String flightResDtosJson = gson.toJson(flightResDtos);
             valueOperations.set(redisKey, flightResDtosJson, Duration.ofSeconds(redisTTL));
 
-            return flightResDtos;
         } catch (ResponseException e) {
             log.info(e.getMessage());
             throw new CustomException(ErrorCode.FAIL_TO_GET_FLIGHT_INFO);
