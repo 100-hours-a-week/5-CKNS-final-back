@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,16 +27,16 @@ public class WishController {
      * 위시리스트 조회
      */
     @GetMapping()
-    public ResponseEntity<ApiResponseEntity<List<WishResDto>>> getWishlist(@PathVariable Long travelRoomId) {
-        return ResponseEntity.ok(ApiResponseEntity.of(wishService.getWishlist(travelRoomId)));
+    public ResponseEntity<ApiResponseEntity<List<WishResDto>>> getWishlist(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(ApiResponseEntity.of(wishService.getWishlist(travelRoomId, userDetails.getUsername())));
     }
 
     /**
      * 위시 추가
      */
     @PostMapping()
-    public ResponseEntity<ApiResponseEntity<String>> addWish(@PathVariable Long travelRoomId, @Valid @RequestBody WishReqDto wishReqDto) {
-        wishService.addWish(travelRoomId, wishReqDto);
+    public ResponseEntity<ApiResponseEntity<String>> addWish(@PathVariable Long travelRoomId, @Valid @RequestBody WishReqDto wishReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+        wishService.addWish(travelRoomId, wishReqDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_ADD_WISH));
     }
 
@@ -42,8 +44,8 @@ public class WishController {
      * 위시 삭제
      */
     @DeleteMapping("/{wishId}")
-    public ResponseEntity<ApiResponseEntity<String>> deleteWish(@PathVariable Long wishId) {
-        wishService.deleteWish(wishId);
+    public ResponseEntity<ApiResponseEntity<String>> deleteWish(@PathVariable Long travelRoomId, @PathVariable Long wishId, @AuthenticationPrincipal UserDetails userDetails) {
+        wishService.deleteWish(travelRoomId, wishId, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_DELETE_WISH));
     }
 }
