@@ -41,6 +41,6 @@ public class AmadeusConnect {
                         .and("departureDate", departDate)
                         .and("returnDate", returnDate)
                         .and("adults", adults)
-                        .and("max", 3));
+                        .and("max", 250));
     }
 }
