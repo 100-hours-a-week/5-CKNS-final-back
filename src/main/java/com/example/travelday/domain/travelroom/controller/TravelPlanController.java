@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +29,9 @@ public class TravelPlanController {
      * 여행 일정 목록 조회
      */
     @GetMapping
-    public ResponseEntity<ApiResponseEntity<List<TravelPlanResDto>>> getTravelPlanList(@PathVariable Long travelRoomId) {
-        List<TravelPlanResDto> travelPlans = travelPlanService.getAllTravelPlan(travelRoomId);
+    public ResponseEntity<ApiResponseEntity<List<TravelPlanResDto>>> getTravelPlanList(@PathVariable Long travelRoomId,@AuthenticationPrincipal UserDetails userDetails) {
+        String userId = userDetails.getUsername();
+        List<TravelPlanResDto> travelPlans = travelPlanService.getAllTravelPlan(travelRoomId, userId);
         return ResponseEntity.ok(ApiResponseEntity.of(travelPlans));
     }
 
@@ -36,9 +39,9 @@ public class TravelPlanController {
      * 여행 일정 덮어쓰기
      */
     @PostMapping("/overwrite")
-    public ResponseEntity<ApiResponseEntity<String>> updateTravelPlan(@PathVariable Long travelRoomId, @RequestBody @Valid TravelPlanListOverwriteDto travelPlanListOverwriteDto) {
-        log.info("여행 일정 덮어쓰기 tarvelPlanList = {}, travelRoomId = {}", travelPlanListOverwriteDto, travelRoomId);
-        travelPlanService.updateTravelPlan(travelRoomId, travelPlanListOverwriteDto);
+    public ResponseEntity<ApiResponseEntity<String>> updateTravelPlan(@PathVariable Long travelRoomId, @RequestBody @Valid TravelPlanListOverwriteDto travelPlanListOverwriteDto, @AuthenticationPrincipal UserDetails userDetails) {
+        String userId = userDetails.getUsername();
+        travelPlanService.updateTravelPlan(travelRoomId, travelPlanListOverwriteDto, userId);
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_TRAVELPLAN));
     }
 
@@ -46,8 +49,9 @@ public class TravelPlanController {
      * 여행 일정 목록 추가하기
      */
     @PostMapping("/list")
-    public ResponseEntity<ApiResponseEntity<String>> addTravelPlanlist(@PathVariable Long travelRoomId, @RequestBody @Valid TravelPlanListReqDto travelPlanListReqDto) {
-        travelPlanService.addTravelPlanList(travelRoomId, travelPlanListReqDto);
+    public ResponseEntity<ApiResponseEntity<String>> addTravelPlanlist(@PathVariable Long travelRoomId, @RequestBody @Valid TravelPlanListReqDto travelPlanListReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+        String userId = userDetails.getUsername();
+        travelPlanService.addTravelPlanList(travelRoomId, travelPlanListReqDto, userId);
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_CREATE_TRAVELPLANLIST));
     }
 
@@ -55,8 +59,9 @@ public class TravelPlanController {
      * 여행 일정 바로 추가
      */
     @PostMapping("/direct")
-    public ResponseEntity<ApiResponseEntity<String>> addTravelPlanDirect(@PathVariable Long travelRoomId, @RequestBody TravelPlanReqDto travelPlanReqDto) {
-        travelPlanService.addTravelPlanDirect(travelRoomId, travelPlanReqDto);
+    public ResponseEntity<ApiResponseEntity<String>> addTravelPlanDirect(@PathVariable Long travelRoomId, @RequestBody TravelPlanReqDto travelPlanReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+        String userId = userDetails.getUsername();
+        travelPlanService.addTravelPlanDirect(travelRoomId, travelPlanReqDto, userId);
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_CREATE_TRAVELPLAN));
     }
 
@@ -64,10 +69,9 @@ public class TravelPlanController {
      * 여행 일정 삭제하기
      */
     @DeleteMapping("/{travelPlanId}")
-    public ResponseEntity<ApiResponseEntity<Void>> deleteTravelPlan(@PathVariable Long travelRoomId, @PathVariable Long travelPlanId) {
-        travelPlanService.deleteTravelPlan(travelRoomId, travelPlanId);
-        return ResponseEntity.ok(ApiResponseEntity.of(null));
+    public ResponseEntity<ApiResponseEntity<String>> deleteTravelPlan(@PathVariable Long travelRoomId, @PathVariable Long travelPlanId, @AuthenticationPrincipal UserDetails userDetails) {
+        String userId = userDetails.getUsername();
+        travelPlanService.deleteTravelPlan(travelRoomId, travelPlanId, userId);
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_DELETE_TRAVELPLAN));
     }
-
-
 }
