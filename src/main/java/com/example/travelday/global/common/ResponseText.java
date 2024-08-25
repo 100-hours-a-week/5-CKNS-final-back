@@ -18,6 +18,8 @@ public class ResponseText {
 
     public static final String SUCCESS_UPDATE_TRAVELROOM = "여행방 수정 성공";
 
+    public static final String SUCCESS_DELETE_TRAVELPLAN = "여행일정 삭제 성공";
+
     public static final String SUCCESS_LOGOUT = "로그아웃 성공";
 
     public static final String SUCCESS_UPDATE_NICKNAME = "닉네임 수정 성공";
