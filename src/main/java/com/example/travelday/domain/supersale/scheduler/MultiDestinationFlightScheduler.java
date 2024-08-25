@@ -51,6 +51,5 @@ public class MultiDestinationFlightScheduler {
                 throw new CustomException(ErrorCode.FAIL_TO_GET_FLIGHT_INFO);
             }
         }
-
     }
 }
