@@ -42,7 +42,6 @@ public class FlightService {
             String redisKey = "flightOffer:" + origin + ":"+ destination + ":" + departDate;
 
             ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
-            String cachedDataJson = (String) valueOperations.get(redisKey);
 
             FlightOfferSearch[] flightOffersJson = amadeusConnect.flights(origin, destination, departDate, adults);
 
