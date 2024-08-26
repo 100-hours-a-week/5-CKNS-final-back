@@ -71,12 +71,17 @@ public class FlightService {
     }
 
     public List<FlightResDto> getLowestPriceFlights() {
-        String[] destinations = {"INC", "FUK", "NRT", "HND", "OKA", "GUM", "BKK", "TPE", "DAD"};
+        String[] destinations = {"PQC", "OIT", "CNX", "TPE", "NRT",
+            "DPS", "OKA", "FUK", "JFK", "NGO",
+            "CDG", "KIX", "LGA", "SYD", "MAD",
+            "LHR", "VIE", "CDG", "FRA", "FCO"};
         String departDate = String.valueOf(LocalDate.now().plusDays(1));
 
         List<FlightResDto> flightResDtos = new ArrayList<>();
         for (String des : destinations) {
-            String redisKey = "flightOffer:" + des + ":" + departDate;
+            String redisKey = "flightOffer:ICN:" + des + ":" +  departDate;
+
+            log.info("redisKey: " + redisKey);
 
             ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
             String cachedDataJson = (String) valueOperations.get(redisKey);
