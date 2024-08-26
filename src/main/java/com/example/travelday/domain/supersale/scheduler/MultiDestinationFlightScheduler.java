@@ -19,8 +19,7 @@ public class MultiDestinationFlightScheduler {
 
     private final FlightService flightService;
 
-    //    @Scheduled(cron = "0/20 * * * * ?")
-    @Scheduled(cron = "0/20 * * * * ?")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void fetchAndStoreFlightOffers() {
 
         log.info("===== fetchAndStoreFlightOffers for Multiple Destinations =====");
