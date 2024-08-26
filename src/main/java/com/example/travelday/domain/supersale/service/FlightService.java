@@ -91,7 +91,7 @@ public class FlightService {
                 List<FlightResDto> cachedData = gson.fromJson(cachedDataJson, listType);
 
                 if (!cachedData.isEmpty()) {
-                    flightResDtos.addAll(cachedData);
+                    flightResDtos.add(cachedData.get(0));
                 }
             }
         }
