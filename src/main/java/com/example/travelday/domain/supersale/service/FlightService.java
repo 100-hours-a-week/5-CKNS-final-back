@@ -39,7 +39,7 @@ public class FlightService {
 
     public void getFlightOffers(String origin, String destination, String departDate, String adults) throws ResponseException {
         try {
-            String redisKey = "flightOffer:" + destination + ":" + departDate;
+            String redisKey = "flightOffer:" + origin + ":"+ destination + ":" + departDate;
 
             ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
             String cachedDataJson = (String) valueOperations.get(redisKey);
@@ -67,13 +67,12 @@ public class FlightService {
 
         } catch (ResponseException e) {
             log.info(e.getMessage());
-            throw new CustomException(ErrorCode.FAIL_TO_GET_FLIGHT_INFO);
         }
     }
 
     public List<FlightResDto> getLowestPriceFlights() {
         String[] destinations = {"INC", "FUK", "NRT", "HND", "OKA", "GUM", "BKK", "TPE", "DAD"};
-        String departDate = String.valueOf(LocalDate.now().plusDays(2));
+        String departDate = String.valueOf(LocalDate.now().plusDays(1));
 
         List<FlightResDto> flightResDtos = new ArrayList<>();
         for (String des : destinations) {
