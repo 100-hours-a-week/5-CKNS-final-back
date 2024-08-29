@@ -1,6 +1,6 @@
 package com.example.travelday.domain.travelroom.controller;
 
-import com.example.travelday.domain.travelroom.dto.request.TravelPlanListOverwriteDto;
+import com.example.travelday.domain.travelroom.dto.request.UpdateTravelPlanListDto;
 import com.example.travelday.domain.travelroom.dto.request.TravelPlanListReqDto;
 import com.example.travelday.domain.travelroom.dto.request.TravelPlanReqDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelPlanResDto;
@@ -8,6 +8,7 @@ import com.example.travelday.domain.travelroom.service.TravelPlanService;
 import com.example.travelday.global.common.ApiResponseEntity;
 import com.example.travelday.global.common.ResponseText;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 @Slf4j
 @RestController
@@ -35,11 +37,28 @@ public class TravelPlanController {
     }
 
     /**
-     * 여행 일정 덮어쓰기
+     * 수정 중인지 확인
      */
-    @PostMapping("/overwrite")
-    public ResponseEntity<ApiResponseEntity<String>> updateTravelPlan(@PathVariable Long travelRoomId, @RequestBody @Valid TravelPlanListOverwriteDto travelPlanListOverwriteDto, @AuthenticationPrincipal UserDetails userDetails) {
-        travelPlanService.updateTravelPlan(travelRoomId, travelPlanListOverwriteDto, userDetails.getUsername());
+    @PostMapping("/check/editable")
+    public ResponseEntity<ApiResponseEntity<String>> isEditable(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(ApiResponseEntity.of(travelPlanService.checkUsing(travelRoomId, userDetails.getUsername()) ? ResponseText.OK : ResponseText.BE_IN_USE));
+    }
+
+    /**
+     * 수정 중인지 확인용 테스트 (로컬 테스트용)
+     */
+    // TODO: 테스트용이기 때문에 main merge 전 삭제하기
+    @PostMapping("/test/check/editable")
+    public ResponseEntity<ApiResponseEntity<String>> testIsEditable(@PathVariable Long travelRoomId, @PathParam("userId") String userId) {
+        return ResponseEntity.ok(ApiResponseEntity.of(travelPlanService.checkUsing(travelRoomId, userId) ? ResponseText.OK : ResponseText.BE_IN_USE));
+    }
+
+    /**
+     * 여행 일정 수정
+     */
+    @PostMapping
+    public ResponseEntity<ApiResponseEntity<String>> updateTravelPlan(@PathVariable Long travelRoomId, @RequestBody @Valid UpdateTravelPlanListDto updateTravelPlanListDto, @AuthenticationPrincipal UserDetails userDetails) {
+        travelPlanService.updateTravelPlan(travelRoomId, updateTravelPlanListDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_TRAVELPLAN));
     }
 

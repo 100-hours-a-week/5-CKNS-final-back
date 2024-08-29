@@ -10,6 +10,8 @@ public class ResponseText {
 
     public static final String DUPLICATE = "DUPLICATE";
 
+    public static final String BE_IN_USE = "BE IN USE";
+
     public static final String SUCCESS_ADD_WISH = "위시 추가 성공";
 
     public static final String SUCCESS_DELETE_WISH = "위시 삭제 성공";
