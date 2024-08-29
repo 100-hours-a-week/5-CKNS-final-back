@@ -2,7 +2,7 @@ package com.example.travelday.domain.travelroom.service;
 
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
-import com.example.travelday.domain.travelroom.dto.request.TravelPlanListOverwriteDto;
+import com.example.travelday.domain.travelroom.dto.request.UpdateTravelPlanListDto;
 import com.example.travelday.domain.travelroom.dto.request.TravelPlanListReqDto;
 import com.example.travelday.domain.travelroom.dto.request.TravelPlanOverwriteDto;
 import com.example.travelday.domain.travelroom.dto.request.TravelPlanReqDto;
@@ -16,9 +16,12 @@ import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,8 @@ public class TravelPlanService {
     private final MemberRepository memberRepository;
 
     private final UserTravelRoomRepository userTravelRoomRepository;
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Transactional
     public List<TravelPlanResDto> getAllTravelPlan(Long travelRoomId, String userId) {
@@ -87,11 +92,35 @@ public class TravelPlanService {
     }
 
     @Transactional
-    public void updateTravelPlan(Long travelRoomId, TravelPlanListOverwriteDto travelPlanListOverwriteDto, String userId) {
+    public boolean checkUsing(Long travelRoomId, String userId) {
+        validateMemberInTravelRoom(userId, travelRoomId);
+
+        String redisKey = "Using Updating:" + travelRoomId;
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        String cachedData = (String) valueOperations.get(redisKey);
+
+        log.info(cachedData);
+        log.info(userId);
+
+        if (cachedData != null && !cachedData.equals(userId)) {
+            log.info("======== 캐시가 있고 데이터는 그 데이터는 userId가 아님");
+            return false;
+        } else if (cachedData != null && cachedData.equals(userId)) {
+            log.info("======== 캐시가 있고 데이터는 그 데이터는 userId가 맞음");
+            return true;
+        }
+
+        valueOperations.set(redisKey, userId, Duration.ofSeconds(1200000));
+
+        return true;
+    }
+
+    @Transactional
+    public void updateTravelPlan(Long travelRoomId, UpdateTravelPlanListDto updateTravelPlanListDto, String userId) {
 
         validateMemberInTravelRoom(userId, travelRoomId);
 
-        List<TravelPlanOverwriteDto> overwritePlans = travelPlanListOverwriteDto.body();
+        List<TravelPlanOverwriteDto> overwritePlans = updateTravelPlanListDto.body();
 
         for (TravelPlanOverwriteDto dto : overwritePlans) {
             travelPlanRepository.updateTravelPlan(dto.id(), dto.scheduledDay(), dto.position());
@@ -122,7 +151,7 @@ public class TravelPlanService {
                                 .isPresent();
 
         if (!exists) {
-            throw new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND);
+            throw new CustomException(ErrorCode.USER_NOT_IN_TRAVEL_ROOM);
         }
     }
 
