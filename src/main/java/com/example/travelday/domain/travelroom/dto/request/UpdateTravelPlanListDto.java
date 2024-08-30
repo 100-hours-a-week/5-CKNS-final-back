@@ -6,7 +6,7 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record TravelPlanListOverwriteDto(
+public record UpdateTravelPlanListDto(
 
     @NotEmpty
     List<TravelPlanOverwriteDto> body
