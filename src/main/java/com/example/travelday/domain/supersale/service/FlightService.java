@@ -62,6 +62,7 @@ public class FlightService {
             // List<FlightResDto>를 JSON 문자열로 변환 후 Redis에 저장
             String flightResDtosJson = gson.toJson(flightResDtos);
             valueOperations.set(redisKey, flightResDtosJson, Duration.ofSeconds(redisTTL));
+            log.info("Successfully stored flight data for destination from {} to {} on {}", origin, destination, departDate);
 
         } catch (ResponseException e) {
             log.info(e.getMessage());
