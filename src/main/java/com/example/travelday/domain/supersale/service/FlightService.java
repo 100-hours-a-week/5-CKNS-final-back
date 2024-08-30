@@ -49,8 +49,6 @@ public class FlightService {
                 return;
             }
 
-            log.info("=============== 여기들어오면 실패임 ================");
-
             FlightOfferSearch[] flightOffersJson = amadeusConnect.flights(origin, destination, departDate, adults);
 
             // flightOffersJson을 JSON 문자열로 변환
