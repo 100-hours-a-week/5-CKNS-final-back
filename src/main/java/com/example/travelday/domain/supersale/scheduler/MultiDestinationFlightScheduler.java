@@ -19,7 +19,9 @@ public class MultiDestinationFlightScheduler {
 
     private final FlightService flightService;
 
-    @Scheduled(cron = "0 0 1 * * ?", zone = "Asia/Seoul")
+//    @Scheduled(cron = "0 0 1 * * ?", zone = "Asia/Seoul")
+//    @Scheduled(cron = "*/30 * * * * ?")
+    @Scheduled(cron = "0 40 17 * * ?", zone = "Asia/Seoul")
     public void fetchAndStoreFlightOffers() {
 
         log.info("===== fetchAndStoreFlightOffers for Multiple Destinations =====");
@@ -28,7 +30,8 @@ public class MultiDestinationFlightScheduler {
         String adults = "1";
 
         // 대상 목적지 목록
-        String[] airportList = {"PQC", "OIT", "CNX", "TPE", "NRT",
+        String[] airportList = {"PQC"
+            , "OIT", "CNX", "TPE", "NRT",
             "DPS", "OKA", "FUK", "JFK", "NGO",
             "CDG", "KIX", "LGA", "SYD", "MAD",
             "LHR", "VIE", "CDG", "FRA", "FCO"
@@ -42,7 +45,8 @@ public class MultiDestinationFlightScheduler {
         for (String airport : airportList) {
             try {
                 flightService.getFlightOffers(icn, airport, departDate, adults);
-                log.info("Successfully fetched and stored flight data for destination from ICN to: {}", airport);
+                log.info("Successfully fetched and " +
+                             " flight data for destination from ICN to: {}", airport);
 
                 if (airport.equals(icn)) continue;
 
