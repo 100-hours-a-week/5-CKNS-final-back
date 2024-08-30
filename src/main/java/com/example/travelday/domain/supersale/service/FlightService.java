@@ -42,6 +42,15 @@ public class FlightService {
 
             ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
 
+            // Redis에서 데이터가 이미 존재하는지 확인
+            String cachedFlightData = (String) valueOperations.get(redisKey);
+            if (cachedFlightData != null) {
+                log.info("Flight data for destination from {} to {} on {} is already cached. Skipping API call.", origin, destination, departDate);
+                return;
+            }
+
+            log.info("=============== 여기들어오면 실패임 ================");
+
             FlightOfferSearch[] flightOffersJson = amadeusConnect.flights(origin, destination, departDate, adults);
 
             // flightOffersJson을 JSON 문자열로 변환
