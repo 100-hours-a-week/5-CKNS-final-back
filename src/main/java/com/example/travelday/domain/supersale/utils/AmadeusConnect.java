@@ -19,8 +19,7 @@ public class AmadeusConnect {
     private AmadeusConnect(@Value("${amadeus.api.key}") String apiKey,
                            @Value("${amadeus.api.secret}") String apiSecret) {
         this.amadeus = Amadeus
-                .builder(apiKey, apiSecret)
-                .build();
+                .builder(apiKey, apiSecret).setLogLevel("debug").setHostname("production").build();
     }
 
     public Hotel[] hotelsByGeocode(double latitude, double longitude) throws ResponseException {

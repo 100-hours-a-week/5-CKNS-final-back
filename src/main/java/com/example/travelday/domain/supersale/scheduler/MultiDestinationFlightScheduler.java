@@ -19,7 +19,7 @@ public class MultiDestinationFlightScheduler {
 
     private final FlightService flightService;
 
-    @Scheduled(cron = "0 */15 * * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "*/20 * * * * *")
     public void fetchAndStoreFlightOffers() {
 
         log.info("===== fetchAndStoreFlightOffers for Multiple Destinations =====");
@@ -38,7 +38,6 @@ public class MultiDestinationFlightScheduler {
         LocalDate departureDate = LocalDate.now().plusDays(1);
         String departDate = departureDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
 
-        // 각 목적지에 대해 검색 및 저장
         // ICN에서 출발하는 각 공항으로 검색 및 저장
         for (String airport : airportList) {
             try {
