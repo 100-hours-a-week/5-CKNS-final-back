@@ -21,7 +21,7 @@ public class MultiDestinationFlightScheduler {
 
 //    @Scheduled(cron = "0 0 1 * * ?", zone = "Asia/Seoul")
 //    @Scheduled(cron = "*/30 * * * * ?")
-    @Scheduled(cron = "0 40 17 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 51 17 * * ?", zone = "Asia/Seoul")
     public void fetchAndStoreFlightOffers() {
 
         log.info("===== fetchAndStoreFlightOffers for Multiple Destinations =====");
