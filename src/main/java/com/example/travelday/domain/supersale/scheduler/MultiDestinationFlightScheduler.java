@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Slf4j
@@ -19,10 +20,10 @@ public class MultiDestinationFlightScheduler {
 
     private final FlightService flightService;
 
-    @Scheduled(cron = "0 0 1 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 20 19 * * ?", zone = "Asia/Seoul")
     public void fetchAndStoreFlightOffers() {
 
-        log.info("===== fetchAndStoreFlightOffers for Multiple Destinations =====");
+        log.info("===== fetchAndStoreFlightOffers for Multiple Destinations started at {} =====", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         String icn= "ICN";
         String adults = "1";
@@ -53,6 +54,8 @@ public class MultiDestinationFlightScheduler {
                 log.error("Failed to fetch flight data from ICN to destination: {} - {}", airport, e.getMessage());
                 throw new CustomException(ErrorCode.FAIL_TO_GET_FLIGHT_INFO);
             }
+
+            log.info("===== fetchAndStoreFlightOffers for Multiple Destinations ended at {} =====", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
     }
 }
