@@ -45,6 +45,9 @@ public enum ErrorCode {
     // wish error
     WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WH001", "위시를 찾을 수 없습니다."),
 
+    // redis error
+    REDIS_SAVE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "RD001", "Redis 저장에 실패했습니다."),
+
     // server error
     SEVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SV001", "서버 오류");
 
