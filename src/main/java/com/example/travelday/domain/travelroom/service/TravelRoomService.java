@@ -3,6 +3,7 @@ package com.example.travelday.domain.travelroom.service;
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
+import com.example.travelday.domain.travelroom.dto.response.TravelRoomMembersResDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomResDto;
 import com.example.travelday.domain.travelroom.entity.TravelRoom;
 import com.example.travelday.domain.travelroom.entity.UserTravelRoom;
@@ -30,20 +31,20 @@ public class TravelRoomService {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public List<TravelRoomResDto> getAllTravelRoom(String userId) {
+    public List<TravelRoomMembersResDto> getAllTravelRoom(String userId) {
         Member member = memberRepository.findByUserId(userId)
                             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        List<Long> travelRoomIds = userTravelRoomRepository.findByMember(member)
-                                        .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND))
-                                        .stream()
-                                        .map(UserTravelRoom::getTravelRoom)
-                                        .map(TravelRoom::getId)
-                                        .collect(Collectors.toList());
+        List<UserTravelRoom> userTravelRooms = userTravelRoomRepository.findByMember(member)
+                                                    .orElseThrow(() -> new CustomException(ErrorCode.USER_DOES_NOT_JOIN_TRAVEL_ROOM));
 
-        return travelRoomRepository.findAllById(travelRoomIds)
+        return userTravelRooms
                     .stream()
-                    .map(TravelRoomResDto::fromEntity)
+                    .map(userTravelRoom -> {
+                            TravelRoom travelRoom = userTravelRoom.getTravelRoom();
+                            int memberCount = userTravelRoomRepository.countByTravelRoom(travelRoom);
+                            return TravelRoomMembersResDto.fromEntity(travelRoom, memberCount);
+                    })
                     .collect(Collectors.toList());
     }
 
