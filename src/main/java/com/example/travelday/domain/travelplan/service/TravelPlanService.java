@@ -99,14 +99,9 @@ public class TravelPlanService {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         String cachedData = (String) valueOperations.get(redisKey);
 
-        log.info(cachedData);
-        log.info(userId);
-
         if (cachedData != null && !cachedData.equals(userId)) {
-            log.info("======== 캐시가 있고 데이터는 그 데이터는 userId가 아님");
             return false;
         } else if (cachedData != null && cachedData.equals(userId)) {
-            log.info("======== 캐시가 있고 데이터는 그 데이터는 userId가 맞음");
             return true;
         }
 
@@ -124,9 +119,6 @@ public class TravelPlanService {
 
         for (TravelPlanOverwriteDto dto : overwritePlans) {
             travelPlanRepository.updateTravelPlan(dto.id(), dto.scheduledDay(), dto.position());
-
-            log.info("Updated TravelPlan: id={}, scheduledDay={}, order={}",
-                dto.id(), dto.scheduledDay(), dto.position());
         }
     }
 

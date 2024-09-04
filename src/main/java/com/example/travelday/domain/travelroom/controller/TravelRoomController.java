@@ -28,7 +28,6 @@ public class TravelRoomController {
      */
     @GetMapping
     public ResponseEntity<ApiResponseEntity<List<TravelRoomMembersResDto>>> getAllTravelRoom(@AuthenticationPrincipal UserDetails userDetails) {
-        log.info("userDetails: {}", userDetails);
         List<TravelRoomMembersResDto> travelRooms = travelRoomService.getAllTravelRoom(userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(travelRooms));
     }
