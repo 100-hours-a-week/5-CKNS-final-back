@@ -1,4 +1,4 @@
-package com.example.travelday.domain.travelroom.enums;
+package com.example.travelday.domain.invitation.enums;
 
 public enum InvitationStatus {
     PENDING,

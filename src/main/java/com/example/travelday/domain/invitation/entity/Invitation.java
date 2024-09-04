@@ -1,7 +1,8 @@
-package com.example.travelday.domain.travelroom.entity;
+package com.example.travelday.domain.invitation.entity;
 
 import com.example.travelday.domain.auth.entity.Member;
-import com.example.travelday.domain.travelroom.enums.InvitationStatus;
+import com.example.travelday.domain.travelroom.entity.TravelRoom;
+import com.example.travelday.domain.invitation.enums.InvitationStatus;
 import com.example.travelday.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
