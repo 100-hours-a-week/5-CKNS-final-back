@@ -25,7 +25,7 @@ public class FlightController {
     /**
      * 최저가 항공 목록 조회
      */
-    @GetMapping("/lowest-price/list")
+    @GetMapping("/lowestPrice/list")
     public ResponseEntity<ApiResponseEntity<List<FlightResDto>>> getLowestPriceFlights() {
         return ResponseEntity.ok(ApiResponseEntity.of(flightService.getLowestPriceFlights()));
     }
@@ -33,7 +33,7 @@ public class FlightController {
     /**
      * 최저가 항공 상세 조회
      */
-    @GetMapping("/lowest-price")
+    @GetMapping("/lowestPrice")
     public ResponseEntity<ApiResponseEntity<FlightResDto>> getLowestPriceFlight(@RequestBody FlightReqDto flightReqDto) {
         return ResponseEntity.ok(ApiResponseEntity.of(flightService.getLowestPriceFlight(flightReqDto)));
     }

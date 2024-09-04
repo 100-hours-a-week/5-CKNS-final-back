@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/api/chat")
 public class ChatController {
 
     private final ChatService chatService;
@@ -40,7 +40,7 @@ public class ChatController {
     /**
      * 채팅 조회
      */
-    @GetMapping("/rooms/{travelRoomId}/chat")
+    @GetMapping("/rooms/{travelRoomId}")
     public ResponseEntity<ApiResponseEntity<?>> listChats(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(ApiResponseEntity.of(chatService.getAllChat(travelRoomId, userDetails.getUsername())));
     }
