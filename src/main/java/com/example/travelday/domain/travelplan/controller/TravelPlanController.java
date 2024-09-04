@@ -1,10 +1,10 @@
-package com.example.travelday.domain.travelroom.controller;
+package com.example.travelday.domain.travelplan.controller;
 
-import com.example.travelday.domain.travelroom.dto.request.UpdateTravelPlanListDto;
-import com.example.travelday.domain.travelroom.dto.request.TravelPlanListReqDto;
-import com.example.travelday.domain.travelroom.dto.request.TravelPlanReqDto;
-import com.example.travelday.domain.travelroom.dto.response.TravelPlanResDto;
-import com.example.travelday.domain.travelroom.service.TravelPlanService;
+import com.example.travelday.domain.travelplan.dto.request.batch.UpdateTravelPlanListDto;
+import com.example.travelday.domain.travelplan.dto.request.batch.TravelPlanListReqDto;
+import com.example.travelday.domain.travelplan.dto.request.TravelPlanReqDto;
+import com.example.travelday.domain.travelplan.dto.response.TravelPlanResDto;
+import com.example.travelday.domain.travelplan.service.TravelPlanService;
 import com.example.travelday.global.common.ApiResponseEntity;
 import com.example.travelday.global.common.ResponseText;
 import jakarta.validation.Valid;
@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.SimpleTimeZone;
 
 @Slf4j
 @RestController

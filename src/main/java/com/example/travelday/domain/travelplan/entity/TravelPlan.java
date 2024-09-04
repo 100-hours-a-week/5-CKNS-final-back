@@ -1,6 +1,7 @@
-package com.example.travelday.domain.travelroom.entity;
+package com.example.travelday.domain.travelplan.entity;
 
-import com.example.travelday.domain.travelroom.dto.request.TravelPlanReqDto;
+import com.example.travelday.domain.travelplan.dto.request.TravelPlanReqDto;
+import com.example.travelday.domain.travelroom.entity.TravelRoom;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

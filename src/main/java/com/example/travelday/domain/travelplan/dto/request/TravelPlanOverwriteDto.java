@@ -1,4 +1,4 @@
-package com.example.travelday.domain.travelroom.dto.request;
+package com.example.travelday.domain.travelplan.dto.request;
 
 import io.micrometer.common.lang.Nullable;
 import jakarta.validation.constraints.NotNull;

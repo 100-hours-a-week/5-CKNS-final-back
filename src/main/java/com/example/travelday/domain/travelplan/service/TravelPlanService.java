@@ -1,15 +1,15 @@
-package com.example.travelday.domain.travelroom.service;
+package com.example.travelday.domain.travelplan.service;
 
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
-import com.example.travelday.domain.travelroom.dto.request.UpdateTravelPlanListDto;
-import com.example.travelday.domain.travelroom.dto.request.TravelPlanListReqDto;
-import com.example.travelday.domain.travelroom.dto.request.TravelPlanOverwriteDto;
-import com.example.travelday.domain.travelroom.dto.request.TravelPlanReqDto;
-import com.example.travelday.domain.travelroom.dto.response.TravelPlanResDto;
-import com.example.travelday.domain.travelroom.entity.TravelPlan;
+import com.example.travelday.domain.travelplan.dto.request.batch.UpdateTravelPlanListDto;
+import com.example.travelday.domain.travelplan.dto.request.batch.TravelPlanListReqDto;
+import com.example.travelday.domain.travelplan.dto.request.TravelPlanOverwriteDto;
+import com.example.travelday.domain.travelplan.dto.request.TravelPlanReqDto;
+import com.example.travelday.domain.travelplan.dto.response.TravelPlanResDto;
+import com.example.travelday.domain.travelplan.entity.TravelPlan;
 import com.example.travelday.domain.travelroom.entity.TravelRoom;
-import com.example.travelday.domain.travelroom.repository.TravelPlanRepository;
+import com.example.travelday.domain.travelplan.repository.TravelPlanRepository;
 import com.example.travelday.domain.travelroom.repository.TravelRoomRepository;
 import com.example.travelday.domain.travelroom.repository.UserTravelRoomRepository;
 import com.example.travelday.global.exception.CustomException;

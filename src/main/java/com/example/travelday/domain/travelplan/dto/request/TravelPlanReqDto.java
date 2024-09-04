@@ -1,4 +1,4 @@
-package com.example.travelday.domain.travelroom.dto.request;
+package com.example.travelday.domain.travelplan.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

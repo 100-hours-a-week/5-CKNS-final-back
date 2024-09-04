@@ -1,6 +1,6 @@
-package com.example.travelday.domain.travelroom.repository;
+package com.example.travelday.domain.travelplan.repository;
 
-import com.example.travelday.domain.travelroom.entity.TravelPlan;
+import com.example.travelday.domain.travelplan.entity.TravelPlan;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

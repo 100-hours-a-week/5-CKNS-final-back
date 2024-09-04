@@ -1,5 +1,6 @@
-package com.example.travelday.domain.travelroom.dto.request;
+package com.example.travelday.domain.travelplan.dto.request.batch;
 
+import com.example.travelday.domain.travelplan.dto.request.TravelPlanOverwriteDto;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 
