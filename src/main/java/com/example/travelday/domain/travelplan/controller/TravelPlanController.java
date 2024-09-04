@@ -1,6 +1,6 @@
 package com.example.travelday.domain.travelplan.controller;
 
-import com.example.travelday.domain.travelplan.dto.request.batch.UpdateTravelPlanListDto;
+import com.example.travelday.domain.travelplan.dto.request.batch.UpdateTravelPlanListReqDto;
 import com.example.travelday.domain.travelplan.dto.request.batch.TravelPlanListReqDto;
 import com.example.travelday.domain.travelplan.dto.request.TravelPlanReqDto;
 import com.example.travelday.domain.travelplan.dto.response.TravelPlanResDto;
@@ -56,7 +56,7 @@ public class TravelPlanController {
      * 여행 일정 수정
      */
     @PostMapping
-    public ResponseEntity<ApiResponseEntity<String>> updateTravelPlan(@PathVariable Long travelRoomId, @RequestBody @Valid UpdateTravelPlanListDto updateTravelPlanListDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponseEntity<String>> updateTravelPlan(@PathVariable Long travelRoomId, @RequestBody @Valid UpdateTravelPlanListReqDto updateTravelPlanListDto, @AuthenticationPrincipal UserDetails userDetails) {
         travelPlanService.updateTravelPlan(travelRoomId, updateTravelPlanListDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_TRAVELPLAN));
     }

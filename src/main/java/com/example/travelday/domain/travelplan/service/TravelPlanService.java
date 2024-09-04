@@ -2,9 +2,9 @@ package com.example.travelday.domain.travelplan.service;
 
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
-import com.example.travelday.domain.travelplan.dto.request.batch.UpdateTravelPlanListDto;
+import com.example.travelday.domain.travelplan.dto.request.batch.UpdateTravelPlanListReqDto;
 import com.example.travelday.domain.travelplan.dto.request.batch.TravelPlanListReqDto;
-import com.example.travelday.domain.travelplan.dto.request.TravelPlanOverwriteDto;
+import com.example.travelday.domain.travelplan.dto.request.TravelPlanOverwriteReqDto;
 import com.example.travelday.domain.travelplan.dto.request.TravelPlanReqDto;
 import com.example.travelday.domain.travelplan.dto.response.TravelPlanResDto;
 import com.example.travelday.domain.travelplan.entity.TravelPlan;
@@ -111,13 +111,13 @@ public class TravelPlanService {
     }
 
     @Transactional
-    public void updateTravelPlan(Long travelRoomId, UpdateTravelPlanListDto updateTravelPlanListDto, String userId) {
+    public void updateTravelPlan(Long travelRoomId, UpdateTravelPlanListReqDto updateTravelPlanListDto, String userId) {
 
         validateMemberInTravelRoom(userId, travelRoomId);
 
-        List<TravelPlanOverwriteDto> overwritePlans = updateTravelPlanListDto.body();
+        List<TravelPlanOverwriteReqDto> overwritePlans = updateTravelPlanListDto.body();
 
-        for (TravelPlanOverwriteDto dto : overwritePlans) {
+        for (TravelPlanOverwriteReqDto dto : overwritePlans) {
             travelPlanRepository.updateTravelPlan(dto.id(), dto.scheduledDay(), dto.position());
         }
     }

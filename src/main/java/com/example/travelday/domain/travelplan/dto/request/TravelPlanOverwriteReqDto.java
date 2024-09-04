@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record TravelPlanOverwriteDto(
+public record TravelPlanOverwriteReqDto(
 
     @NotNull
     Long id,
