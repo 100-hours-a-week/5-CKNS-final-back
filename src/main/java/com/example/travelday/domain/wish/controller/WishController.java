@@ -1,8 +1,8 @@
-package com.example.travelday.domain.travelroom.controller;
+package com.example.travelday.domain.wish.controller;
 
-import com.example.travelday.domain.travelroom.dto.request.WishReqDto;
-import com.example.travelday.domain.travelroom.dto.response.WishResDto;
-import com.example.travelday.domain.travelroom.service.WishService;
+import com.example.travelday.domain.wish.dto.request.WishReqDto;
+import com.example.travelday.domain.wish.dto.response.WishResDto;
+import com.example.travelday.domain.wish.service.WishService;
 import com.example.travelday.global.common.ApiResponseEntity;
 import com.example.travelday.global.common.ResponseText;
 import jakarta.validation.Valid;

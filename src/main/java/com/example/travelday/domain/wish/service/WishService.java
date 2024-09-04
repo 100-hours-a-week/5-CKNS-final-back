@@ -1,14 +1,14 @@
-package com.example.travelday.domain.travelroom.service;
+package com.example.travelday.domain.wish.service;
 
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
-import com.example.travelday.domain.travelroom.dto.request.WishReqDto;
-import com.example.travelday.domain.travelroom.dto.response.WishResDto;
+import com.example.travelday.domain.wish.dto.request.WishReqDto;
+import com.example.travelday.domain.wish.dto.response.WishResDto;
 import com.example.travelday.domain.travelroom.entity.TravelRoom;
-import com.example.travelday.domain.travelroom.entity.Wish;
+import com.example.travelday.domain.wish.entity.Wish;
 import com.example.travelday.domain.travelroom.repository.TravelRoomRepository;
 import com.example.travelday.domain.travelroom.repository.UserTravelRoomRepository;
-import com.example.travelday.domain.travelroom.repository.WishRepository;
+import com.example.travelday.domain.wish.repository.WishRepository;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;

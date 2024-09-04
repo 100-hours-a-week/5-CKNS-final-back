@@ -1,6 +1,6 @@
-package com.example.travelday.domain.travelroom.repository;
+package com.example.travelday.domain.wish.repository;
 
-import com.example.travelday.domain.travelroom.entity.Wish;
+import com.example.travelday.domain.wish.entity.Wish;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

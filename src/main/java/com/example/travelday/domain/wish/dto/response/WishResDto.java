@@ -1,6 +1,6 @@
-package com.example.travelday.domain.travelroom.dto.response;
+package com.example.travelday.domain.wish.dto.response;
 
-import com.example.travelday.domain.travelroom.entity.Wish;
+import com.example.travelday.domain.wish.entity.Wish;
 import lombok.Builder;
 
 @Builder
