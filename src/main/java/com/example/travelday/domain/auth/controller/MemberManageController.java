@@ -20,7 +20,9 @@ public class MemberManageController {
 
     private final MemberManageService memberManageService;
 
-    /** 회원 정보 조회 */
+    /**
+     * 회원 정보 조회
+     */
     @GetMapping
     public ResponseEntity<ApiResponseEntity<MemberInfoResDto>> getMemberInfo(
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -28,7 +30,9 @@ public class MemberManageController {
                 ApiResponseEntity.of(memberManageService.getInfo(userDetails.getUsername())));
     }
 
-    /** 닉네임 중복 검사 */
+    /**
+     * 닉네임 중복 검사
+     */
     @GetMapping("/nickname/check")
     public ResponseEntity<ApiResponseEntity<String>> duplicateNickname(
             @RequestParam String nickname) {
@@ -37,7 +41,9 @@ public class MemberManageController {
                 ApiResponseEntity.of(isDuplicate ? ResponseText.DUPLICATE : ResponseText.OK));
     }
 
-    /** 닉네임 수정 */
+    /**
+     * 닉네임 수정
+     */
     @PutMapping("/nickname")
     public ResponseEntity<ApiResponseEntity<String>> updateNickname(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateNicknameReqDto reqDto) {
         memberManageService.updateNickname(userDetails.getUsername(), reqDto.nickname());
