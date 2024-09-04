@@ -1,6 +1,6 @@
-package com.example.travelday.domain.travelroom.dto.response;
+package com.example.travelday.domain.chat.dto.response;
 
-import com.example.travelday.domain.travelroom.entity.Chat;
+import com.example.travelday.domain.chat.entity.Chat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 

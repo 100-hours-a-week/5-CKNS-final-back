@@ -1,4 +1,4 @@
-package com.example.travelday.domain.travelroom.entity;
+package com.example.travelday.domain.chat.entity;
 
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;

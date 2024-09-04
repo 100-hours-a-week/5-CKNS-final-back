@@ -1,6 +1,6 @@
-package com.example.travelday.domain.travelroom.repository;
+package com.example.travelday.domain.chat.repository;
 
-import com.example.travelday.domain.travelroom.entity.Chat;
+import com.example.travelday.domain.chat.entity.Chat;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

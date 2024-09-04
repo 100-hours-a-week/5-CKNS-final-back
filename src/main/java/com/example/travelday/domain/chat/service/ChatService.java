@@ -1,11 +1,11 @@
-package com.example.travelday.domain.travelroom.service;
+package com.example.travelday.domain.chat.service;
 
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
-import com.example.travelday.domain.travelroom.dto.request.ChatReqDto;
-import com.example.travelday.domain.travelroom.dto.response.ChatResDto;
-import com.example.travelday.domain.travelroom.entity.Chat;
-import com.example.travelday.domain.travelroom.repository.ChatRepository;
+import com.example.travelday.domain.chat.dto.request.ChatReqDto;
+import com.example.travelday.domain.chat.dto.response.ChatResDto;
+import com.example.travelday.domain.chat.entity.Chat;
+import com.example.travelday.domain.chat.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

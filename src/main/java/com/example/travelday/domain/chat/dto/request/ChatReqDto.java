@@ -1,4 +1,4 @@
-package com.example.travelday.domain.travelroom.dto.request;
+package com.example.travelday.domain.chat.dto.request;
 
 import lombok.Builder;
 
