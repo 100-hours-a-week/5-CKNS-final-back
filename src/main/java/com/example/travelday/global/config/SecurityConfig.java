@@ -1,4 +1,4 @@
-package com.example.travelday.global.config.security;
+package com.example.travelday.global.config;
 
 import com.example.travelday.global.auth.jwt.component.JwtAccessDeniedHandler;
 import com.example.travelday.global.auth.jwt.component.JwtAuthenticationEntryPoint;
