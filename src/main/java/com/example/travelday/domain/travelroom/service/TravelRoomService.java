@@ -42,8 +42,15 @@ public class TravelRoomService {
                     .stream()
                     .map(userTravelRoom -> {
                             TravelRoom travelRoom = userTravelRoom.getTravelRoom();
-                            int memberCount = userTravelRoomRepository.countByTravelRoom(travelRoom);
-                            return TravelRoomMembersResDto.fromEntity(travelRoom, memberCount);
+
+                            List<UserTravelRoom> userTravelRoomInTravelRoom = userTravelRoomRepository.findByTravelRoom(travelRoom);
+
+                            List<String> memberUserNames = userTravelRoomInTravelRoom.stream()
+                                    .map(utr -> utr.getMember().getNickname())
+                                    .collect(Collectors.toList());
+
+                            int memberCount = userTravelRoomInTravelRoom.size();
+                            return TravelRoomMembersResDto.fromEntity(travelRoom, memberCount, memberUserNames);
                     })
                     .collect(Collectors.toList());
     }
