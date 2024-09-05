@@ -113,7 +113,7 @@ public class FlightService {
     }
 
     public FlightResDto getLowestPriceFlight(FlightReqDto flightReqDto) {
-        String redisKey = "flightOffer:ICN" + flightReqDto.destination() + ":" + flightReqDto.departDate();
+        String redisKey = "flightOffer:ICN:" + flightReqDto.destination() + ":" + flightReqDto.departDate();
 
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         String cachedDataJson = (String) valueOperations.get(redisKey);
