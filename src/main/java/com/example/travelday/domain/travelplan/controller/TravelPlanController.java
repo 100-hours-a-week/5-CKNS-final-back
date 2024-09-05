@@ -1,7 +1,7 @@
 package com.example.travelday.domain.travelplan.controller;
 
-import com.example.travelday.domain.travelplan.dto.request.batch.UpdateTravelPlanListReqDto;
-import com.example.travelday.domain.travelplan.dto.request.batch.TravelPlanListReqDto;
+import com.example.travelday.domain.travelplan.dto.request.group.UpdateTravelPlansReqDto;
+import com.example.travelday.domain.travelplan.dto.request.group.TravelPlansReqDto;
 import com.example.travelday.domain.travelplan.dto.request.TravelPlanReqDto;
 import com.example.travelday.domain.travelplan.dto.response.TravelPlanResDto;
 import com.example.travelday.domain.travelplan.service.TravelPlanService;
@@ -56,7 +56,7 @@ public class TravelPlanController {
      * 여행 일정 수정
      */
     @PostMapping
-    public ResponseEntity<ApiResponseEntity<String>> updateTravelPlan(@PathVariable Long travelRoomId, @RequestBody @Valid UpdateTravelPlanListReqDto updateTravelPlanListDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponseEntity<String>> updateTravelPlan(@PathVariable Long travelRoomId, @RequestBody @Valid UpdateTravelPlansReqDto updateTravelPlanListDto, @AuthenticationPrincipal UserDetails userDetails) {
         travelPlanService.updateTravelPlan(travelRoomId, updateTravelPlanListDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_TRAVELPLAN));
     }
@@ -65,7 +65,7 @@ public class TravelPlanController {
      * 여행 일정 목록 추가하기
      */
     @PostMapping("/list")
-    public ResponseEntity<ApiResponseEntity<String>> addTravelPlanlist(@PathVariable Long travelRoomId, @RequestBody @Valid TravelPlanListReqDto travelPlanListReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponseEntity<String>> addTravelPlanlist(@PathVariable Long travelRoomId, @RequestBody @Valid TravelPlansReqDto travelPlanListReqDto, @AuthenticationPrincipal UserDetails userDetails) {
         travelPlanService.addTravelPlanList(travelRoomId, travelPlanListReqDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_CREATE_TRAVELPLANLIST));
     }

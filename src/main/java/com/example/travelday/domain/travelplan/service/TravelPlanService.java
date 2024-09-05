@@ -2,8 +2,8 @@ package com.example.travelday.domain.travelplan.service;
 
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
-import com.example.travelday.domain.travelplan.dto.request.batch.UpdateTravelPlanListReqDto;
-import com.example.travelday.domain.travelplan.dto.request.batch.TravelPlanListReqDto;
+import com.example.travelday.domain.travelplan.dto.request.group.UpdateTravelPlansReqDto;
+import com.example.travelday.domain.travelplan.dto.request.group.TravelPlansReqDto;
 import com.example.travelday.domain.travelplan.dto.request.TravelPlanOverwriteReqDto;
 import com.example.travelday.domain.travelplan.dto.request.TravelPlanReqDto;
 import com.example.travelday.domain.travelplan.dto.response.TravelPlanResDto;
@@ -55,7 +55,7 @@ public class TravelPlanService {
     }
 
     @Transactional
-    public void addTravelPlanList(Long travelRoomId, TravelPlanListReqDto travelPlanListReqDto, String userId) {
+    public void addTravelPlanList(Long travelRoomId, TravelPlansReqDto travelPlanListReqDto, String userId) {
 
         validateMemberInTravelRoom(userId, travelRoomId);
 
@@ -111,7 +111,7 @@ public class TravelPlanService {
     }
 
     @Transactional
-    public void updateTravelPlan(Long travelRoomId, UpdateTravelPlanListReqDto updateTravelPlanListDto, String userId) {
+    public void updateTravelPlan(Long travelRoomId, UpdateTravelPlansReqDto updateTravelPlanListDto, String userId) {
 
         validateMemberInTravelRoom(userId, travelRoomId);
 
