@@ -13,6 +13,5 @@ public interface UserTravelRoomRepository extends JpaRepository<UserTravelRoom, 
 
     Optional<UserTravelRoom> findByMemberAndTravelRoomId(Member member, Long travelRoomId);
 
-    int countByTravelRoom(TravelRoom travelRoom); // 해당 여행 방에 속한 멤버 수를 카운팅하는 메서드
-
+    List<UserTravelRoom> findByTravelRoom(TravelRoom travelRoom);
 }
