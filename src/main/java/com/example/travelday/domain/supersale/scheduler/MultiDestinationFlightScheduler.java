@@ -43,14 +43,10 @@ public class MultiDestinationFlightScheduler {
         for (String airport : airportList) {
             try {
                 flightService.getFlightOffers(icn, airport, departDate, adults);
-                log.info("Successfully fetched and stored flight data for destination from ICN to: {}", airport);
-
                 if (airport.equals(icn)) continue;
 
                 flightService.getFlightOffers(airport, icn, departDate, adults);
-                log.info("Successfully fetched and stored flight data for destination to ICN to: {}", airport);
             } catch (ResponseException e) {
-                log.error("Failed to fetch flight data from ICN to destination: {} - {}", airport, e.getMessage());
                 throw new CustomException(ErrorCode.FAIL_TO_GET_FLIGHT_INFO);
             }
         }

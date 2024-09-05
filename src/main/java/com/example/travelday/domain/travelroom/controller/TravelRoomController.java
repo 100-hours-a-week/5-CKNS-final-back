@@ -28,7 +28,6 @@ public class TravelRoomController {
      */
     @GetMapping
     public ResponseEntity<ApiResponseEntity<List<TravelRoomMembersResDto>>> getAllTravelRoom(@AuthenticationPrincipal UserDetails userDetails) {
-        log.info("userDetails: {}", userDetails);
         List<TravelRoomMembersResDto> travelRooms = travelRoomService.getAllTravelRoom(userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(travelRooms));
     }
@@ -55,9 +54,9 @@ public class TravelRoomController {
      * 여행방 삭제
      */
     @DeleteMapping("/{travelRoomId}")
-    public ResponseEntity<ApiResponseEntity<Void>> deleteTravelRoom(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponseEntity<String>> deleteTravelRoom(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
         travelRoomService.deleteTravelRoom(travelRoomId, userDetails.getUsername());
-        return ResponseEntity.ok(ApiResponseEntity.of(null));
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_DELETE_TRAVELROOM));
     }
 
     /**
