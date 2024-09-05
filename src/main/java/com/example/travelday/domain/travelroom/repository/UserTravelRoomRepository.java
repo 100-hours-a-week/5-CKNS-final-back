@@ -13,6 +13,5 @@ public interface UserTravelRoomRepository extends JpaRepository<UserTravelRoom, 
 
     Optional<UserTravelRoom> findByMemberAndTravelRoomId(Member member, Long travelRoomId);
 
-    int countByTravelRoom(TravelRoom travelRoom);
-
+    List<UserTravelRoom> findByTravelRoom(TravelRoom travelRoom);
 }
