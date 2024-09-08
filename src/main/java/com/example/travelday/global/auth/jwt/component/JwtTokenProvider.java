@@ -3,8 +3,8 @@ package com.example.travelday.global.auth.jwt.component;
 import com.example.travelday.global.auth.jwt.dto.AccessTokenDto;
 import com.example.travelday.global.auth.jwt.dto.RefreshTokenDto;
 import com.example.travelday.global.auth.jwt.dto.TokenDto;
-import com.example.travelday.global.auth.jwt.exception.ExpiredTokenException;
-import com.example.travelday.global.auth.jwt.exception.InvalidTokenException;
+import com.example.travelday.global.exception.ExpiredTokenException;
+import com.example.travelday.global.exception.InvalidTokenException;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import io.jsonwebtoken.*;
@@ -64,7 +64,7 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
 
         // Access Token 만료 시간 설정
-        Date accessTokenExpiresIn = new Date(now + 1000 * 10);
+        Date accessTokenExpiresIn = new Date(now + 1000 * Long.parseLong(accessTokenExpiration));
 
         // Access Token 생성
         String accessToken = Jwts.builder()

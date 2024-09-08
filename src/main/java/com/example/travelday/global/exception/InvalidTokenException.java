@@ -1,4 +1,4 @@
-package com.example.travelday.global.auth.jwt.exception;
+package com.example.travelday.global.exception;
 
 import com.example.travelday.global.exception.TokenException;
 
