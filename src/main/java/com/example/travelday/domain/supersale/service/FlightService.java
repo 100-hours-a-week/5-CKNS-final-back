@@ -4,6 +4,8 @@ import com.amadeus.exceptions.ResponseException;
 import com.amadeus.resources.FlightOfferSearch;
 import com.example.travelday.domain.supersale.dto.request.FlightReqDto;
 import com.example.travelday.domain.supersale.dto.response.FlightResDto;
+import com.example.travelday.domain.supersale.entity.Airport;
+import com.example.travelday.domain.supersale.repository.AirportRepository;
 import com.example.travelday.domain.supersale.repository.FlightOfferRepository;
 import com.example.travelday.domain.supersale.utils.AmadeusConnect;
 import com.example.travelday.global.exception.CustomException;
@@ -12,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -32,6 +35,9 @@ public class FlightService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final Gson gson = new Gson();
     private final FlightOfferRepository flightOfferRepository;
+
+    @Autowired
+    private final AirportRepository airportRepository;
 
     @Value("${spring.data.redis.timeout}")
     private long redisTTL;
@@ -126,5 +132,14 @@ public class FlightService {
         List<FlightResDto> cachedData = gson.fromJson(cachedDataJson, listType);
 
         return cachedData.get(0);
+    }
+
+    public List<Airport> searchAirport(String keyword) {
+        List<Airport> airports = airportRepository.findByKoreanAirportNameContaining(keyword);
+        airports.addAll(airportRepository.findByAirportCodeContaining(keyword));
+        if (airports.isEmpty()) {
+            throw new CustomException(ErrorCode.AIRPORT_NOT_FOUND);
+        }
+        return airports;
     }
 }
