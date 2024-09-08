@@ -15,10 +15,11 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
     @Qualifier("handlerExceptionResolver")
-    private  HandlerExceptionResolver resolver;
+    private final HandlerExceptionResolver resolver;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
