@@ -3,12 +3,15 @@ package com.example.travelday.global.auth.jwt.component;
 import com.example.travelday.global.auth.jwt.dto.AccessTokenDto;
 import com.example.travelday.global.auth.jwt.dto.RefreshTokenDto;
 import com.example.travelday.global.auth.jwt.dto.TokenDto;
+import com.example.travelday.global.exception.ExpiredTokenException;
+import com.example.travelday.global.exception.InvalidTokenException;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.Jwts.SIG;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +27,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class JwtTokenProvider {
 
@@ -128,9 +132,9 @@ public class JwtTokenProvider {
                     .parseSignedClaims(accessToken);
             return true;
         } catch (SecurityException | MalformedJwtException | UnsupportedJwtException e) {
-            throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
+            throw new InvalidTokenException(ErrorCode.INVALID_ACCESS_TOKEN.getMessage());
         } catch (ExpiredJwtException e) {
-            throw new CustomException(ErrorCode.EXPIRED_ACCESS_TOKEN);
+            throw new ExpiredTokenException(ErrorCode.EXPIRED_ACCESS_TOKEN.getMessage());
         }
     }
 
