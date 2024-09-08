@@ -5,6 +5,7 @@ import com.amadeus.resources.FlightOfferSearch;
 import com.example.travelday.domain.supersale.dto.request.FlightReqDto;
 import com.example.travelday.domain.supersale.dto.response.FlightResDto;
 import com.example.travelday.domain.supersale.entity.Airport;
+import com.example.travelday.domain.supersale.entity.FlightOffer;
 import com.example.travelday.domain.supersale.repository.AirportRepository;
 import com.example.travelday.domain.supersale.repository.FlightOfferRepository;
 import com.example.travelday.domain.supersale.utils.AmadeusConnect;
@@ -58,8 +59,8 @@ public class FlightService {
             String flightOffersJsonString = gson.toJson(flightOffersJson);
 
             // flightOffersJsonString을 MySQL에 저장
-//            FlightOffer flightOfferEntity = new FlightOffer(flightOffersJsonString);
-//            flightOfferRepository.save(flightOfferEntity);
+            FlightOffer flightOfferEntity = new FlightOffer(flightOffersJsonString);
+            flightOfferRepository.save(flightOfferEntity);
 
             List<FlightOfferSearch> flightOffers = List.of(flightOffersJson);
             List<FlightResDto> flightResDtos = new ArrayList<>();
