@@ -50,7 +50,8 @@ public enum ErrorCode {
     REDIS_SAVE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "RE001", "Redis 저장에 실패했습니다."),
 
     // server error
-    SEVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SV001", "서버 오류입니다.");
+    SEVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SV001", "서버 오류입니다."),
+    TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "SV002", "요청이 너무 많습니다.");
 
     private final HttpStatus httpStatus;
 
