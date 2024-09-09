@@ -4,7 +4,9 @@ import com.amadeus.exceptions.ResponseException;
 import com.amadeus.resources.FlightOfferSearch;
 import com.example.travelday.domain.supersale.dto.request.FlightReqDto;
 import com.example.travelday.domain.supersale.dto.response.FlightResDto;
+import com.example.travelday.domain.supersale.entity.Airport;
 import com.example.travelday.domain.supersale.entity.FlightOffer;
+import com.example.travelday.domain.supersale.repository.AirportRepository;
 import com.example.travelday.domain.supersale.repository.FlightOfferRepository;
 import com.example.travelday.domain.supersale.utils.AmadeusConnect;
 import com.example.travelday.global.exception.CustomException;
@@ -33,6 +35,7 @@ public class FlightService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final Gson gson = new Gson();
     private final FlightOfferRepository flightOfferRepository;
+    private final AirportRepository airportRepository;
 
     @Value("${spring.data.redis.timeout}")
     private long redisTTL;
@@ -43,6 +46,13 @@ public class FlightService {
 
             ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
 
+            // Redis에서 데이터가 이미 존재하는지 확인
+            String cachedFlightData = (String) valueOperations.get(redisKey);
+            if (cachedFlightData != null) {
+                log.info("Flight data for destination from {} to {} on {} is already cached. Skipping API call.", origin, destination, departDate);
+                return;
+            }
+            // amadeus api 호출
             FlightOfferSearch[] flightOffersJson = amadeusConnect.flights(origin, destination, departDate, adults);
 
             // flightOffersJson을 JSON 문자열로 변환
@@ -52,7 +62,6 @@ public class FlightService {
             FlightOffer flightOfferEntity = new FlightOffer(flightOffersJsonString);
             flightOfferRepository.save(flightOfferEntity);
 
-            // Redis 데이터가 없거나 문제가 있을 경우 Amadeus API 호출
             List<FlightOfferSearch> flightOffers = List.of(flightOffersJson);
             List<FlightResDto> flightResDtos = new ArrayList<>();
 
@@ -61,8 +70,17 @@ public class FlightService {
             }
 
             // List<FlightResDto>를 JSON 문자열로 변환 후 Redis에 저장
-            String flightResDtosJson = gson.toJson(flightResDtos);
-            valueOperations.set(redisKey, flightResDtosJson, Duration.ofSeconds(redisTTL));
+            try {
+                String flightResDtosJson = gson.toJson(flightResDtos);
+                valueOperations.set(redisKey, flightResDtosJson, Duration.ofSeconds(redisTTL));
+                log.info("Successfully stored flight data for destination from {} to {} on {}", origin, destination, departDate);
+            }
+            catch (Exception e) {
+                log.error("Failed to store flight data in Redis for destination from {} to {} on {} - {}", origin, destination, departDate, e.getMessage(), e);
+                throw new CustomException(ErrorCode.REDIS_SAVE_ERROR);
+            }
+
+
 
         } catch (ResponseException e) {
             log.info(e.getMessage());
@@ -99,7 +117,7 @@ public class FlightService {
     }
 
     public FlightResDto getLowestPriceFlight(FlightReqDto flightReqDto) {
-        String redisKey = "flightOffer:ICN" + flightReqDto.destination() + ":" + flightReqDto.departDate();
+        String redisKey = "flightOffer:ICN:" + flightReqDto.destination() + ":" + flightReqDto.departDate();
 
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         String cachedDataJson = (String) valueOperations.get(redisKey);
@@ -112,5 +130,14 @@ public class FlightService {
         List<FlightResDto> cachedData = gson.fromJson(cachedDataJson, listType);
 
         return cachedData.get(0);
+    }
+
+    public List<Airport> searchAirport(String keyword) {
+        List<Airport> airports = airportRepository.findByKoreanAirportNameContaining(keyword);
+        airports.addAll(airportRepository.findByAirportCodeContaining(keyword));
+        if (airports.isEmpty()) {
+            throw new CustomException(ErrorCode.AIRPORT_NOT_FOUND);
+        }
+        return airports;
     }
 }

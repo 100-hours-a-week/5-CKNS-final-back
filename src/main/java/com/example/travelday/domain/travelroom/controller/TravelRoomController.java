@@ -1,6 +1,7 @@
 package com.example.travelday.domain.travelroom.controller;
 
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
+import com.example.travelday.domain.travelroom.dto.response.TravelRoomMembersResDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomResDto;
 import com.example.travelday.domain.travelroom.service.TravelRoomService;
 import com.example.travelday.global.common.ApiResponseEntity;
@@ -26,8 +27,8 @@ public class TravelRoomController {
      * 여행방 목록 조회
      */
     @GetMapping
-    public ResponseEntity<ApiResponseEntity<List<TravelRoomResDto>>> getAllTravelRoom(@AuthenticationPrincipal UserDetails userDetails) {
-        List<TravelRoomResDto> travelRooms = travelRoomService.getAllTravelRoom(userDetails.getUsername());
+    public ResponseEntity<ApiResponseEntity<List<TravelRoomMembersResDto>>> getAllTravelRoom(@AuthenticationPrincipal UserDetails userDetails) {
+        List<TravelRoomMembersResDto> travelRooms = travelRoomService.getAllTravelRoom(userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(travelRooms));
     }
 
@@ -53,9 +54,9 @@ public class TravelRoomController {
      * 여행방 삭제
      */
     @DeleteMapping("/{travelRoomId}")
-    public ResponseEntity<ApiResponseEntity<Void>> deleteTravelRoom(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponseEntity<String>> deleteTravelRoom(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
         travelRoomService.deleteTravelRoom(travelRoomId, userDetails.getUsername());
-        return ResponseEntity.ok(ApiResponseEntity.of(null));
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_DELETE_TRAVELROOM));
     }
 
     /**
@@ -66,6 +67,4 @@ public class TravelRoomController {
         travelRoomService.updateTravelRoom(travelRoomId, requestDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_TRAVELROOM));
     }
-
-
 }

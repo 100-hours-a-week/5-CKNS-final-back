@@ -20,6 +20,7 @@ public class AmadeusConnect {
                            @Value("${amadeus.api.secret}") String apiSecret) {
         this.amadeus = Amadeus
                 .builder(apiKey, apiSecret)
+                .setHostname("production")
                 .build();
     }
 
