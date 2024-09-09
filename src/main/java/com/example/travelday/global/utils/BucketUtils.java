@@ -25,4 +25,8 @@ public class BucketUtils {
         log.warn("Bucket count is empty");
         throw new CustomException(ErrorCode.TOO_MANY_REQUESTS);
     }
+
+    public long getAvailableTokens() {
+        return bucket.getAvailableTokens();
+    }
 }
