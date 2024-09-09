@@ -32,7 +32,8 @@ public class FlightController {
      * 최저가 항공 상세 조회
      */
     @GetMapping("/lowestPrice")
-    public ResponseEntity<ApiResponseEntity<FlightResDto>> getLowestPriceFlight(@RequestBody FlightReqDto flightReqDto) {
+    public ResponseEntity<ApiResponseEntity<FlightResDto>> getLowestPriceFlight(@RequestParam String destination, @RequestParam String departDate) {
+        FlightReqDto flightReqDto = new FlightReqDto(destination, departDate);
         return ResponseEntity.ok(ApiResponseEntity.of(flightService.getLowestPriceFlight(flightReqDto)));
     }
 
