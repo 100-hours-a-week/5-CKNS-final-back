@@ -25,7 +25,6 @@ public class BucketUtils {
     private final DiscordWebhookNotifier discordWebhookNotifier;
 
     public void checkRequestBucketCount() {
-
         long avilableTokens = bucket.getAvailableTokens();
 
         if (avilableTokens == 1) {
