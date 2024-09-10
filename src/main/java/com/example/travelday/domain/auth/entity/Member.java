@@ -3,6 +3,7 @@ package com.example.travelday.domain.auth.entity;
 import com.example.travelday.global.auth.oauth.enums.SocialType;
 import com.example.travelday.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
@@ -24,6 +25,7 @@ public class Member extends BaseTimeEntity {
     @Comment("아이디")
     private String userId;
 
+    @Size(max = 15, message = "최대 15자리까지 입력 가능합니다.")
     @Column(name = "nickname", length = 20, nullable = false)
     @Comment("닉네임")
     private String nickname;

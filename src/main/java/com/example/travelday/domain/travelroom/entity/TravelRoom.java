@@ -4,6 +4,7 @@ package com.example.travelday.domain.travelroom.entity;
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
 import com.example.travelday.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class TravelRoom extends BaseTimeEntity {
     @Column(name = "id")
     private Long id;
 
+    @Size(max = 15, message = "최대 15자리까지 입력 가능합니다.")
     @Column(name = "name")
     private String name;
 
