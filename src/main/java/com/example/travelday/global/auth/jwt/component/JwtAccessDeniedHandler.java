@@ -19,7 +19,8 @@ import java.io.IOException;
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
     @Qualifier("handlerExceptionResolver")
-    private final HandlerExceptionResolver resolver;
+    // private final HandlerExceptionResolver resolver;
+    private HandlerExceptionResolver resolver;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
