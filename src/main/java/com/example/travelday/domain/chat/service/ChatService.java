@@ -6,6 +6,7 @@ import com.example.travelday.domain.chat.dto.request.ChatReqDto;
 import com.example.travelday.domain.chat.dto.response.ChatResDto;
 import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.repository.ChatRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ChatService {
 
     private final ChatRepository chatRepository;
@@ -34,7 +36,19 @@ public class ChatService {
 
         Chat savedChat = chatRepository.save(chat);
 
-        return ChatResDto.of(savedChat, userId);
+        return ChatResDto.of(savedChat);
+    }
+
+    public String savedChat(Long travelRoomId, ChatReqDto chatReqDto, String userId) {
+        Chat chat = Chat.builder()
+                        .travelRoomId(travelRoomId)
+                        .senderId(userId)
+                        .message(chatReqDto.message())
+                        .build();
+
+        chatRepository.save(chat);
+
+        return chat.getMessage();
     }
 
     public List<ChatResDto> getAllChat(Long travelRoomId, String userId) {
@@ -42,8 +56,12 @@ public class ChatService {
                     .stream()
                     .map( chat -> {
                         Optional<Member> chatUser = memberRepository.findByUserId(userId);
-                        return ChatResDto.of(chat, chatUser.get().getUserId());
+                        return ChatResDto.of(chat);
                     })
                     .toList();
+    }
+
+    public Chat getLastChatsByTravelRoomId(Long travelRoomId) {
+        return chatRepository.findTopByTravelRoomIdOrderByCreatedAtDesc(travelRoomId);
     }
 }
