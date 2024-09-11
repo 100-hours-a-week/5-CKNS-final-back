@@ -81,6 +81,10 @@ dependencies {
 
     // bucket4j
     implementation 'com.bucket4j:bucket4j-core:8.8.0'
+
+    //Firebase
+    implementation 'com.google.firebase:firebase-admin:7.3.0'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
 }
 
 //spotless {
