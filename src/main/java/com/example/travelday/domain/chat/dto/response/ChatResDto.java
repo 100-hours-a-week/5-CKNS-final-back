@@ -18,7 +18,7 @@ public record ChatResDto(
 ) {
     public static ChatResDto of(Chat chat, String userId) {
         return ChatResDto.builder()
-                .id(chat.getId().toHexString())
+                .id(chat.getId())
                 .travelRoomId(chat.getTravelRoomId())
                 .senderId(userId)
                 .message(chat.getMessage())

@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import java.time.LocalDateTime;
 
@@ -16,10 +16,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "chat")
+@Builder
 public class Chat {
 
     @Id
-    private ObjectId id;
+    @Field(value = "_id", targetType = FieldType.OBJECT_ID)
+    private String id;
 
     @Field("travel_room_id")
     private Long travelRoomId;
@@ -27,15 +29,10 @@ public class Chat {
     @Field("sender_id")
     private String senderId;
 
+    @Field("message")
     private String message;
 
+    @Field("createdAt")
     @CreatedDate
     private LocalDateTime createdAt;
-
-    @Builder
-    public Chat(Long travelRoomId, String senderId, String message) {
-        this.travelRoomId = travelRoomId;
-        this.senderId = senderId;
-        this.message = message;
-    }
 }
