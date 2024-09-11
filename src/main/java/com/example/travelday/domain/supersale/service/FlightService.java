@@ -11,6 +11,7 @@ import com.example.travelday.domain.supersale.repository.FlightOfferRepository;
 import com.example.travelday.domain.supersale.utils.AmadeusConnect;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
+import com.example.travelday.global.utils.BucketUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;
@@ -36,11 +37,13 @@ public class FlightService {
     private final Gson gson = new Gson();
     private final FlightOfferRepository flightOfferRepository;
     private final AirportRepository airportRepository;
+    private final BucketUtils bucketUtils;
 
     @Value("${spring.data.redis.timeout}")
     private long redisTTL;
 
     public void getFlightOffers(String origin, String destination, String departDate, String adults) throws ResponseException {
+
         try {
             String redisKey = "flightOffer:" + origin + ":"+ destination + ":" + departDate;
 
@@ -53,6 +56,7 @@ public class FlightService {
                 return;
             }
             // amadeus api 호출
+            bucketUtils.checkRequestBucketCount();
             FlightOfferSearch[] flightOffersJson = amadeusConnect.flights(origin, destination, departDate, adults);
 
             // flightOffersJson을 JSON 문자열로 변환
