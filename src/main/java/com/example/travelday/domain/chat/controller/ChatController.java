@@ -59,11 +59,10 @@ public class ChatController {
      * 마지막 채팅 조회
      */
     @GetMapping("/rooms/{travelRoomId}/last")
+    // TODO: userDetail로 travelRoomId에 해당하는지 확인하는 로직 추가
     public ResponseEntity<ApiResponseEntity<ChatResDto>> getLastChats(@PathVariable Long travelRoomId) {
         Chat lastchat = chatService.getLastChatsByTravelRoomId(travelRoomId);
-        log.info("lastchat : {}", lastchat);
         ChatResDto chatResDto = ChatResDto.of(lastchat);
-        log.info("lastchatResDto : {}", chatResDto);
         return ResponseEntity.ok(ApiResponseEntity.of(chatResDto));
     }
 }
