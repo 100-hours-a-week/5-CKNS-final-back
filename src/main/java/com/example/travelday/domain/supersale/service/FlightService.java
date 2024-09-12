@@ -96,7 +96,7 @@ public class FlightService {
             "DPS", "OKA", "FUK", "JFK", "NGO",
             "CDG", "KIX", "LGA", "SYD", "MAD",
             "LHR", "VIE", "CDG", "FRA", "FCO"};
-        String departDate = String.valueOf(LocalDate.now().plusDays(1));
+        String departDate = String.valueOf(LocalDate.now().plusDays(2));
 
         List<FlightResDto> flightResDtos = new ArrayList<>();
         for (String des : destinations) {
