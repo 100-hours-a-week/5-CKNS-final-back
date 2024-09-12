@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Builder
 public record InvitationReqDto(
-        String token,
         String invitee
 ) {
 }

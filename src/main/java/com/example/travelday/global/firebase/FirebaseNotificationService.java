@@ -56,7 +56,6 @@ public class FirebaseNotificationService {
         if (MessagingErrorCode.INVALID_ARGUMENT.name().equals(response) || MessagingErrorCode.UNREGISTERED.name().equals(response)) {
             // 토큰이 유효하지 않은 경우, 삭제
             fcmTokenRepository.delete(fcmToken);
-            log.info("유효하지않은 토큰 {} 삭제", fcmToken.getToken());
         } else {
             log.info(fcmToken.getToken());
         }
