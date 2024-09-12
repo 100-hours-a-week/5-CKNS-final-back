@@ -31,8 +31,8 @@ public class ChatController {
     /**
      * 채팅 메시지 전송
      */
-    @MessageMapping("/{travelRoomId}/chat/send")
-    @SendTo("/{travelRoomId}/chat")
+    @MessageMapping("/chat/rooms/{travelRoomId}")
+    @SendTo("/sub/chat/rooms/{travelRoomId}")
     public ChatResDto sendChatMessage(@DestinationVariable("travelRoomId") Long travelRoomId, @Payload ChatReqDto chatReqDto, @AuthenticationPrincipal UserDetails userDetails) {
         return chatService.saveChat(travelRoomId, chatReqDto, userDetails.getUsername());
     }
