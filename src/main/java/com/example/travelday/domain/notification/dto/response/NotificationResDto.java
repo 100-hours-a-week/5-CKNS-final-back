@@ -11,15 +11,17 @@ public record NotificationResDto(
         Long notificationId,
         String content,
         String notificationTime,
-        boolean isChecked
+        boolean isChecked,
+        Long travelRoomId
 ) {
 
     public static NotificationResDto of(Notification notification) {
         return NotificationResDto.builder()
                 .notificationId(notification.getId())
                 .content(notification.getContent())
-                .notificationTime(notification.getCreatedTime().format(DateTimeFormatter.ofPattern("yy-MM-dd hh:mm:ss")))
+                .notificationTime(notification.getCreatedTime().format(DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss")))
                 .isChecked(notification.isChecked())
+                .travelRoomId(notification.getTravelRoomId())
                 .build();
     }
 }
