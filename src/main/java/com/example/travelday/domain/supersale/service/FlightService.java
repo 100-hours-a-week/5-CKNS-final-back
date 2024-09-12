@@ -102,8 +102,6 @@ public class FlightService {
         for (String des : destinations) {
             String redisKey = "flightOffer:ICN:" + des + ":" +  departDate;
 
-            log.info("redisKey: " + redisKey);
-
             ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
             String cachedDataJson = (String) valueOperations.get(redisKey);
 
