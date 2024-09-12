@@ -25,14 +25,10 @@ public class FirebaseMessagingService {
         try {
             return FirebaseMessaging.getInstance().send(message);
         } catch (FirebaseMessagingException e) {
-            if (e.getMessagingErrorCode().equals(MessagingErrorCode.INVALID_ARGUMENT)) {
-                // 토큰이 유효하지 않은 경우, 오류 코드를 반환
+            // 토큰이 유효하지 않거나 재발급된 토큰인 경우 오류 코드를 반환
+            if (e.getMessagingErrorCode().equals(MessagingErrorCode.INVALID_ARGUMENT) || e.getMessagingErrorCode().equals(MessagingErrorCode.UNREGISTERED)) {
                 return e.getMessagingErrorCode().toString();
-            } else if (e.getMessagingErrorCode().equals(MessagingErrorCode.UNREGISTERED)) {
-                // 재발급된 이전 토큰인 경우, 오류 코드를 반환
-                return e.getMessagingErrorCode().toString();
-            }
-            else { // 그 외, 오류는 런타임 예외로 처리
+            } else { // 그 외, 오류는 런타임 예외로 처리
                 throw new RuntimeException(e);
             }
         }

@@ -19,10 +19,10 @@ public class FcmController {
 
     @PostMapping()
     public ResponseEntity<ApiResponseEntity<String>> createFcmToken(
-            @RequestBody FcmCreateReqDto request,
+            @RequestBody FcmCreateReqDto fcmCreateReqDto,
             @AuthenticationPrincipal UserDetails userDetails
             ) {
-        fcmService.createFcmToken(userDetails.getUsername(), request.fcmToken());
+        fcmService.createFcmToken(userDetails.getUsername(), fcmCreateReqDto.fcmToken());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_CREATE_FCM_TOKEN));
     }
 }
