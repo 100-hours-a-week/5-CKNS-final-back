@@ -5,8 +5,6 @@ import com.example.travelday.domain.chat.dto.response.ChatResDto;
 import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.service.ChatService;
 import com.example.travelday.global.common.ApiResponseEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/chat")
 public class ChatController {
 
-    private static final Logger log = LoggerFactory.getLogger(ChatController.class);
     private final ChatService chatService;
 
     @Autowired

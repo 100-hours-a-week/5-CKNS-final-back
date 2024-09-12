@@ -39,18 +39,6 @@ public class ChatService {
         return ChatResDto.of(savedChat);
     }
 
-    public String savedChat(Long travelRoomId, ChatReqDto chatReqDto, String userId) {
-        Chat chat = Chat.builder()
-                        .travelRoomId(travelRoomId)
-                        .senderId(userId)
-                        .message(chatReqDto.message())
-                        .build();
-
-        chatRepository.save(chat);
-
-        return chat.getMessage();
-    }
-
     public List<ChatResDto> getAllChat(Long travelRoomId, String userId) {
         return chatRepository.findAllByTravelRoomId(travelRoomId)
                     .stream()
