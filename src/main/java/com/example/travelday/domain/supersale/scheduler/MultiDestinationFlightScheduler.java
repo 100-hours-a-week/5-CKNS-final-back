@@ -19,7 +19,7 @@ public class MultiDestinationFlightScheduler {
 
     private final FlightService flightService;
 
-    @Scheduled(cron = "0 16 2 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 27 17 * * ?")
     public void fetchAndStoreFlightOffers() {
 
         log.info("===== fetchAndStoreFlightOffers for Multiple Destinations =====");
@@ -35,7 +35,7 @@ public class MultiDestinationFlightScheduler {
         };
 
         // 현재 날짜 기준 하루 뒤 편도
-        LocalDate departureDate = LocalDate.now().plusDays(1);
+        LocalDate departureDate = LocalDate.now().plusDays(2);
         String departDate = departureDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
 
         // 각 목적지에 대해 검색 및 저장
