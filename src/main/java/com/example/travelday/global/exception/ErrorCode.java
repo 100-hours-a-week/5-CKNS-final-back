@@ -36,7 +36,7 @@ public enum ErrorCode {
     NICKNAME_CREATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "MB002", "닉네임 생성에 실패했습니다."),
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MB003", "존재하지 않는 회원입니다."),
 
-    //notification error
+    // notification error
     NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "NT001", "알림을 찾을 수 없습니다."),
     NOTIFICATION_ALREADY_READ(HttpStatus.BAD_REQUEST, "NT002", "이미 읽은 알림입니다."),
     NOTIFICATION_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "NT003", "알림 전송에 실패했습니다."),
@@ -44,6 +44,10 @@ public enum ErrorCode {
     INVALID_NOTIFICATION_PAYLOAD(HttpStatus.BAD_REQUEST, "NT005", "알림 내용이 유효하지 않습니다."),
     FCM_TOKEN_DUPLICATE(HttpStatus.BAD_REQUEST, "NT006", "중복된 FCM 토큰입니다."),
     FCM_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "NT007", "FCM 토큰을 찾을 수 없습니다."),
+
+    // invitation error
+    INVITATION_NOT_FOUND(HttpStatus.NOT_FOUND, "IV001", "초대장을 찾을 수 없습니다."),
+    BAD_REQUEST_FLAG(HttpStatus.BAD_REQUEST, "IV002", "초대장 수락 여부 요청 형식이 잘못되었습니다."),
 
     // wish error
     WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WH001", "위시를 찾을 수 없습니다."),
