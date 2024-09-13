@@ -25,7 +25,7 @@ public class Member extends BaseTimeEntity {
     @Comment("아이디")
     private String userId;
 
-    @Size(max = 15, message = "최대 15자리까지 입력 가능합니다.")
+    @Size(max = 30, message = "최대 30자리까지 입력 가능합니다.")
     @Column(name = "nickname", length = 20, nullable = false)
     @Comment("닉네임")
     private String nickname;
