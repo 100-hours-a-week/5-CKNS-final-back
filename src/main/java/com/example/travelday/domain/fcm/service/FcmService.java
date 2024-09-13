@@ -41,31 +41,17 @@ public class FcmService {
         fcmTokenRepository.save(token);
     }
 
-    /*public void updateFcmToken(String oldFcmToken, String newFcmToken, Long memberId) {
-        FcmToken token = fcmTokenRepository.findByToken(oldFcmToken)
-                .orElseThrow(() -> new BusinessException(FcmException.NOT_FOUND_FCM));
-
-        if (!token.getMember().getId().equals(memberId))
-            throw new BusinessException(FcmException.NOT_MATCH_MEMBER);
-
-        token.updateToken(newFcmToken);
-        fcmTokenRepository.save(token);
-    }*/
-
     @Transactional
-    public void updateFcmToken(Long memberId, String fcmToken) {
-        Member member = memberRepository.findById(memberId)
+    public void updateFcmToken(String userId, String fcmToken) {
+        Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        FcmToken fcmTokenOptional= fcmTokenRepository.findByToken(fcmToken)
+        FcmToken updateFcmToken= fcmTokenRepository.findByToken(fcmToken)
                 .orElseThrow(() -> new CustomException(ErrorCode.FCM_TOKEN_NOT_FOUND));
 
-        FcmToken token = FcmToken.builder()
-                .token(fcmToken)
-                .member(member)
-                .build();
+        updateFcmToken.updateToken(fcmToken);
 
-        fcmTokenRepository.save(token);
+        fcmTokenRepository.save(updateFcmToken);
     }
 
     // FCM 토큰의 마지막 사용 시간을 현재 시간으로 업데이트

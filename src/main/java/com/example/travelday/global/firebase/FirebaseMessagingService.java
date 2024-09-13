@@ -12,8 +12,10 @@ public class FirebaseMessagingService {
      * Firebase를 통해 푸시 알림을 전송합니다.
      */
     public String sendNotification(String token, String content) {
+        String INVITATION_WORD = "당신을 기다리고 있어요!";
+
         Notification notification = Notification.builder()
-                .setTitle("당신을 기다리고 있어요!")
+                .setTitle(INVITATION_WORD)
                 .setBody(content)
                 .build();
 
