@@ -27,10 +27,10 @@ public class ChatService {
         this.memberRepository = memberRepository;
     }
 
-    public ChatResDto saveChat(Long travelRoomId, ChatReqDto chatReqDto, String userId) {
+    public ChatResDto saveChat(Long travelRoomId, ChatReqDto chatReqDto) {
         Chat chat = Chat.builder()
                         .travelRoomId(travelRoomId)
-                        .senderId(userId)
+                        .senderId(chatReqDto.senderId())
                         .message(chatReqDto.message())
                         .build();
 
