@@ -22,15 +22,12 @@ import org.springframework.stereotype.Component;
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class StompHandler implements ChannelInterceptor {
 
-    private final JwtProperties jwtProperties; // JwtProperties 인스턴스 주입
-    private final JwtTokenProvider jwtTokenProvider; // JwtTokenProvider 주입
-
+    private final JwtProperties jwtProperties;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    // 메세지가 채널로 전송되기 전에 호출되는 메서드
-    // jwt 토큰을 통해 사용자 정보를 가져와서 stomp 헤더에 추가
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        // stompheaderAccesor를 통해 stomp헤더에 접근할 수 있다.
+
         StompHeaderAccessor headerAccessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
         assert headerAccessor != null;
