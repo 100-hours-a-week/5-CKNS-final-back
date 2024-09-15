@@ -23,12 +23,12 @@ jobs:
         run: chmod +x gradlew
         # Give execution permission to the Gradle wrapper file
 
-      - name: Create application-dev.yml file
+      - name: Create application-my.yml file
         run: |
           mkdir -p ./src/main/resources
           cd ./src/main/resources
-          touch application-dev.yml
-          echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > application-dev.yml
+          touch application-my.yml
+          echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > application-my.yml
         shell: bash
         # Create application-dev.yml and insert the dev-specific settings
 
