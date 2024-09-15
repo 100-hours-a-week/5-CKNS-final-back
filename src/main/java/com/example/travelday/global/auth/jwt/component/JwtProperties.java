@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 public class JwtProperties {
 
     @Value("${websocket.jwt.secret}")
-    public static String SECRET_KEY;
+    public String SECRET_KEY;
 
     @Value("${websocket.jwt.expiration}")
-    public static int EXPIRATION_TIME;
+    public int EXPIRATION_TIME;
 
     @Value("${websocket.jwt.token-prefix}")
-    public static String TOKEN_PREFIX;
+    public String TOKEN_PREFIX;
 
     @Value("${websocket.jwt.header-string}")
-    public static String HEADER_STRING;
+    public String HEADER_STRING;
 }

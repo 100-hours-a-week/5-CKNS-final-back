@@ -1,9 +1,8 @@
 package com.example.travelday.domain.chat.utils;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.travelday.global.auth.jwt.component.JwtProperties;
+import com.example.travelday.global.auth.jwt.component.JwtTokenProvider;
+import com.example.travelday.global.exception.TokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -23,6 +22,10 @@ import org.springframework.stereotype.Component;
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class StompHandler implements ChannelInterceptor {
 
+    private final JwtProperties jwtProperties; // JwtProperties 인스턴스 주입
+    private final JwtTokenProvider jwtTokenProvider; // JwtTokenProvider 주입
+
+
     @Override
     // 메세지가 채널로 전송되기 전에 호출되는 메서드
     // jwt 토큰을 통해 사용자 정보를 가져와서 stomp 헤더에 추가
@@ -34,22 +37,16 @@ public class StompHandler implements ChannelInterceptor {
 
         if (headerAccessor.getCommand() == StompCommand.CONNECT) { // 연결 시에만 header 확인
             String token = String.valueOf(headerAccessor.getNativeHeader("Authorization").get(0));
-            token = token.replace(JwtProperties.TOKEN_PREFIX, "");
+            token = token.replace(jwtProperties.TOKEN_PREFIX, "");
 
             try {
-                Integer userId = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET_KEY))
-                                        .build()
-                                        .verify(token)
-                                        .getClaim("userId")
-                                        .asInt();
-
-                headerAccessor.addNativeHeader("UserId", String.valueOf(userId));
-            } catch (TokenExpiredException e) {
-                log.error("Token is expired");
-                throw new IllegalStateException("Token is expired");
-            } catch (Exception e) {
-                log.error("Token is invalid");
-                throw new IllegalStateException("Token is invalid");
+                if (jwtTokenProvider.validateToken(token)) { // 토큰 검증
+                    String userId = jwtTokenProvider.getAuthentication(token).getName(); // Authentication에서 userId 추출
+                    headerAccessor.addNativeHeader("UserId", userId); // Stomp 헤더에 추가
+                }
+            } catch (TokenException e) {
+                log.error("Token validation failed: {}", e.getMessage());
+                throw new IllegalStateException("Invalid or expired token.");
             }
         }
         return message;

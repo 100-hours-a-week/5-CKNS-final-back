@@ -44,12 +44,10 @@ public class ChatController {
      */
     @EventListener(SessionConnectEvent.class)
     public void onConnect(SessionConnectEvent event) {
-        log.info("Connect: {}", event);
         String sessionId = event.getMessage().getHeaders().get("simpSessionId").toString();
-        String userId = event.getMessage().getHeaders().get("nativeHeaders").toString().split("userId=")[1].split("]")[0];
+        String userId = event.getMessage().getHeaders().get("nativeHeaders").toString().split("UserId=")[1].split("]")[0];
 
         sessions.put(sessionId, userId);
-        log.info("웹소켓 연결 sessions: {}, userId: {} ", sessions, userId);
     }
 
     /**
@@ -57,9 +55,7 @@ public class ChatController {
      */
     @EventListener(SessionDisconnectEvent.class)
     public void onDisconnect(SessionDisconnectEvent event) {
-        log.info("Disconnect: {}", event);
         sessions.remove(event.getSessionId());
-        log.info("웹소켓 연결 종료 sessions: {}", sessions);
     }
 
     /**
