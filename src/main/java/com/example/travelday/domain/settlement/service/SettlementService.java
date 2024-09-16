@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,16 +56,35 @@ public class SettlementService {
     }
 
     @Transactional
-    public void addSettlement(Long travelRoomId, Long settlementId, SettlementDetailReqDto settlementDetailReqDto, String username) {
+    public void addSettlement(Long travelRoomId, Long settlementId, SettlementDetailReqDto settlementDetailReqDto, String userId) {
 
-        validateMemberInTravelRoom(username, travelRoomId);
+        validateMemberInTravelRoom(userId, travelRoomId);
 
         validateSettlementInTraveRoom(settlementId, travelRoomId);
 
         Settlement settlement = settlementRepository.findById(settlementId)
                                 .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND));
 
+        validateAmount(BigDecimal.valueOf(settlementDetailReqDto.amount()));
+
         SettlementDetail settlementDetail = SettlementDetail.addOf(settlement, settlementDetailReqDto);
+
+        settlementDetailRepository.save(settlementDetail);
+    }
+
+    @Transactional
+    public void updateSettlementDetail(Long travelRoomId, Long settlementId, Long settlementDetailId, SettlementDetailReqDto settlementDetailReqDto, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
+
+        validateSettlementInTraveRoom(settlementId, travelRoomId);
+
+        SettlementDetail settlementDetail = settlementDetailRepository.findById(settlementDetailId)
+                                            .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_DETAIL_NOT_FOUND));
+
+        validateAmount(BigDecimal.valueOf(settlementDetailReqDto.amount()));
+
+        settlementDetail.updateDetails(settlementDetailReqDto);
 
         settlementDetailRepository.save(settlementDetail);
     }
@@ -92,5 +112,9 @@ public class SettlementService {
         }
     }
 
-
+    public void validateAmount(BigDecimal amount) {
+        if (amount.precision() > 10 || amount.scale() > 2) {
+            throw new CustomException(ErrorCode.INVALID_AMOUNT_RANGE);
+        }
+    }
 }

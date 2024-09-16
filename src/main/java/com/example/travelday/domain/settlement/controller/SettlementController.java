@@ -51,4 +51,12 @@ public class SettlementController {
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_ADD_SETTLEMENT));
     }
 
+    /**
+     * 정산 내역 수정하기
+     */
+    @PatchMapping("/{travelRoomId}/{settlementId}/{settlementDetailId}")
+    public ResponseEntity<ApiResponseEntity<String>> updateSettlement(@PathVariable Long travelRoomId, @PathVariable Long settlementId, @PathVariable Long settlementDetailId, @RequestBody @Valid SettlementDetailReqDto settlementDetailReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+        settlementService.updateSettlementDetail(travelRoomId, settlementId, settlementDetailId, settlementDetailReqDto, userDetails.getUsername());
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_SETTLEMENT));
+    }
 }

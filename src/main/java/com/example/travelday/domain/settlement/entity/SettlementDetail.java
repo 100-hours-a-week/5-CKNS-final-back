@@ -43,4 +43,9 @@ public class SettlementDetail {
                     .amount(BigDecimal.valueOf(settlementDetailReqDto.amount()))
                     .build();
     }
+
+    public void updateDetails(SettlementDetailReqDto settlementDetailReqDto) {
+        this.name = settlementDetailReqDto.name();
+        this.amount = BigDecimal.valueOf(settlementDetailReqDto.amount());
+    }
 }
