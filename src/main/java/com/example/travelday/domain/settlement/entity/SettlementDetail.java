@@ -1,7 +1,9 @@
 package com.example.travelday.domain.settlement.entity;
 
+import com.example.travelday.domain.settlement.dto.request.SettlementDetailReqDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,4 +28,19 @@ public class SettlementDetail {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Builder
+    public SettlementDetail(Settlement settlement, String name, BigDecimal amount) {
+        this.settlement = settlement;
+        this.name = name;
+        this.amount = amount;
+    }
+
+    public static SettlementDetail addOf(Settlement settlement, SettlementDetailReqDto settlementDetailReqDto) {
+        return SettlementDetail.builder()
+                    .name(settlementDetailReqDto.name())
+                    .settlement(settlement)
+                    .amount(BigDecimal.valueOf(settlementDetailReqDto.amount()))
+                    .build();
+    }
 }

@@ -1,18 +1,18 @@
 package com.example.travelday.domain.settlement.controller;
 
+import com.example.travelday.domain.settlement.dto.request.SettlementDetailReqDto;
 import com.example.travelday.domain.settlement.dto.response.SettlementDetailResDto;
 import com.example.travelday.domain.settlement.dto.response.SettlementResDto;
 import com.example.travelday.domain.settlement.service.SettlementService;
 import com.example.travelday.global.common.ApiResponseEntity;
+import com.example.travelday.global.common.ResponseText;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,7 +29,6 @@ public class SettlementController {
      */
     @GetMapping("/{travelRoomId}")
     public ResponseEntity<ApiResponseEntity<SettlementResDto>> getSettlement(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
-        log.info("컨트롤러 진입, travelRoomId: {}, username: {}", travelRoomId, userDetails.getUsername());
         SettlementResDto settlement = settlementService.getAllSettlement(travelRoomId, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(settlement));
     }
@@ -42,4 +41,14 @@ public class SettlementController {
         List<SettlementDetailResDto> settlements = settlementService.getSettlementDetailList(travelRoomId, settlement, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(settlements));
     }
+
+    /**
+     * 정산 내역 추가하기
+     */
+    @PostMapping("/{travelRoomId}/{settlementId}")
+    public ResponseEntity<ApiResponseEntity<String>> addSettlement(@PathVariable Long travelRoomId, @PathVariable Long settlementId, @RequestBody @Valid SettlementDetailReqDto settlementDetailReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+        settlementService.addSettlement(travelRoomId, settlementId, settlementDetailReqDto, userDetails.getUsername());
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_ADD_SETTLEMENT));
+    }
+
 }

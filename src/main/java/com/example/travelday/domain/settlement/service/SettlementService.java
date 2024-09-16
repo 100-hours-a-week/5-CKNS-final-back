@@ -2,8 +2,10 @@ package com.example.travelday.domain.settlement.service;
 
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
+import com.example.travelday.domain.settlement.dto.request.SettlementDetailReqDto;
 import com.example.travelday.domain.settlement.dto.response.SettlementDetailResDto;
 import com.example.travelday.domain.settlement.dto.response.SettlementResDto;
+import com.example.travelday.domain.settlement.entity.Settlement;
 import com.example.travelday.domain.settlement.entity.SettlementDetail;
 import com.example.travelday.domain.settlement.repository.SettlementDetailRepository;
 import com.example.travelday.domain.settlement.repository.SettlementRepository;
@@ -52,6 +54,21 @@ public class SettlementService {
                     .collect(Collectors.toList());
     }
 
+    @Transactional
+    public void addSettlement(Long travelRoomId, Long settlementId, SettlementDetailReqDto settlementDetailReqDto, String username) {
+
+        validateMemberInTravelRoom(username, travelRoomId);
+
+        validateSettlementInTraveRoom(settlementId, travelRoomId);
+
+        Settlement settlement = settlementRepository.findById(settlementId)
+                                .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND));
+
+        SettlementDetail settlementDetail = SettlementDetail.addOf(settlement, settlementDetailReqDto);
+
+        settlementDetailRepository.save(settlementDetail);
+    }
+
     // 여행방에 멤버가 있는지 확인
     private void validateMemberInTravelRoom(String userId, Long travelRoomId) {
         Member member = memberRepository.findByUserId(userId)
@@ -74,4 +91,6 @@ public class SettlementService {
             throw new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND);
         }
     }
+
+
 }
