@@ -8,5 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface SettlementRepository extends JpaRepository<Settlement, Long> {
+
     Optional<Settlement> findByTravelRoomId(Long travelRoomId);
+
+    Optional<Settlement> findByIdAndTravelRoomId(Long id, Long travelRoomId);
 }
