@@ -27,8 +27,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
             .setAllowedOrigins("*") // TODO: CORS 설정
             .withSockJS();
-        registry.addEndpoint("/ws")
-            .setAllowedOriginPatterns("*");
     }
 
     @Override
