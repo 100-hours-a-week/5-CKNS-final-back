@@ -16,11 +16,16 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -45,7 +50,13 @@ public class ChatController {
     @EventListener(SessionConnectEvent.class)
     public void onConnect(SessionConnectEvent event) {
         String sessionId = event.getMessage().getHeaders().get("simpSessionId").toString();
-        String userId = event.getMessage().getHeaders().get("nativeHeaders").toString().split("UserId=")[1].split("]")[0];
+
+        Map<String, List<String>> nativeHeaders = (Map<String, List<String>>) event.getMessage().getHeaders().get("nativeHeaders");
+
+        String userId = Optional.ofNullable(nativeHeaders)
+                            .flatMap(headers -> Optional.ofNullable(headers.get("UserId")))
+                            .map(list -> list.get(0))
+                            .orElseThrow(() -> new IllegalStateException("UserId not found in nativeHeaders"));
 
         sessions.put(sessionId, userId);
     }
