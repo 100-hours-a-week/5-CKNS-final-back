@@ -33,6 +33,8 @@ public enum ErrorCode {
 
     // settlement error
     SETTLEMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "ST001", "존재하지 않는 정산입니다."),
+    SETTLEMENT_DETAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "ST002", "존재하지 않는 정산 내역입니다."),
+    INVALID_AMOUNT_RANGE(HttpStatus.BAD_REQUEST, "ST003", "금액 범위가 유효하지 않습니다."),
 
     // user error
     NICKNAME_ALREADY_TAKEN(HttpStatus.CONFLICT, "MB001", "이미 사용 중인 닉네임입니다."),
