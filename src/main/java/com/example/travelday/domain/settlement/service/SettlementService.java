@@ -9,10 +9,13 @@ import com.example.travelday.domain.settlement.entity.Settlement;
 import com.example.travelday.domain.settlement.entity.SettlementDetail;
 import com.example.travelday.domain.settlement.repository.SettlementDetailRepository;
 import com.example.travelday.domain.settlement.repository.SettlementRepository;
+import com.example.travelday.domain.settlement.utils.SettlementDetailChangedEvent;
 import com.example.travelday.domain.travelroom.repository.UserTravelRoomRepository;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SettlementService {
@@ -31,6 +35,8 @@ public class SettlementService {
     private final SettlementDetailRepository settlementDetailRepository;
 
     private final UserTravelRoomRepository userTravelRoomRepository;
+
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional(readOnly = true)
     public SettlementResDto getAllSettlement(Long travelRoomId, String userId) {
@@ -70,6 +76,8 @@ public class SettlementService {
         SettlementDetail settlementDetail = SettlementDetail.addOf(settlement, settlementDetailReqDto);
 
         settlementDetailRepository.save(settlementDetail);
+
+        eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
     }
 
     @Transactional
@@ -87,6 +95,8 @@ public class SettlementService {
         settlementDetail.updateDetails(settlementDetailReqDto);
 
         settlementDetailRepository.save(settlementDetail);
+
+        eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
     }
 
     // 여행방에 멤버가 있는지 확인

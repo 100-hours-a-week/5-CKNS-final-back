@@ -46,4 +46,14 @@ public class Settlement {
         this.travelRoom = travelRoom;
         this.status = SettlementStatus.PENDING;
     }
+
+    public void recalculateTotalAmount() {
+        this.totalAmount = settlementDetails.stream()
+                                .map(SettlementDetail::getAmount)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void updateTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 }
