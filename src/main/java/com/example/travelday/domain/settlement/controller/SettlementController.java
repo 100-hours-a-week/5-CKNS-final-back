@@ -59,4 +59,13 @@ public class SettlementController {
         settlementService.updateSettlementDetail(travelRoomId, settlementId, settlementDetailId, settlementDetailReqDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_SETTLEMENT));
     }
+
+    /**
+     * 정산 내역 삭제하기
+     */
+    @DeleteMapping("/{travelRoomId}/{settlementId}/{settlementDetailId}")
+    public ResponseEntity<ApiResponseEntity<String>> deleteSettlement(@PathVariable Long travelRoomId, @PathVariable Long settlementId, @PathVariable Long settlementDetailId, @AuthenticationPrincipal UserDetails userDetails) {
+        settlementService.deleteSettlementDetail(travelRoomId, settlementId, settlementDetailId, userDetails.getUsername());
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_DELETE_SETTLEMENT));
+    }
 }

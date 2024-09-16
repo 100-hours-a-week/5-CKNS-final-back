@@ -99,6 +99,20 @@ public class SettlementService {
         eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
     }
 
+    public void deleteSettlementDetail(Long travelRoomId, Long settlementId, Long settlementDetailId, String username) {
+
+        validateMemberInTravelRoom(username, travelRoomId);
+
+        validateSettlementInTraveRoom(settlementId, travelRoomId);
+
+        SettlementDetail settlementDetail = settlementDetailRepository.findById(settlementDetailId)
+                                            .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_DETAIL_NOT_FOUND));
+
+        settlementDetailRepository.delete(settlementDetail);
+
+        eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
+    }
+
     // 여행방에 멤버가 있는지 확인
     private void validateMemberInTravelRoom(String userId, Long travelRoomId) {
         Member member = memberRepository.findByUserId(userId)
@@ -122,9 +136,12 @@ public class SettlementService {
         }
     }
 
+    // 정산 금액 범위 확인
     public void validateAmount(BigDecimal amount) {
         if (amount.precision() > 10 || amount.scale() > 2) {
             throw new CustomException(ErrorCode.INVALID_AMOUNT_RANGE);
         }
     }
+
+
 }
