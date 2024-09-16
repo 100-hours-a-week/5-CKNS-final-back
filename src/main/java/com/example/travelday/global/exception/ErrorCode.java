@@ -43,10 +43,12 @@ public enum ErrorCode {
 
     //notification error
     NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "NT001", "알림을 찾을 수 없습니다."),
-    NOTIFICATION_ALREADY_READ(HttpStatus.BAD_REQUEST, "NO002", "이미 읽은 알림입니다."),
-    NOTIFICATION_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "NO003", "알림 전송에 실패했습니다."),
-    NOTIFICATION_SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "NO004", "알림 서비스가 이용 불가능합니다."),
-    INVALID_NOTIFICATION_PAYLOAD(HttpStatus.BAD_REQUEST, "NO005", "알림 내용이 유효하지 않습니다."),
+    NOTIFICATION_ALREADY_READ(HttpStatus.BAD_REQUEST, "NT002", "이미 읽은 알림입니다."),
+    NOTIFICATION_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "NT003", "알림 전송에 실패했습니다."),
+    NOTIFICATION_SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "NT004", "알림 서비스가 이용 불가능합니다."),
+    INVALID_NOTIFICATION_PAYLOAD(HttpStatus.BAD_REQUEST, "NT005", "알림 내용이 유효하지 않습니다."),
+    FCM_TOKEN_DUPLICATE(HttpStatus.BAD_REQUEST, "NT006", "중복된 FCM 토큰입니다."),
+    FCM_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "NT007", "FCM 토큰을 찾을 수 없습니다."),
 
     // wish error
     WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WH001", "위시를 찾을 수 없습니다."),
