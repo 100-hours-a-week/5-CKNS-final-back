@@ -29,6 +29,9 @@ public class Chat {
     @Field("sender_id")
     private String senderId;
 
+    @Field("sender_nickname")
+    private String senderNickname;
+
     @Field("message")
     private String message;
 

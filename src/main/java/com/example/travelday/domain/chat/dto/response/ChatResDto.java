@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public record ChatResDto(
     String id,
     Long travelRoomId,
-    String senderId,
+    String senderNickname,
     String message,
     String createdAt
 ) {
@@ -21,7 +21,7 @@ public record ChatResDto(
         return ChatResDto.builder()
                 .id(chat.getId())
                 .travelRoomId(chat.getTravelRoomId())
-                .senderId(chat.getSenderId())
+                .senderNickname(chat.getSenderNickname())
                 .message(chat.getMessage())
                 .createdAt(formatToUTC(chat.getCreatedAt()))
                 .build();

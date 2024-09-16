@@ -6,6 +6,8 @@ import com.example.travelday.domain.chat.dto.request.ChatReqDto;
 import com.example.travelday.domain.chat.dto.response.ChatResDto;
 import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.repository.ChatRepository;
+import com.example.travelday.global.exception.CustomException;
+import com.example.travelday.global.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +30,14 @@ public class ChatService {
     }
 
     public ChatResDto saveChat(Long travelRoomId, ChatReqDto chatReqDto) {
+
+        Member member = memberRepository.findByUserId(chatReqDto.senderId())
+                            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
         Chat chat = Chat.builder()
                         .travelRoomId(travelRoomId)
                         .senderId(chatReqDto.senderId())
+                        .senderNickname(member.getNickname())
                         .message(chatReqDto.message())
                         .build();
 
