@@ -4,6 +4,7 @@ import com.example.travelday.domain.settlement.entity.enums.SettlementStatus;
 import com.example.travelday.domain.travelroom.entity.TravelRoom;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,7 +31,7 @@ public class Settlement {
 
     @Column(name = "settled_date")
     @Temporal(TemporalType.DATE)
-    private Date settledDate;
+    private Date settledAt;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_room_id", nullable = false)
@@ -38,4 +39,11 @@ public class Settlement {
 
     @OneToMany(mappedBy = "settlement", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SettlementDetail> settlementDetails;
+
+    @Builder
+    public Settlement(BigDecimal totalAmount, TravelRoom travelRoom) {
+        this.totalAmount = totalAmount;
+        this.travelRoom = travelRoom;
+        this.status = SettlementStatus.PENDING;
+    }
 }
