@@ -11,7 +11,7 @@
 5. (새로운 기능) 장소 검색하고 위시리스트가 아닌 일정으로 바로 추가해보세요.
 
 * [React 프론트엔드 레포지토리](https://github.com/ss0ming/happy_community_front)
-* [Spring 백엔드 레포지토리](https://github.com/ss0ming/happy_community_back)
+* [Spring 백엔드 레포지토리](https://github.com/100-hours-a-week/5-CKNS-final-front)
 
 ## 🕹️ Main Feature
 
