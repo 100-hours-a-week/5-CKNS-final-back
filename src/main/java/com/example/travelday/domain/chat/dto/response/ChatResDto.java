@@ -16,7 +16,7 @@ public record ChatResDto(
     String createdAt
 ) {
     private static final DateTimeFormatter UTC_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    // TODO: 추후 유저 프로필이 추가 후 UserDetail Coustom 을 통해 가져오기.senderProfileImage(chat.getSenderProfileImage())
+    // TODO: 추후 유저 프로필이 추가 후 UserDetail Custom 을 통해 가져오기.senderProfileImage(chat.getSenderProfileImage())
     public static ChatResDto of(Chat chat) {
         return ChatResDto.builder()
                 .id(chat.getId())
