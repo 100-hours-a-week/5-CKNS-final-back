@@ -10,6 +10,7 @@ import com.example.travelday.domain.settlement.entity.SettlementDetail;
 import com.example.travelday.domain.settlement.repository.SettlementDetailRepository;
 import com.example.travelday.domain.settlement.repository.SettlementRepository;
 import com.example.travelday.domain.settlement.utils.SettlementDetailChangedEvent;
+import com.example.travelday.domain.travelroom.entity.UserTravelRoom;
 import com.example.travelday.domain.travelroom.repository.UserTravelRoomRepository;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
@@ -118,22 +119,14 @@ public class SettlementService {
         Member member = memberRepository.findByUserId(userId)
                             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        boolean exists = userTravelRoomRepository.findByMemberAndTravelRoomId(member, travelRoomId)
-                            .isPresent();
-
-        if (!exists) {
-            throw new CustomException(ErrorCode.USER_NOT_IN_TRAVEL_ROOM);
-        }
+        UserTravelRoom userTravelRoom = userTravelRoomRepository.findByMemberAndTravelRoomId(member, travelRoomId)
+                                                .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
     }
 
     // 여행방에 정산이 있는지 확인
     private void validateSettlementInTraveRoom(Long settlementId, Long travelRoomId) {
-        boolean exists = settlementRepository.findByIdAndTravelRoomId(settlementId, travelRoomId)
-                            .isPresent();
-
-        if (!exists) {
-            throw new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND);
-        }
+        Settlement settlement = settlementRepository.findByIdAndTravelRoomId(settlementId, travelRoomId)
+                                .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND));
     }
 
     // 정산 금액 범위 확인
