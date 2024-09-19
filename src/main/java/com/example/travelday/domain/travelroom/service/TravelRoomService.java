@@ -102,8 +102,13 @@ public class TravelRoomService {
         UserTravelRoom userTravelRoom = userTravelRoomRepository.findByMemberAndTravelRoomId(member, travelRoomId)
                                             .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
 
-        TravelRoom travelRoom = userTravelRoom.getTravelRoom();
+        userTravelRoomRepository.delete(userTravelRoom);
 
-        travelRoomRepository.delete(travelRoom);
+        boolean isUserRemaining = userTravelRoomRepository.existsByTravelRoomId(travelRoomId);
+
+        // 만약 남은 유저가 없다면 여행방 자체 삭제
+        if (!isUserRemaining) {
+            travelRoomRepository.deleteById(travelRoomId);
+        }
     }
 }
