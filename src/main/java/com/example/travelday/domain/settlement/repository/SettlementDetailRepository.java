@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface SettlementDetailRepository extends JpaRepository<SettlementDetail, Long> {
     List<SettlementDetail> findBySettlementId(Long settlementId);
 }
