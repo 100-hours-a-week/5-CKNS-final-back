@@ -142,6 +142,4 @@ public class SettlementService {
             throw new CustomException(ErrorCode.INVALID_AMOUNT_RANGE);
         }
     }
-
-
 }
