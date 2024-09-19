@@ -8,8 +8,8 @@ import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.repository.ChatRepository;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,17 +17,12 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ChatService {
 
     private final ChatRepository chatRepository;
 
     private final MemberRepository memberRepository;
-
-    @Autowired
-    public ChatService(ChatRepository chatRepository, MemberRepository memberRepository) {
-        this.chatRepository = chatRepository;
-        this.memberRepository = memberRepository;
-    }
 
     public ChatResDto saveChat(Long travelRoomId, ChatReqDto chatReqDto) {
 

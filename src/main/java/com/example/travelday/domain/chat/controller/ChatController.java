@@ -5,8 +5,8 @@ import com.example.travelday.domain.chat.dto.response.ChatResDto;
 import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.service.ChatService;
 import com.example.travelday.global.common.ApiResponseEntity;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @RestController
 @RequestMapping("/api/chat")
+@RequiredArgsConstructor
 public class ChatController {
 
     private final ChatService chatService;
@@ -38,11 +39,6 @@ public class ChatController {
     // TODO: 세션아이디와 사용자정보 redis에 저장?
     // 사용자와 세션 ID 매핑
     private final Map<String, String> sessions = new ConcurrentHashMap<>();
-
-    @Autowired
-    public ChatController(ChatService chatService) {
-        this.chatService = chatService;
-    }
 
     /**
      * WebSocket 연결 시 세션 ID 가져오기
