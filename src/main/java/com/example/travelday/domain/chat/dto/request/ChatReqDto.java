@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record ChatReqDto(
-        String message
+        String message,
+        String senderId
 ) {
 }
