@@ -1,6 +1,7 @@
 package com.example.travelday.domain.auth.controller;
 
 import com.example.travelday.domain.auth.dto.request.UpdateNicknameReqDto;
+import com.example.travelday.domain.auth.entity.Member;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,8 @@ import com.example.travelday.global.common.ApiResponseEntity;
 import com.example.travelday.global.common.ResponseText;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RequestMapping("/api/user")
 @RestController
@@ -48,5 +51,10 @@ public class MemberManageController {
     public ResponseEntity<ApiResponseEntity<String>> updateNickname(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateNicknameReqDto reqDto) {
         memberManageService.updateNickname(userDetails.getUsername(), reqDto.nickname());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_NICKNAME));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponseEntity<List<MemberInfoResDto>>> searchMember(@RequestParam String keyword) {
+        return ResponseEntity.ok(ApiResponseEntity.of(memberManageService.searchMembers(keyword)));
     }
 }

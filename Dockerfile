@@ -20,6 +20,13 @@ RUN ./gradlew clean build
 # Use a minimal base image to run the application
 FROM openjdk:17-jdk-slim
 
+# timezone settings
+RUN cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
+#ARG DEBIAN_FRONTEND=noninteractive
+#RUN apt-get install -y tzdata
+#RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
 # Set an argument for the JAR file path (built in the previous stage)
 ARG JAR_FILE_PATH=build/libs/TravelDay-0.0.1-SNAPSHOT.jar
 
