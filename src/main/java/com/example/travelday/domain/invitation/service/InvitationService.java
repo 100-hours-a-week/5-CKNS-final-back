@@ -6,6 +6,8 @@ import com.example.travelday.domain.invitation.dto.request.InvitationReqDto;
 import com.example.travelday.domain.invitation.entity.Invitation;
 import com.example.travelday.domain.invitation.enums.ResFlag;
 import com.example.travelday.domain.invitation.repository.InvitationRepository;
+import com.example.travelday.domain.notification.entity.Notification;
+import com.example.travelday.domain.notification.repository.NotificationRepository;
 import com.example.travelday.domain.travelroom.entity.TravelRoom;
 import com.example.travelday.domain.travelroom.entity.UserTravelRoom;
 import com.example.travelday.domain.travelroom.repository.TravelRoomRepository;
@@ -31,6 +33,8 @@ public class InvitationService {
 
     private final UserTravelRoomRepository userTravelRoomRepository;
 
+    private final NotificationRepository notificationRepository;
+
     @Transactional
     public void createInvitation(Long travelRoomId, InvitationReqDto invitationReqDto, String userId) {
         TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
@@ -52,6 +56,7 @@ public class InvitationService {
         firebaseNotificationService.notifyNewInvitation(receiver, invitation); // 파이어베이스 메세지 송신
     }
 
+    @Transactional
     public void responseInvitation(String userId, Long travelRoomId, Long invitationId, String status) {
         Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -73,5 +78,10 @@ public class InvitationService {
         UserTravelRoom userTravelRoom = UserTravelRoom
                 .create(travelRoom, member);
         userTravelRoomRepository.save(userTravelRoom);
+
+        Notification notification = notificationRepository.findByMemberAndTravelRoomId(member, travelRoomId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOTIFICATION_NOT_FOUND));
+        notification.check();
+        notificationRepository.save(notification);
     }
 }
