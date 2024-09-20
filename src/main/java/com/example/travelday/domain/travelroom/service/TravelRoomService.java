@@ -17,9 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,5 +122,20 @@ public class TravelRoomService {
         return members.stream()
                 .map(MemberInfoResDto::of)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<MemberInfoResDto> getMembersInTravelRoom(Long travelRoomId) {
+        TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+
+        List<UserTravelRoom> userTravelRooms = userTravelRoomRepository.findByTravelRoom(travelRoom);
+
+        List<MemberInfoResDto> memberInfoResDtos = new ArrayList<>();
+        for (UserTravelRoom userTravelRoom : userTravelRooms) {
+            memberInfoResDtos.add(MemberInfoResDto.of(userTravelRoom.getMember()));
+        }
+
+        return memberInfoResDtos;
     }
 }
