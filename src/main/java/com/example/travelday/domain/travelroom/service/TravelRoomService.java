@@ -1,5 +1,6 @@
 package com.example.travelday.domain.travelroom.service;
 
+import com.example.travelday.domain.auth.dto.response.MemberInfoResDto;
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
@@ -13,6 +14,9 @@ import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -105,5 +109,16 @@ public class TravelRoomService {
         TravelRoom travelRoom = userTravelRoom.getTravelRoom();
 
         travelRoomRepository.delete(travelRoom);
+    }
+
+    @Transactional
+    public List<MemberInfoResDto> searchMembers(String keyword) {
+        Pageable pageable = PageRequest.of(0, 5);
+
+        Page<Member> members = memberRepository.findByNicknameContaining(keyword, pageable);
+
+        return members.stream()
+                .map(MemberInfoResDto::of)
+                .toList();
     }
 }
