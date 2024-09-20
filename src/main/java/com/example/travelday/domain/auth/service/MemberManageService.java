@@ -1,5 +1,6 @@
 package com.example.travelday.domain.auth.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,7 +11,7 @@ import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberManageService {
@@ -30,6 +31,17 @@ public class MemberManageService {
                 .profileImagePath(member.getProfileImagePath())
                 .build();
     }
+
+    @Transactional
+    public void updateProfileImagePath(String userId, String profileImagePath) {
+        log.info("!@#!#@!#@!#!#!@#@!#@!#!@#@!#@!#!@#@!#@!#@!#!@#@!"+profileImagePath);
+//        Member member = memberRepository
+//                .findByUserId(userId)
+//                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+//
+//        member.updateProfileImage(profileImagePath);
+    }
+
 
     @Transactional(readOnly = true)
     public boolean checkDuplicateNickname(String nickname) {

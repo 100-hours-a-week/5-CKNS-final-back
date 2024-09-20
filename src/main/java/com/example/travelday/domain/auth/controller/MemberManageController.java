@@ -56,8 +56,14 @@ public class MemberManageController {
      * 프로필 이미지 등록 URL 요청
      * */
     @GetMapping("/profile/preSignedUrl/{filename}")
-    public ResponseEntity<ApiResponseEntity<String>> getFile(@PathVariable(value = "filename") String fileName) {
+    public ResponseEntity<ApiResponseEntity<String>> getFile(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable(value = "filename") String fileName) {
         String url = fileService.getPreSignedUrl("image",fileName);
+
+        String userId = userDetails.getUsername();
+        memberManageService.updateProfileImagePath(userId, url);
+
         return ResponseEntity.ok(
                 ApiResponseEntity.of(url)
         );
