@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -98,11 +99,14 @@ public class ChatController {
     /**
      * 마지막 채팅 조회
      */
-    @GetMapping("/rooms/{travelRoomId}/last")
-    // TODO: userDetail로 travelRoomId에 해당하는지 확인하는 로직 추가
-    public ResponseEntity<ApiResponseEntity<ChatResDto>> getLastChats(@PathVariable Long travelRoomId) {
-        Chat lastchat = chatService.getLastChatsByTravelRoomId(travelRoomId);
-        ChatResDto chatResDto = ChatResDto.of(lastchat);
-        return ResponseEntity.ok(ApiResponseEntity.of(chatResDto));
+    @GetMapping("/rooms/last")
+    public ResponseEntity<ApiResponseEntity<List<ChatResDto>>> getLastChats(@AuthenticationPrincipal UserDetails userDetails) {
+        List<Chat> lastchats = chatService.getLastChatsByTravelRoomId(userDetails.getUsername());
+
+        List<ChatResDto> chatResDtos = lastchats.stream()
+                                                .map(ChatResDto::of)
+                                                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(ApiResponseEntity.of(chatResDtos));
     }
 }
