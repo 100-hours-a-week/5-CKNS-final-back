@@ -25,7 +25,10 @@ public class MemberManageService {
                         .findByUserId(userId)
                         .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        return MemberInfoResDto.builder().nickname(member.getNickname()).build();
+        return MemberInfoResDto.builder()
+                .nickname(member.getNickname())
+                .profileImagePath(member.getProfileImagePath())
+                .build();
     }
 
     @Transactional(readOnly = true)
