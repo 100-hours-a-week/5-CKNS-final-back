@@ -48,6 +48,8 @@ public enum ErrorCode {
     // invitation error
     INVITATION_NOT_FOUND(HttpStatus.NOT_FOUND, "IV001", "초대장을 찾을 수 없습니다."),
     BAD_REQUEST_FLAG(HttpStatus.BAD_REQUEST, "IV002", "초대장 수락 여부 요청 형식이 잘못되었습니다."),
+    ALREADY_IN_TRAVELROOM(HttpStatus.BAD_REQUEST, "IV003", "이미 여행방에 있는 회원입니다."),
+    ALREADY_SEND_INVITATION(HttpStatus.BAD_REQUEST, "IV004", "이미 초대장을 보냈습니다."),
 
     // wish error
     WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WH001", "위시를 찾을 수 없습니다."),

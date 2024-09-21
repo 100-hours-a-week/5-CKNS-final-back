@@ -4,6 +4,7 @@ import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
 import com.example.travelday.domain.invitation.dto.request.InvitationReqDto;
 import com.example.travelday.domain.invitation.entity.Invitation;
+import com.example.travelday.domain.invitation.enums.InvitationStatus;
 import com.example.travelday.domain.invitation.enums.ResFlag;
 import com.example.travelday.domain.invitation.repository.InvitationRepository;
 import com.example.travelday.domain.notification.entity.Notification;
@@ -46,14 +47,30 @@ public class InvitationService {
         Member receiver = memberRepository.findByUserId(invitationReqDto.invitee())
                         .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        Invitation invitation = Invitation.builder()
-                .travelRoom(travelRoom)
-                .inviter(sender)
-                .invitee(receiver)
-                .build();
-        invitationRepository.save(invitation);
+        if (userTravelRoomRepository.existsByMember(receiver)) {
+            throw new CustomException(ErrorCode.ALREADY_IN_TRAVELROOM);
+        }
 
-        firebaseNotificationService.notifyNewInvitation(receiver, invitation); // 파이어베이스 메세지 송신
+        Invitation invitation = invitationRepository.findByInviteeAndTravelRoomId(receiver, travelRoomId);
+
+        if (invitation == null) {
+            Invitation newInvitation = Invitation.builder()
+                    .travelRoom(travelRoom)
+                    .inviter(sender)
+                    .invitee(receiver)
+                    .build();
+
+            invitationRepository.save(newInvitation);
+            firebaseNotificationService.notifyNewInvitation(receiver, newInvitation); // 파이어베이스 메세지 송신
+        } else if (invitation.getStatus().equals(InvitationStatus.REJECTED)) {
+            invitation.resendInvitation();
+            invitationRepository.save(invitation);
+            firebaseNotificationService.notifyNewInvitation(receiver, invitation);
+        } else if (invitation.getStatus().equals(InvitationStatus.PENDING)) {
+            throw new CustomException(ErrorCode.ALREADY_SEND_INVITATION);
+        } else if (invitation.getStatus().equals(InvitationStatus.ACCEPTED)) {
+            throw new CustomException(ErrorCode.ALREADY_IN_TRAVELROOM);
+        }
     }
 
     @Transactional
@@ -75,6 +92,8 @@ public class InvitationService {
             throw new CustomException(ErrorCode.BAD_REQUEST_FLAG);
         }
 
+        invitationRepository.save(invitation);
+
         UserTravelRoom userTravelRoom = UserTravelRoom
                 .create(travelRoom, member);
         userTravelRoomRepository.save(userTravelRoom);
@@ -82,6 +101,7 @@ public class InvitationService {
         Notification notification = notificationRepository.findByMemberAndTravelRoomId(member, travelRoomId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOTIFICATION_NOT_FOUND));
         notification.check();
+
         notificationRepository.save(notification);
     }
 }
