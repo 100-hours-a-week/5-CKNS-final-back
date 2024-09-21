@@ -6,35 +6,39 @@ import com.example.travelday.domain.chat.dto.request.ChatReqDto;
 import com.example.travelday.domain.chat.dto.response.ChatResDto;
 import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.repository.ChatRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.travelday.global.exception.CustomException;
+import com.example.travelday.global.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class ChatService {
 
     private final ChatRepository chatRepository;
 
     private final MemberRepository memberRepository;
 
-    @Autowired
-    public ChatService(ChatRepository chatRepository, MemberRepository memberRepository) {
-        this.chatRepository = chatRepository;
-        this.memberRepository = memberRepository;
-    }
+    public ChatResDto saveChat(Long travelRoomId, ChatReqDto chatReqDto) {
 
-    public ChatResDto saveChat(Long travelRoomId, ChatReqDto chatReqDto, String userId) {
+        Member member = memberRepository.findByUserId(chatReqDto.senderId())
+                            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
         Chat chat = Chat.builder()
                         .travelRoomId(travelRoomId)
-                        .senderId(userId)
+                        .senderId(chatReqDto.senderId())
+                        .senderNickname(member.getNickname())
                         .message(chatReqDto.message())
                         .build();
 
         Chat savedChat = chatRepository.save(chat);
 
-        return ChatResDto.of(savedChat, userId);
+        return ChatResDto.of(savedChat);
     }
 
     public List<ChatResDto> getAllChat(Long travelRoomId, String userId) {
@@ -42,8 +46,12 @@ public class ChatService {
                     .stream()
                     .map( chat -> {
                         Optional<Member> chatUser = memberRepository.findByUserId(userId);
-                        return ChatResDto.of(chat, chatUser.get().getUserId());
+                        return ChatResDto.of(chat);
                     })
                     .toList();
+    }
+
+    public Chat getLastChatsByTravelRoomId(Long travelRoomId) {
+        return chatRepository.findTopByTravelRoomIdOrderByCreatedAtDesc(travelRoomId);
     }
 }

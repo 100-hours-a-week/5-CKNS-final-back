@@ -1,6 +1,8 @@
 package com.example.travelday.domain.auth.service;
 
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +13,9 @@ import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
-@Slf4j
+
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class MemberManageService {
@@ -54,5 +58,16 @@ public class MemberManageService {
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         member.updateNickname(nickname);
+    }
+
+    @Transactional
+    public List<MemberInfoResDto> searchMembers(String keyword) {
+        Pageable pageable = PageRequest.of(0, 5);
+
+        Page<Member> members = memberRepository.findByNicknameContaining(keyword, pageable);
+
+        return members.stream()
+                .map(MemberInfoResDto::of)
+                .toList();
     }
 }
