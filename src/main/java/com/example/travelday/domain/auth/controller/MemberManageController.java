@@ -68,7 +68,7 @@ public class MemberManageController {
             @PathVariable(value = "filename") String fileName) {
 
 
-        String uniqueName = fileService.getFileName("image",fileName);
+        String uniqueName = fileService.getFileName("image", fileName);
         String preSignedUrl = fileService.getPreSignedUrl(uniqueName);
 
         // 프로필 이미지 경로를 멤버 컬럼에 저장
@@ -78,7 +78,7 @@ public class MemberManageController {
         return ResponseEntity.ok(
                 ApiResponseEntity.of(preSignedUrl)
         );
-  
+    }
     @GetMapping("/search")
     public ResponseEntity<ApiResponseEntity<List<MemberInfoResDto>>> searchMember(@RequestParam String keyword) {
         return ResponseEntity.ok(ApiResponseEntity.of(memberManageService.searchMembers(keyword)));

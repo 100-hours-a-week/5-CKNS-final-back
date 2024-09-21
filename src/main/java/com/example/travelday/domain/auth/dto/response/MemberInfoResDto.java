@@ -14,6 +14,7 @@ public record MemberInfoResDto(
         return MemberInfoResDto.builder()
                 .userId(member.getUserId())
                 .nickname(member.getNickname())
+                .profileImagePath(member.getProfileImagePath())
                 .build();
     }
 }
