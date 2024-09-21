@@ -5,7 +5,7 @@ import com.example.travelday.domain.auth.repository.MemberRepository;
 import com.example.travelday.domain.invitation.dto.request.InvitationReqDto;
 import com.example.travelday.domain.invitation.entity.Invitation;
 import com.example.travelday.domain.invitation.enums.InvitationStatus;
-import com.example.travelday.domain.invitation.enums.ResFlag;
+import com.example.travelday.domain.invitation.enums.InvitationResponseStatus;
 import com.example.travelday.domain.invitation.repository.InvitationRepository;
 import com.example.travelday.domain.notification.entity.Notification;
 import com.example.travelday.domain.notification.repository.NotificationRepository;
@@ -51,7 +51,8 @@ public class InvitationService {
             throw new CustomException(ErrorCode.ALREADY_IN_TRAVELROOM);
         }
 
-        Invitation invitation = invitationRepository.findByInviteeAndTravelRoomId(receiver, travelRoomId);
+        Invitation invitation = invitationRepository.findByInviteeAndTravelRoomId(receiver, travelRoomId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INVITATION_NOT_FOUND));
 
         if (invitation == null) {
             Invitation newInvitation = Invitation.builder()
@@ -84,9 +85,9 @@ public class InvitationService {
         Invitation invitation = invitationRepository.findById(invitationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVITATION_NOT_FOUND));
 
-        if (status.equals(ResFlag.Y.toString())) {
+        if (status.equals(InvitationResponseStatus.Y.toString())) {
             invitation.accept();
-        } else if (status.equals(ResFlag.N.toString())) {
+        } else if (status.equals(InvitationResponseStatus.N.toString())) {
             invitation.reject();
         } else {
             throw new CustomException(ErrorCode.BAD_REQUEST_FLAG);
