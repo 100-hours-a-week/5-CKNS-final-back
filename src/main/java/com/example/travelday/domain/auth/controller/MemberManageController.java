@@ -59,13 +59,17 @@ public class MemberManageController {
     public ResponseEntity<ApiResponseEntity<String>> getFile(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable(value = "filename") String fileName) {
-        String url = fileService.getPreSignedUrl("image",fileName);
 
+
+        String uniqueName = fileService.getFileName("image",fileName);
+        String preSignedUrl = fileService.getPreSignedUrl(uniqueName);
+
+        // 프로필 이미지 경로를 멤버 컬럼에 저장
         String userId = userDetails.getUsername();
-        memberManageService.updateProfileImagePath(userId, url);
+        memberManageService.updateProfileImagePath(userId, uniqueName);
 
         return ResponseEntity.ok(
-                ApiResponseEntity.of(url)
+                ApiResponseEntity.of(preSignedUrl)
         );
     }
 }

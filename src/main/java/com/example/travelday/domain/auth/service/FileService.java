@@ -23,17 +23,28 @@ public class FileService {
 
 	/**
      * presigned url 발급
-     * @param prefix 버킷 디렉토리 이름
      * @param fileName 클라이언트가 전달한 파일명 파라미터
      * @return presigned url
      */
-    public String getPreSignedUrl(String prefix, String fileName) {
-        if(!prefix.isEmpty()) {
-            fileName = createPath(prefix, fileName);
-        }
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(bucket, fileName);
+    public String getPreSignedUrl(String fileName) {
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(bucket, fileName,"image/png");
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
         return url.toString();
+    }
+    /**
+     * file 고유 이름 생성
+     * @param prefix 버킷 디렉토리 이름
+     * @return filePath 클라이언트가 전달한 파일명 파라미터
+     * */
+    public String getFileName(String prefix, String fileName) {
+        String filePath;
+        if(!prefix.isEmpty()) {
+           filePath  = createPath(prefix, fileName);
+        }
+        else {
+            filePath = fileName;
+        }
+        return filePath;
     }
 
 	/**
@@ -42,11 +53,15 @@ public class FileService {
      * @param fileName S3 업로드용 파일 이름
      * @return presigned url
      */
-    private GeneratePresignedUrlRequest getGeneratePreSignedUrlRequest(String bucket, String fileName) {
+    private GeneratePresignedUrlRequest getGeneratePreSignedUrlRequest(String bucket, String fileName, String contentType) {
         GeneratePresignedUrlRequest generatePresignedUrlRequest =
                 new GeneratePresignedUrlRequest(bucket, fileName)
                         .withMethod(HttpMethod.PUT)
                         .withExpiration(getPreSignedUrlExpiration());
+
+        // Set the content type for the image
+        generatePresignedUrlRequest.addRequestParameter("Content-Type", contentType);
+
         generatePresignedUrlRequest.addRequestParameter(
                 Headers.S3_CANNED_ACL,
                 CannedAccessControlList.PublicRead.toString());

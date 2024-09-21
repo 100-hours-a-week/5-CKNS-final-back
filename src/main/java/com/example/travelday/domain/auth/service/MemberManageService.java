@@ -34,12 +34,12 @@ public class MemberManageService {
 
     @Transactional
     public void updateProfileImagePath(String userId, String profileImagePath) {
-        log.info("!@#!#@!#@!#!#!@#@!#@!#!@#@!#@!#!@#@!#@!#@!#!@#@!"+profileImagePath);
-//        Member member = memberRepository
-//                .findByUserId(userId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-//
-//        member.updateProfileImage(profileImagePath);
+//        log.info("!@#!#@!#@!#!#!@#@!#@!#!@#@!#@!#!@#@!#@!#@!#!@#@!"+profileImagePath);
+        Member member = memberRepository
+                .findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        member.updateProfileImage(profileImagePath);
     }
 
 
