@@ -3,6 +3,8 @@ package com.example.travelday.domain.travelroom.service;
 import com.example.travelday.domain.auth.dto.response.MemberInfoResDto;
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
+import com.example.travelday.domain.settlement.entity.Settlement;
+import com.example.travelday.domain.settlement.repository.SettlementRepository;
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomMembersResDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomResDto;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,8 @@ import java.util.stream.Collectors;
 public class TravelRoomService {
 
     private final TravelRoomRepository travelRoomRepository;
+
+    private final SettlementRepository settlementRepository;
 
     private final UserTravelRoomRepository userTravelRoomRepository;
 
@@ -77,13 +82,22 @@ public class TravelRoomService {
     @Transactional
     public void createTravelRoom(TravelRoomReqDto requestDto, String userId) {
         TravelRoom travelRoom = TravelRoom.addOf(requestDto);
-        TravelRoom savedTravelRoom = travelRoomRepository.save(travelRoom);
+        travelRoomRepository.save(travelRoom);
 
         Member member = memberRepository.findByUserId(userId)
                             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        UserTravelRoom userTravelRoom = UserTravelRoom.create(savedTravelRoom, member);
+        UserTravelRoom userTravelRoom = UserTravelRoom.create(travelRoom, member);
         userTravelRoomRepository.save(userTravelRoom);
+
+        log.info("TravelRoom 생성 완료 : {}", travelRoom);
+
+        Settlement settlement = Settlement.builder()
+                                .travelRoom(travelRoom)
+                                .totalAmount(BigDecimal.ZERO)
+                                .build();
+
+        settlementRepository.save(settlement);
     }
 
     @Transactional
@@ -108,9 +122,14 @@ public class TravelRoomService {
         UserTravelRoom userTravelRoom = userTravelRoomRepository.findByMemberAndTravelRoomId(member, travelRoomId)
                                             .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
 
-        TravelRoom travelRoom = userTravelRoom.getTravelRoom();
+        userTravelRoomRepository.delete(userTravelRoom);
 
-        travelRoomRepository.delete(travelRoom);
+        boolean isUserRemaining = userTravelRoomRepository.existsByTravelRoomId(travelRoomId);
+
+        // 만약 남은 유저가 없다면 여행방 자체 삭제
+        if (!isUserRemaining) {
+            travelRoomRepository.deleteById(travelRoomId);
+        }
     }
 
     @Transactional
