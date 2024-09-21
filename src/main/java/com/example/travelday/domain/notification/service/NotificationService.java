@@ -44,7 +44,7 @@ public class NotificationService {
         Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        List<Notification> notificationList = notificationRepository.findAllByMemberOrderByCreatedTimeDesc(member);
+        List<Notification> notificationList = notificationRepository.findAllByMemberAndIsCheckedFalseOrderByCreatedTimeDesc(member);
 
         // notificationList의 Notification 객체들을 NotificationResDto로 변환하여 리스트로 저장
         List<NotificationResDto> notificationResDtoList = notificationList.stream()
@@ -57,7 +57,6 @@ public class NotificationService {
         }
         notificationRepository.saveAll(notificationList);
 
-        log.info(notificationResDtoList.toString());
         return notificationResDtoList;
     }
 }

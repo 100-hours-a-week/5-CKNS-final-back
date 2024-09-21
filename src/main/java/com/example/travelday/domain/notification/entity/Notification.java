@@ -50,6 +50,10 @@ public class Notification {
         this.isChecked = false;
     }
 
+    public void check() {
+        this.isChecked = true;
+    }
+
     public void checkNotification() {
         this.isChecked = true;
     }

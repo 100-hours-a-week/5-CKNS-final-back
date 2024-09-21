@@ -1,5 +1,6 @@
 package com.example.travelday.domain.travelroom.service;
 
+import com.example.travelday.domain.auth.dto.response.MemberInfoResDto;
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
@@ -13,9 +14,14 @@ import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,5 +111,31 @@ public class TravelRoomService {
         TravelRoom travelRoom = userTravelRoom.getTravelRoom();
 
         travelRoomRepository.delete(travelRoom);
+    }
+
+    @Transactional
+    public List<MemberInfoResDto> searchMembers(String keyword) {
+        Pageable pageable = PageRequest.of(0, 5);
+
+        Page<Member> members = memberRepository.findByNicknameContaining(keyword, pageable);
+
+        return members.stream()
+                .map(MemberInfoResDto::of)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<MemberInfoResDto> getMembersInTravelRoom(Long travelRoomId) {
+        TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+
+        List<UserTravelRoom> userTravelRooms = userTravelRoomRepository.findByTravelRoom(travelRoom);
+
+        List<MemberInfoResDto> memberInfoResDtos = new ArrayList<>();
+        for (UserTravelRoom userTravelRoom : userTravelRooms) {
+            memberInfoResDtos.add(MemberInfoResDto.of(userTravelRoom.getMember()));
+        }
+
+        return memberInfoResDtos;
     }
 }
