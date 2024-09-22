@@ -2,7 +2,6 @@ package com.example.travelday.domain.chat.controller;
 
 import com.example.travelday.domain.chat.dto.request.ChatReqDto;
 import com.example.travelday.domain.chat.dto.response.ChatResDto;
-import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.service.ChatService;
 import com.example.travelday.global.common.ApiResponseEntity;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -101,12 +99,7 @@ public class ChatController {
      */
     @GetMapping("/rooms/last")
     public ResponseEntity<ApiResponseEntity<List<ChatResDto>>> getLastChats(@AuthenticationPrincipal UserDetails userDetails) {
-        List<Chat> lastchats = chatService.getLastChatsByTravelRoomId(userDetails.getUsername());
-
-        List<ChatResDto> chatResDtos = lastchats.stream()
-                                                .map(ChatResDto::of)
-                                                .collect(Collectors.toList());
-
+        List<ChatResDto> chatResDtos = chatService.getLastChatsByTravelRoomId(userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(chatResDtos));
     }
 }
