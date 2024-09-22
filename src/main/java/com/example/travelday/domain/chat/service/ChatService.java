@@ -60,19 +60,14 @@ public class ChatService {
         Member member = memberRepository.findByUserId(userId)
                                         .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        log.info("채팅 서비스 member 찾기 : " + member);
         List<UserTravelRoom> userTravelRooms = userTravelRoomRepository.findByMember(member)
                                         .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
-        log.info("채팅 서비스 userTravelRooms 찾기 : " + userTravelRooms);
 
-
-
-        // 각 travelRoomId에서 마지막 채팅을 Optional로 처리하고, 없는 경우는 건너뛰도록 처리
         List<Chat> lastchats = userTravelRooms.stream()
                                 .map(userTravelRoom -> chatRepository.findTopByTravelRoomIdOrderByCreatedAtDesc(userTravelRoom.getTravelRoom().getId()))
                                 .filter(Optional::isPresent) // 채팅이 존재하는 경우만 필터링
                                 .map(Optional::get)           // Optional에서 Chat 객체 추출
-                                .collect(Collectors.toList()); // 최종 리스트로 수집
+                                .collect(Collectors.toList());
 
         return lastchats.stream()
                         .map(ChatResDto::of)
