@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TravelRoomService {
 
+    public static final int LIMIT_NUM_OF_SEARCH_MEMBERS = 5;
+
     private final TravelRoomRepository travelRoomRepository;
 
     private final SettlementRepository settlementRepository;
@@ -132,13 +134,17 @@ public class TravelRoomService {
         }
     }
 
-    @Transactional
-    public List<MemberInfoResDto> searchMembers(String keyword) {
-        Pageable pageable = PageRequest.of(0, 5);
+    @Transactional(readOnly = true)
+    public List<MemberInfoResDto> searchMembersToInvite(Long travelRoomId, String keyword) {
+        List<Member> membersInTravelRoom = userTravelRoomRepository.findAllByTravelRoomId(travelRoomId).stream()
+                .map(UserTravelRoom::getMember)
+                .toList();
 
-        Page<Member> members = memberRepository.findByNicknameContaining(keyword, pageable);
+        List<Member> members = memberRepository.findByNicknameContaining(keyword);
 
         return members.stream()
+                .filter(member -> !membersInTravelRoom.contains(member))
+                .limit(LIMIT_NUM_OF_SEARCH_MEMBERS)
                 .map(MemberInfoResDto::of)
                 .toList();
     }
