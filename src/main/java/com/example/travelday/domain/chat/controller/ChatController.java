@@ -2,7 +2,6 @@ package com.example.travelday.domain.chat.controller;
 
 import com.example.travelday.domain.chat.dto.request.ChatReqDto;
 import com.example.travelday.domain.chat.dto.response.ChatResDto;
-import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.service.ChatService;
 import com.example.travelday.global.common.ApiResponseEntity;
 import lombok.RequiredArgsConstructor;
@@ -98,11 +97,9 @@ public class ChatController {
     /**
      * 마지막 채팅 조회
      */
-    @GetMapping("/rooms/{travelRoomId}/last")
-    // TODO: userDetail로 travelRoomId에 해당하는지 확인하는 로직 추가
-    public ResponseEntity<ApiResponseEntity<ChatResDto>> getLastChats(@PathVariable Long travelRoomId) {
-        Chat lastchat = chatService.getLastChatsByTravelRoomId(travelRoomId);
-        ChatResDto chatResDto = ChatResDto.of(lastchat);
-        return ResponseEntity.ok(ApiResponseEntity.of(chatResDto));
+    @GetMapping("/rooms/last")
+    public ResponseEntity<ApiResponseEntity<List<ChatResDto>>> getLastChats(@AuthenticationPrincipal UserDetails userDetails) {
+        List<ChatResDto> chatResDtos = chatService.getLastChatsByTravelRoomId(userDetails.getUsername());
+        return ResponseEntity.ok(ApiResponseEntity.of(chatResDtos));
     }
 }

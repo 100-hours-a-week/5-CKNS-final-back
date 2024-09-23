@@ -41,4 +41,5 @@ public class ResponseText {
   // invitation
     public static final String SUCCESS_CREATE_INVITATION = "여행방 초대 성공";
     public static final String SUCCESS_CREATE_FCM_TOKEN = "FCM 토큰 생성 성공";
+    public static final String SUCCESS_INVITATION_RESPONSE = "초대 응답 성공";
 }
