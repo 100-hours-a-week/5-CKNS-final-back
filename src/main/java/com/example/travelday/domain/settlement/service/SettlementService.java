@@ -11,7 +11,9 @@ import com.example.travelday.domain.settlement.entity.SettlementDetail;
 import com.example.travelday.domain.settlement.repository.SettlementDetailRepository;
 import com.example.travelday.domain.settlement.repository.SettlementRepository;
 import com.example.travelday.domain.settlement.utils.SettlementDetailChangedEvent;
+import com.example.travelday.domain.travelroom.entity.TravelRoom;
 import com.example.travelday.domain.travelroom.entity.UserTravelRoom;
+import com.example.travelday.domain.travelroom.repository.TravelRoomRepository;
 import com.example.travelday.domain.travelroom.repository.UserTravelRoomRepository;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
@@ -42,6 +44,25 @@ public class SettlementService {
     private final ApplicationEventPublisher eventPublisher;
 
     private final FirebaseNotificationService firebaseNotificationService;
+
+    private final TravelRoomRepository travelRoomRepository;
+
+    @Transactional
+    public void createSettlement(Long travelRoomId, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
+
+        TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
+                                    .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+
+
+        Settlement settlement = Settlement.builder()
+                                    .travelRoom(travelRoom)
+                                    .totalAmount(BigDecimal.ZERO)
+                                    .build();
+
+        settlementRepository.save(settlement);
+    }
 
     @Transactional(readOnly = true)
     public SettlementResDto getAllSettlement(Long travelRoomId, String userId) {

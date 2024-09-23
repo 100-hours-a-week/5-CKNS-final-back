@@ -26,6 +26,15 @@ public class SettlementController {
     private final SettlementService settlementService;
 
     /**
+     * 정산 생성
+     */
+    @PostMapping("/{travelRoomId}")
+    public ResponseEntity<ApiResponseEntity<String>> createSettlement(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
+        settlementService.createSettlement(travelRoomId, userDetails.getUsername());
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_CREATE_SETTLEMENT));
+    }
+
+    /**
      * 정산 조회
      */
     @GetMapping("/{travelRoomId}")
