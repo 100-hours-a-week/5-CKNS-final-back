@@ -52,4 +52,8 @@ public class Invitation extends BaseTimeEntity {
     public void accept() {
         this.status = InvitationStatus.ACCEPTED;
     }
+
+    public void resendInvitation() {
+        this.status = InvitationStatus.PENDING;
+    }
 }
