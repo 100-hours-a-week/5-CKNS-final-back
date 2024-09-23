@@ -52,9 +52,4 @@ public class MemberManageController {
         memberManageService.updateNickname(userDetails.getUsername(), reqDto.nickname());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_NICKNAME));
     }
-
-    @GetMapping("/search")
-    public ResponseEntity<ApiResponseEntity<List<MemberInfoResDto>>> searchMember(@RequestParam String keyword) {
-        return ResponseEntity.ok(ApiResponseEntity.of(memberManageService.searchMembers(keyword)));
-    }
 }
