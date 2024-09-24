@@ -1,11 +1,12 @@
 package com.example.travelday.domain.invitation.service;
 
+import com.amadeus.Travel;
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
 import com.example.travelday.domain.invitation.dto.request.InvitationReqDto;
 import com.example.travelday.domain.invitation.entity.Invitation;
 import com.example.travelday.domain.invitation.enums.InvitationStatus;
-import com.example.travelday.domain.invitation.enums.ResFlag;
+import com.example.travelday.domain.invitation.enums.InvitationResponseStatus;
 import com.example.travelday.domain.invitation.repository.InvitationRepository;
 import com.example.travelday.domain.notification.entity.Notification;
 import com.example.travelday.domain.notification.repository.NotificationRepository;
@@ -47,25 +48,16 @@ public class InvitationService {
         Member receiver = memberRepository.findByUserId(invitationReqDto.invitee())
                         .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
-        if (userTravelRoomRepository.existsByMember(receiver)) {
+        if (userTravelRoomRepository.existsByTravelRoomIdAndMember(travelRoomId, receiver)) {
             throw new CustomException(ErrorCode.ALREADY_IN_TRAVELROOM);
         }
 
         Invitation invitation = invitationRepository.findByInviteeAndTravelRoomId(receiver, travelRoomId);
 
         if (invitation == null) {
-            Invitation newInvitation = Invitation.builder()
-                    .travelRoom(travelRoom)
-                    .inviter(sender)
-                    .invitee(receiver)
-                    .build();
-
-            invitationRepository.save(newInvitation);
-            firebaseNotificationService.notifyNewInvitation(receiver, newInvitation); // 파이어베이스 메세지 송신
+            createNewInvitation(travelRoom, sender, receiver);
         } else if (invitation.getStatus().equals(InvitationStatus.REJECTED)) {
-            invitation.resendInvitation();
-            invitationRepository.save(invitation);
-            firebaseNotificationService.notifyNewInvitation(receiver, invitation);
+            resendInvitation(invitation, receiver);
         } else if (invitation.getStatus().equals(InvitationStatus.PENDING)) {
             throw new CustomException(ErrorCode.ALREADY_SEND_INVITATION);
         } else if (invitation.getStatus().equals(InvitationStatus.ACCEPTED)) {
@@ -84,9 +76,9 @@ public class InvitationService {
         Invitation invitation = invitationRepository.findById(invitationId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVITATION_NOT_FOUND));
 
-        if (status.equals(ResFlag.Y.toString())) {
+        if (status.equals(InvitationResponseStatus.Y.toString())) {
             invitation.accept();
-        } else if (status.equals(ResFlag.N.toString())) {
+        } else if (status.equals(InvitationResponseStatus.N.toString())) {
             invitation.reject();
         } else {
             throw new CustomException(ErrorCode.BAD_REQUEST_FLAG);
@@ -103,5 +95,22 @@ public class InvitationService {
         notification.check();
 
         notificationRepository.save(notification);
+    }
+
+    private void createNewInvitation(TravelRoom travelRoom, Member sender, Member receiver) {
+        Invitation newInvitation = Invitation.builder()
+                .travelRoom(travelRoom)
+                .inviter(sender)
+                .invitee(receiver)
+                .build();
+
+        invitationRepository.save(newInvitation);
+        firebaseNotificationService.notifyNewInvitation(receiver, newInvitation); // 파이어베이스 메세지 송신
+    }
+
+    private void resendInvitation(Invitation invitation, Member receiver) {
+        invitation.resendInvitation();
+        invitationRepository.save(invitation);
+        firebaseNotificationService.notifyNewInvitation(receiver, invitation);
     }
 }

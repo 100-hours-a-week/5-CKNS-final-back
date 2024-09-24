@@ -13,6 +13,8 @@ public interface UserTravelRoomRepository extends JpaRepository<UserTravelRoom, 
 
     Optional<UserTravelRoom> findByMemberAndTravelRoomId(Member member, Long travelRoomId);
 
+    List<UserTravelRoom> findAllByTravelRoomId(Long travelRoomI);
+
     List<UserTravelRoom> findByTravelRoom(TravelRoom travelRoom);
 
     Optional<List<UserTravelRoom>> findByTravelRoomId(Long travelRoomId);

@@ -52,15 +52,24 @@ public class Member extends BaseTimeEntity {
     @Comment("수정자")
     private String updatedBy;
 
+    @Column(name = "profile_image_path", length = 255)
+    @Comment("프로필 이미지 경로")
+    private String profileImagePath;
+
     @Builder
-    public Member(String userId, String nickname, SocialType socialType, String updatedBy) {
+    public Member(String userId, String nickname, SocialType socialType, String updatedBy, String profileImagePath) {
         this.userId = userId;
         this.nickname = nickname;
         this.socialType = socialType;
         this.updatedBy = updatedBy;
+        this.profileImagePath = profileImagePath;
     }
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void updateProfileImage(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
     }
 }
