@@ -6,6 +6,9 @@ import com.example.travelday.domain.chat.dto.request.ChatReqDto;
 import com.example.travelday.domain.chat.dto.response.ChatResDto;
 import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.repository.ChatRepository;
+import com.example.travelday.domain.travelroom.entity.UserTravelRoom;
+import com.example.travelday.domain.travelroom.repository.UserTravelRoomRepository;
+
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -23,6 +27,7 @@ public class ChatService {
     private final ChatRepository chatRepository;
 
     private final MemberRepository memberRepository;
+    private final UserTravelRoomRepository userTravelRoomRepository;
 
     public ChatResDto saveChat(Long travelRoomId, ChatReqDto chatReqDto) {
 
@@ -51,7 +56,22 @@ public class ChatService {
                     .toList();
     }
 
-    public Chat getLastChatsByTravelRoomId(Long travelRoomId) {
-        return chatRepository.findTopByTravelRoomIdOrderByCreatedAtDesc(travelRoomId);
+    public List<ChatResDto> getLastChatsByTravelRoomId(String userId) {
+
+        Member member = memberRepository.findByUserId(userId)
+                                        .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        List<UserTravelRoom> userTravelRooms = userTravelRoomRepository.findByMember(member)
+                                        .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+
+        List<Chat> lastchats = userTravelRooms.stream()
+                                .map(userTravelRoom -> chatRepository.findTopByTravelRoomIdOrderByCreatedAtDesc(userTravelRoom.getTravelRoom().getId()))
+                                .filter(Optional::isPresent) // 채팅이 존재하는 경우만 필터링
+                                .map(Optional::get)           // Optional에서 Chat 객체 추출
+                                .collect(Collectors.toList());
+
+        return lastchats.stream()
+                        .map(ChatResDto::of)
+                        .collect(Collectors.toList());
     }
 }

@@ -23,8 +23,8 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -125,7 +125,7 @@ public class TravelRoomService {
                                             .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
 
         userTravelRoomRepository.delete(userTravelRoom);
-
+      
         boolean isUserRemaining = userTravelRoomRepository.existsByTravelRoomId(travelRoomId);
 
         // 만약 남은 유저가 없다면 여행방 자체 삭제

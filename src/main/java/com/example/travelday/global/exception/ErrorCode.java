@@ -59,6 +59,9 @@ public enum ErrorCode {
     // wish error
     WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WH001", "위시를 찾을 수 없습니다."),
 
+    // chat error
+    CHAT_NOT_FOUND(HttpStatus.BAD_REQUEST, "CH001", "채팅이 존재하지 않습니다."),
+
     // redis error
     REDIS_SAVE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "RE001", "Redis 저장에 실패했습니다."),
 
