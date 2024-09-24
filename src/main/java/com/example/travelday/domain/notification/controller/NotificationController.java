@@ -23,9 +23,8 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @GetMapping()
-    public ResponseEntity<ApiResponseEntity<NotificationResDto>> getNotifications(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponseEntity<List<NotificationResDto>>> getNotifications(@AuthenticationPrincipal UserDetails userDetails) {
         List<NotificationResDto> notificationResDtoList = notificationService.getNotificationsListByMember(userDetails.getUsername());
-        log.info("Notification List: {}", notificationResDtoList);
-        return ResponseEntity.ok(ApiResponseEntity.of(notificationResDtoList.get(0)));
+        return ResponseEntity.ok(ApiResponseEntity.of(notificationResDtoList));
     }
 }

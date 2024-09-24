@@ -57,15 +57,4 @@ public class MemberManageService {
 
         member.updateNickname(nickname);
     }
-
-    @Transactional
-    public List<MemberInfoResDto> searchMembers(String keyword) {
-        Pageable pageable = PageRequest.of(0, 5);
-
-        Page<Member> members = memberRepository.findByNicknameContaining(keyword, pageable);
-
-        return members.stream()
-                .map(MemberInfoResDto::of)
-                .toList();
-    }
 }
