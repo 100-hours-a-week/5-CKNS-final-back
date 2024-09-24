@@ -1,7 +1,11 @@
 package com.example.travelday.domain.auth.controller;
 
 import com.example.travelday.domain.auth.dto.request.UpdateNicknameReqDto;
+
+import com.example.travelday.domain.auth.service.FileService;
+
 import com.example.travelday.domain.auth.entity.Member;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +26,8 @@ import java.util.List;
 public class MemberManageController {
 
     private final MemberManageService memberManageService;
+
+    private final FileService fileService;
 
     /**
      * 회원 정보 조회
@@ -51,5 +57,25 @@ public class MemberManageController {
     public ResponseEntity<ApiResponseEntity<String>> updateNickname(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateNicknameReqDto reqDto) {
         memberManageService.updateNickname(userDetails.getUsername(), reqDto.nickname());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_NICKNAME));
+    }
+
+    /**
+     * 프로필 이미지 등록 URL 요청
+     * */
+    @GetMapping("/profile/preSignedUrl/{filename}")
+    public ResponseEntity<ApiResponseEntity<String>> getPreSignedUrl(@AuthenticationPrincipal UserDetails userDetails, @PathVariable(value = "filename") String fileName) {
+
+        String uniqueName = fileService.getFileName("image", fileName);
+        // 프로필 이미지 경로를 멤버 컬럼에 저장
+        String userId = userDetails.getUsername();
+        memberManageService.updateProfileImagePath(userId, uniqueName);
+
+        return ResponseEntity.ok(ApiResponseEntity.of(fileService.getPreSignedUrl(uniqueName)));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponseEntity<List<MemberInfoResDto>>> searchMember(@RequestParam String keyword) {
+        return ResponseEntity.ok(ApiResponseEntity.of(memberManageService.searchMembers(keyword)));
+
     }
 }
