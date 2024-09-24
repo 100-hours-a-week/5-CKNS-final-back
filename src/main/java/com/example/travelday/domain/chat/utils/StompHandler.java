@@ -34,7 +34,9 @@ public class StompHandler implements ChannelInterceptor {
 
         if (headerAccessor.getCommand() == StompCommand.CONNECT) { // 연결 시에만 header 확인
             String token = String.valueOf(headerAccessor.getNativeHeader("Authorization").get(0));
+            log.info("Token: {}", token);
             token = token.replace(jwtProperties.TOKEN_PREFIX, "");
+            log.info("Token replace prefix: {}", token);
 
             try {
                 if (jwtTokenProvider.validateToken(token)) { // 토큰 검증
