@@ -3,7 +3,6 @@ package com.example.travelday.domain.travelroom.service;
 import com.example.travelday.domain.auth.dto.response.MemberInfoResDto;
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
-import com.example.travelday.domain.settlement.entity.Settlement;
 import com.example.travelday.domain.settlement.repository.SettlementRepository;
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomMembersResDto;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,15 +89,6 @@ public class TravelRoomService {
 
         UserTravelRoom userTravelRoom = UserTravelRoom.create(travelRoom, member);
         userTravelRoomRepository.save(userTravelRoom);
-
-        log.info("TravelRoom 생성 완료 : {}", travelRoom);
-
-        Settlement settlement = Settlement.builder()
-                                .travelRoom(travelRoom)
-                                .totalAmount(BigDecimal.ZERO)
-                                .build();
-
-        settlementRepository.save(settlement);
     }
 
     @Transactional

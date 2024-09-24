@@ -1,6 +1,7 @@
 package com.example.travelday.domain.settlement.controller;
 
 import com.example.travelday.domain.settlement.dto.request.SettlementDetailReqDto;
+import com.example.travelday.domain.settlement.dto.request.SettlementNotificationReqDto;
 import com.example.travelday.domain.settlement.dto.response.SettlementDetailResDto;
 import com.example.travelday.domain.settlement.dto.response.SettlementResDto;
 import com.example.travelday.domain.settlement.service.SettlementService;
@@ -23,6 +24,15 @@ import java.util.List;
 public class SettlementController {
 
     private final SettlementService settlementService;
+
+    /**
+     * 정산 생성
+     */
+    @PostMapping("/{travelRoomId}")
+    public ResponseEntity<ApiResponseEntity<String>> createSettlement(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
+        settlementService.createSettlement(travelRoomId, userDetails.getUsername());
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_CREATE_SETTLEMENT));
+    }
 
     /**
      * 정산 조회
@@ -73,4 +83,14 @@ public class SettlementController {
         settlementService.deleteSettlementDetail(travelRoomId, settlementId, settlementDetailId, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_DELETE_SETTLEMENT));
     }
+
+    /**
+     * 정산 알림
+     */
+    @PostMapping("/{travelRoomId}/notification")
+    public ResponseEntity<ApiResponseEntity<String>> notifySettlement(@PathVariable Long travelRoomId, @RequestBody @Valid SettlementNotificationReqDto settlementNotificationReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+        settlementService.notifySettlement(travelRoomId, settlementNotificationReqDto, userDetails.getUsername());
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_NOTIFY_SETTLEMENT));
+    }
+
 }

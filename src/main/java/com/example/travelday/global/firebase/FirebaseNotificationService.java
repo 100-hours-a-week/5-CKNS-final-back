@@ -1,24 +1,31 @@
 package com.example.travelday.global.firebase;
 
 import com.example.travelday.domain.auth.entity.Member;
+import com.example.travelday.domain.auth.repository.MemberRepository;
 import com.example.travelday.domain.fcm.entity.FcmToken;
 import com.example.travelday.domain.fcm.repository.FcmTokenRepository;
 import com.example.travelday.domain.fcm.service.FcmService;
 import com.example.travelday.domain.invitation.entity.Invitation;
 import com.example.travelday.domain.notification.dto.request.NotificationReqDto;
 import com.example.travelday.domain.notification.service.NotificationService;
+import com.example.travelday.domain.settlement.dto.request.SettlementNotificationReqDto;
+import com.example.travelday.global.exception.CustomException;
+import com.example.travelday.global.exception.ErrorCode;
 import com.google.firebase.messaging.MessagingErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class FirebaseNotificationService {
+
+    private final MemberRepository memberRepository;
 
     private final FcmTokenRepository fcmTokenRepository;
 
@@ -48,6 +55,40 @@ public class FirebaseNotificationService {
             fcmService.updateLastUsedTime(fcmToken);
             sendNotificationToUser(fcmToken, notificationContent);
         }
+    }
+
+    public void notifySettlement(String userId, SettlementNotificationReqDto settlementNotificationReqDto, Long travelRoomId) {
+
+        Member member = memberRepository.findByUserId(userId)
+                            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        // 각 닉네임에 대해 스트림을 사용하여 알림 메시지를 생성하고, 메시지 전송
+        settlementNotificationReqDto.nicknameToPrice().entrySet().stream()
+            .forEach(entry -> {
+                String nickname = entry.getKey();
+                BigDecimal amount = entry.getValue();
+
+                Member targetMember = memberRepository.findByNickname(nickname)
+                                            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+                String notificationContent = String.format("%s님이 %s님에게 %.2f원을 정산 요청했습니다.",
+                    member.getNickname(), nickname, amount);
+
+                NotificationReqDto notificationReqDto = NotificationReqDto.builder()
+                                                            .userId(targetMember.getUserId())
+                                                            .notificationContent(notificationContent)
+                                                            .travelRoomId(travelRoomId)
+                                                            .build();
+
+                notificationService.createNotification(notificationReqDto);
+
+                List<FcmToken> fcmTokens = fcmTokenRepository.findByMember(targetMember);
+
+                fcmTokens.forEach(fcmToken -> {
+                    fcmService.updateLastUsedTime(fcmToken);
+                    sendNotificationToUser(fcmToken, notificationContent);
+                });
+            });
     }
 
     private void sendNotificationToUser(FcmToken fcmToken, String content) {

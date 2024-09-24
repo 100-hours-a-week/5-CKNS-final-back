@@ -3,6 +3,7 @@ package com.example.travelday.domain.settlement.service;
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
 import com.example.travelday.domain.settlement.dto.request.SettlementDetailReqDto;
+import com.example.travelday.domain.settlement.dto.request.SettlementNotificationReqDto;
 import com.example.travelday.domain.settlement.dto.response.SettlementDetailResDto;
 import com.example.travelday.domain.settlement.dto.response.SettlementResDto;
 import com.example.travelday.domain.settlement.entity.Settlement;
@@ -10,10 +11,13 @@ import com.example.travelday.domain.settlement.entity.SettlementDetail;
 import com.example.travelday.domain.settlement.repository.SettlementDetailRepository;
 import com.example.travelday.domain.settlement.repository.SettlementRepository;
 import com.example.travelday.domain.settlement.utils.SettlementDetailChangedEvent;
+import com.example.travelday.domain.travelroom.entity.TravelRoom;
 import com.example.travelday.domain.travelroom.entity.UserTravelRoom;
+import com.example.travelday.domain.travelroom.repository.TravelRoomRepository;
 import com.example.travelday.domain.travelroom.repository.UserTravelRoomRepository;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
+import com.example.travelday.global.firebase.FirebaseNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -38,6 +42,27 @@ public class SettlementService {
     private final UserTravelRoomRepository userTravelRoomRepository;
 
     private final ApplicationEventPublisher eventPublisher;
+
+    private final FirebaseNotificationService firebaseNotificationService;
+
+    private final TravelRoomRepository travelRoomRepository;
+
+    @Transactional
+    public void createSettlement(Long travelRoomId, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
+
+        TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
+                                    .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+
+
+        Settlement settlement = Settlement.builder()
+                                    .travelRoom(travelRoom)
+                                    .totalAmount(BigDecimal.ZERO)
+                                    .build();
+
+        settlementRepository.save(settlement);
+    }
 
     @Transactional(readOnly = true)
     public SettlementResDto getAllSettlement(Long travelRoomId, String userId) {
@@ -112,6 +137,31 @@ public class SettlementService {
         settlementDetailRepository.delete(settlementDetail);
 
         eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
+    }
+
+
+    public void notifySettlement(Long travelRoomId, SettlementNotificationReqDto settlementNotificationReqDto, String userId) {
+        validateMemberInTravelRoom(userId, travelRoomId);
+
+        // 여행방의 모든 멤버를 가져옴
+        List<UserTravelRoom> userTravelRooms = userTravelRoomRepository.findByTravelRoomId(travelRoomId)
+                                                        .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+
+        // 여행방의 모든 멤버들의 닉네임 목록을 가져옴
+        List<String> memberNicknames = userTravelRooms.stream()
+                                            .map(userTravelRoom -> userTravelRoom.getMember().getNickname())
+                                            .collect(Collectors.toList());
+
+
+        settlementNotificationReqDto.nicknameToPrice().keySet().stream()
+                                .filter(nickname -> !memberNicknames.contains(nickname))
+                                .findFirst()  // 필터링된 첫 번째 닉네임을 찾음
+                                .ifPresent(nickname -> { // 존재할 경우 예외를 던짐
+                throw new CustomException(ErrorCode.USER_NOT_IN_TRAVEL_ROOM);
+            });
+
+
+        firebaseNotificationService.notifySettlement(userId, settlementNotificationReqDto, travelRoomId); // 파이어베이스 메세지 송신
     }
 
     // 여행방에 멤버가 있는지 확인
