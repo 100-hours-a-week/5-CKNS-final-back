@@ -73,8 +73,8 @@ public class TravelRoomController {
      * 초대할 수 있는 사용자 검색
      */
     @GetMapping("/{travelRoomId}/user/search")
-    public ResponseEntity<ApiResponseEntity<List<MemberInfoResDto>>> searchMember(@RequestParam String keyword) {
-        return ResponseEntity.ok(ApiResponseEntity.of(travelRoomService.searchMembers(keyword)));
+    public ResponseEntity<ApiResponseEntity<List<MemberInfoResDto>>> searchMembersToInvite(@PathVariable Long travelRoomId, @RequestParam String keyword) {
+        return ResponseEntity.ok(ApiResponseEntity.of(travelRoomService.searchMembersToInvite(travelRoomId, keyword)));
     }
 
     /**

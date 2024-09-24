@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TravelRoomService {
 
+    public static final int LIMIT_NUM_OF_SEARCH_MEMBERS = 5;
+
     private final TravelRoomRepository travelRoomRepository;
 
     private final SettlementRepository settlementRepository;
@@ -123,7 +125,7 @@ public class TravelRoomService {
                                             .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
 
         userTravelRoomRepository.delete(userTravelRoom);
-
+      
         boolean isUserRemaining = userTravelRoomRepository.existsByTravelRoomId(travelRoomId);
 
         // 만약 남은 유저가 없다면 여행방 자체 삭제
@@ -132,13 +134,17 @@ public class TravelRoomService {
         }
     }
 
-    @Transactional
-    public List<MemberInfoResDto> searchMembers(String keyword) {
-        Pageable pageable = PageRequest.of(0, 5);
+    @Transactional(readOnly = true)
+    public List<MemberInfoResDto> searchMembersToInvite(Long travelRoomId, String keyword) {
+        List<Member> membersInTravelRoom = userTravelRoomRepository.findAllByTravelRoomId(travelRoomId).stream()
+                .map(UserTravelRoom::getMember)
+                .toList();
 
-        Page<Member> members = memberRepository.findByNicknameContaining(keyword, pageable);
+        List<Member> members = memberRepository.findByNicknameContaining(keyword);
 
         return members.stream()
+                .filter(member -> !membersInTravelRoom.contains(member))
+                .limit(LIMIT_NUM_OF_SEARCH_MEMBERS)
                 .map(MemberInfoResDto::of)
                 .toList();
     }
