@@ -72,10 +72,4 @@ public class MemberManageController {
 
         return ResponseEntity.ok(ApiResponseEntity.of(fileService.getPreSignedUrl(uniqueName)));
     }
-
-    @GetMapping("/search")
-    public ResponseEntity<ApiResponseEntity<List<MemberInfoResDto>>> searchMember(@RequestParam String keyword) {
-        return ResponseEntity.ok(ApiResponseEntity.of(memberManageService.searchMembers(keyword)));
-
-    }
 }
