@@ -16,10 +16,13 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class FileService {
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     private final AmazonS3 amazonS3;
+
+    private static final int EXP_TIME_MILLIS = 1000 * 60 * 2;
 
 	/**
      * presigned url 발급
@@ -31,20 +34,18 @@ public class FileService {
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
         return url.toString();
     }
+
     /**
      * file 고유 이름 생성
      * @param prefix 버킷 디렉토리 이름
      * @return filePath 클라이언트가 전달한 파일명 파라미터
      * */
     public String getFileName(String prefix, String fileName) {
-        String filePath;
-        if(!prefix.isEmpty()) {
-           filePath  = createPath(prefix, fileName);
+        if (!(prefix == null || prefix.isEmpty())) {
+            return createPath(prefix, fileName);
+        } else {
+            return fileName;
         }
-        else {
-            filePath = fileName;
-        }
-        return filePath;
     }
 
 	/**
@@ -54,17 +55,14 @@ public class FileService {
      * @return presigned url
      */
     private GeneratePresignedUrlRequest getGeneratePreSignedUrlRequest(String bucket, String fileName, String contentType) {
-        GeneratePresignedUrlRequest generatePresignedUrlRequest =
-                new GeneratePresignedUrlRequest(bucket, fileName)
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, fileName)
                         .withMethod(HttpMethod.PUT)
                         .withExpiration(getPreSignedUrlExpiration());
 
-        // Set the content type for the image
-        generatePresignedUrlRequest.addRequestParameter("Content-Type", contentType);
+        // Set the content type for the image (2024.09.24. type-guard deactivate)
+        // generatePresignedUrlRequest.addRequestParameter("Content-Type", contentType);
 
-        generatePresignedUrlRequest.addRequestParameter(
-                Headers.S3_CANNED_ACL,
-                CannedAccessControlList.PublicRead.toString());
+        generatePresignedUrlRequest.addRequestParameter(Headers.S3_CANNED_ACL, CannedAccessControlList.PublicRead.toString());
         return generatePresignedUrlRequest;
     }
 
@@ -74,9 +72,7 @@ public class FileService {
      */
     private Date getPreSignedUrlExpiration() {
         Date expiration = new Date();
-        long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 2;
-        expiration.setTime(expTimeMillis);
+        expiration.setTime(expiration.getTime() + EXP_TIME_MILLIS);
         return expiration;
     }
 
