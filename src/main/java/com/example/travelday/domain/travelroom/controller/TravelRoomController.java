@@ -1,5 +1,6 @@
 package com.example.travelday.domain.travelroom.controller;
 
+import com.example.travelday.domain.auth.dto.response.MemberInfoResDto;
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomMembersResDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomResDto;
@@ -66,5 +67,21 @@ public class TravelRoomController {
     public ResponseEntity<ApiResponseEntity<String>> updateTravelRoom(@PathVariable Long travelRoomId, @RequestBody TravelRoomReqDto requestDto, @AuthenticationPrincipal UserDetails userDetails) {
         travelRoomService.updateTravelRoom(travelRoomId, requestDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_TRAVELROOM));
+    }
+
+    /**
+     * 초대할 수 있는 사용자 검색
+     */
+    @GetMapping("/{travelRoomId}/user/search")
+    public ResponseEntity<ApiResponseEntity<List<MemberInfoResDto>>> searchMembersToInvite(@PathVariable Long travelRoomId, @RequestParam String keyword) {
+        return ResponseEntity.ok(ApiResponseEntity.of(travelRoomService.searchMembersToInvite(travelRoomId, keyword)));
+    }
+
+    /**
+     * 여행방 내 사용자 조회
+     */
+    @GetMapping("/{travelRoomId}/user")
+    public ResponseEntity<ApiResponseEntity<List<MemberInfoResDto>>> getMebmersInTravelRoom(@PathVariable Long travelRoomId) {
+        return ResponseEntity.ok(ApiResponseEntity.of(travelRoomService.getMembersInTravelRoom(travelRoomId)));
     }
 }

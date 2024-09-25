@@ -1,6 +1,7 @@
 package com.example.travelday.domain.invitation.controller;
 
 import com.example.travelday.domain.invitation.dto.request.InvitationReqDto;
+import com.example.travelday.domain.invitation.dto.request.InvitationStatusReqDto;
 import com.example.travelday.domain.invitation.service.InvitationService;
 import com.example.travelday.global.common.ApiResponseEntity;
 import com.example.travelday.global.common.ResponseText;
@@ -23,5 +24,14 @@ public class InvitationController {
                                                                       @AuthenticationPrincipal UserDetails userDetails) {
         invitationService.createInvitation(travelRoomId, invitationReqDto, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_CREATE_INVITATION));
+    }
+
+    @PutMapping("/{invitationId}")
+    public ResponseEntity<ApiResponseEntity<String>> responseInvitation(@PathVariable Long travelRoomId,
+                                                                        @PathVariable Long invitationId,
+                                                                        @AuthenticationPrincipal UserDetails userDetails,
+                                                                        @RequestBody InvitationStatusReqDto invitationResponseReqDto) {
+        invitationService.responseInvitation(userDetails.getUsername(), travelRoomId, invitationId, invitationResponseReqDto.status());
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_INVITATION_RESPONSE));
     }
 }

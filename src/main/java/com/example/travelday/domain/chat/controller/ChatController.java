@@ -2,6 +2,7 @@ package com.example.travelday.domain.chat.controller;
 
 import com.example.travelday.domain.chat.dto.request.ChatReqDto;
 import com.example.travelday.domain.chat.dto.response.ChatResDto;
+import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.service.ChatService;
 import com.example.travelday.global.common.ApiResponseEntity;
 import lombok.RequiredArgsConstructor;
