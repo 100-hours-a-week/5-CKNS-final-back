@@ -9,7 +9,6 @@ public class ResponseText {
     // common
     public static final String OK = "OK";
     public static final String DUPLICATE = "DUPLICATE";
-    public static final String BE_IN_USE = "BE IN USE";
 
     // wish
     public static final String SUCCESS_ADD_WISH = "위시 추가 성공";
