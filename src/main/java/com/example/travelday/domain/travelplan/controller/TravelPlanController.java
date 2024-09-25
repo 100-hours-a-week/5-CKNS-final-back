@@ -39,17 +39,8 @@ public class TravelPlanController {
      * 수정 중인지 확인
      */
     @PostMapping("/check/editable")
-    public ResponseEntity<ApiResponseEntity<String>> isEditable(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(ApiResponseEntity.of(travelPlanService.checkUsing(travelRoomId, userDetails.getUsername()) ? ResponseText.OK : ResponseText.BE_IN_USE));
-    }
-
-    /**
-     * 수정 중인지 확인용 테스트 (로컬 테스트용)
-     */
-    // TODO: 테스트용이기 때문에 main merge 전 삭제하기
-    @PostMapping("/test/check/editable")
-    public ResponseEntity<ApiResponseEntity<String>> testIsEditable(@PathVariable Long travelRoomId, @PathParam("userId") String userId) {
-        return ResponseEntity.ok(ApiResponseEntity.of(travelPlanService.checkUsing(travelRoomId, userId) ? ResponseText.OK : ResponseText.BE_IN_USE));
+    public ResponseEntity<ApiResponseEntity<Boolean>> isEditable(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(ApiResponseEntity.of(travelPlanService.checkUsing(travelRoomId, userDetails.getUsername())));
     }
 
     /**
