@@ -29,7 +29,7 @@ public class ChatService {
     private final MemberRepository memberRepository;
     private final UserTravelRoomRepository userTravelRoomRepository;
 
-    public ChatResDto saveChat(Long travelRoomId, ChatReqDto chatReqDto) {
+    public Chat saveChat(Long travelRoomId, ChatReqDto chatReqDto) {
 
         Member member = memberRepository.findByUserId(chatReqDto.senderId())
                             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -43,7 +43,7 @@ public class ChatService {
 
         Chat savedChat = chatRepository.save(chat);
 
-        return ChatResDto.of(savedChat);
+        return savedChat;
     }
 
     public List<ChatResDto> getAllChat(Long travelRoomId, String userId) {

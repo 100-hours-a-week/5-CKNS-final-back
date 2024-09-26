@@ -1,6 +1,7 @@
 package com.example.travelday.domain.chat.controller;
 
 import com.example.travelday.domain.chat.dto.request.ChatReqDto;
+import com.example.travelday.domain.chat.dto.response.ChatMessageResDto;
 import com.example.travelday.domain.chat.dto.response.ChatResDto;
 import com.example.travelday.domain.chat.service.ChatService;
 import com.example.travelday.domain.chat.utils.ChatBucket;
@@ -86,7 +87,7 @@ public class ChatController {
      */
     @MessageMapping("/chat/rooms/{travelRoomId}")
     @SendTo("/sub/chat/rooms/{travelRoomId}")
-    public ChatResDto sendChatMessage(@DestinationVariable("travelRoomId") Long travelRoomId, @Payload String message, SimpMessageHeaderAccessor accessor) {
+    public ChatMessageResDto sendChatMessage(@DestinationVariable("travelRoomId") Long travelRoomId, @Payload String message, SimpMessageHeaderAccessor accessor) {
         String senderId = sessions.get(accessor.getSessionId());
 
         // 세션 ID나 사용자 정보가 없을 때 예외 처리
@@ -100,6 +101,8 @@ public class ChatController {
         }
 
         Bucket bucket = chatBucket.resolveBucket(senderId);
+        long leftBucketToken = bucket.getAvailableTokens();
+
         if (!bucket.tryConsume(CONSUME_BUCKET_COUNT)) {
             long banEndTime = System.currentTimeMillis() + CHAT_BAN_MILLISECONDS;
             userBanEndTime.put(senderId, banEndTime);
@@ -111,7 +114,7 @@ public class ChatController {
                 .message(message)
                 .build();
 
-        return chatService.saveChat(travelRoomId, chatReqDto);
+        return ChatMessageResDto.of(chatService.saveChat(travelRoomId, chatReqDto), leftBucketToken);
     }
 
     /**
