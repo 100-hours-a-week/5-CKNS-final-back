@@ -90,10 +90,17 @@ public class ChatController {
     public ChatMessageResDto sendChatMessage(@DestinationVariable("travelRoomId") Long travelRoomId, @Payload String message, SimpMessageHeaderAccessor accessor) {
         String senderId = sessions.get(accessor.getSessionId());
 
+        // todo: 검증 코드 분리
         // 세션 ID나 사용자 정보가 없을 때 예외 처리
         if (senderId == null) {
             log.error("Invalid session ID or user is not authenticated.");
-            throw new IllegalStateException("User is not authenticated or session is invalid.");
+            throw new IllegalStateException("User is not authenticated or session is invalid."); // todo: 에러코드 정의
+        }
+
+        // 메시지 길이 제한 (최대 5000자)
+        if (message.length() > 5000) {
+            log.error("Message exceeds the maximum allowed length of 5000 characters.");
+            throw new IllegalArgumentException("Message exceeds the maximum allowed length of 5000 characters."); // todo: 에러코드 정의
         }
 
         if (userBanEndTime.containsKey(senderId) && System.currentTimeMillis() < userBanEndTime.get(senderId)) {
