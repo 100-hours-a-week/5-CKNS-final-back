@@ -1,0 +1,59 @@
+name: Dev CI/CD
+
+on:
+  push:
+    branches:
+      - test2  # Dev branch trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        # Check out the code repository
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+        # Set up Amazon Corretto JDK 17
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        # Give execution permission to the Gradle wrapper file
+
+      - name: Create application-my.yml file
+        run: |
+          mkdir -p ./src/main/resources
+          cd ./src/main/resources
+          touch application-my.yml
+          echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > application-my.yml
+        shell: bash
+        # Create application-dev.yml and insert the dev-specific settings
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+        # Build the project with Gradle
+
+      - name: Package the application into a ZIP file
+        run: |
+          mkdir -p .deploy
+          zip -r .deploy/travelday-dev.zip * -x .git\*
+        # Package the project files into a ZIP archive for Elastic Beanstalk dev-server
+
+      - name: List the contents of the ZIP file
+        run: unzip -l .deploy/travelday-dev.zip
+        # List the contents of the generated ZIP file
+
+      - name: Beanstalk Deploy to Dev
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: TravelDay  # Dev server application name
+          environment_name: TravelDay-env-dev  # Dev environment name
+          region: ap-northeast-2
+          deployment_package: .deploy/travelday-dev.zip  # Use dev-specific ZIP
+          version_label: ${{github.run_id}}-${{github.sha}}
+        # Deploy the ZIP file to AWS Elastic Beanstalk Dev environment

@@ -101,7 +101,7 @@ public class TravelPlanService {
 
         if (cachedData != null && !cachedData.equals(userId)) {
             return false;
-        } else if (cachedData != null && cachedData.equals(userId)) {
+        } else if (cachedData != null) {
             return true;
         }
 

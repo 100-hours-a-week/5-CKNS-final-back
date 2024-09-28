@@ -56,7 +56,7 @@ dependencies {
 
     // Web Socket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    implementation 'org.webjars:sockjs-client:1.1.2'
+    implementation 'org.webjars:sockjs-client:1.5.1'
     implementation 'org.webjars:stomp-websocket:2.3.3'
 
     // redis
@@ -72,6 +72,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+    implementation 'com.auth0:java-jwt:4.4.0'
 
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -81,6 +82,17 @@ dependencies {
 
     // bucket4j
     implementation 'com.bucket4j:bucket4j-core:8.8.0'
+
+
+    // AWS S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-admin:7.3.0'
+
+    // okhttp
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+
 }
 
 //spotless {
