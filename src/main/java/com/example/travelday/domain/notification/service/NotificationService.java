@@ -47,16 +47,8 @@ public class NotificationService {
         List<Notification> notificationList = notificationRepository.findAllByMemberAndIsCheckedFalseOrderByCreatedTimeDesc(member);
 
         // notificationList의 Notification 객체들을 NotificationResDto로 변환하여 리스트로 저장
-        List<NotificationResDto> notificationResDtoList = notificationList.stream()
+        return notificationList.stream()
                 .map(NotificationResDto::of)
                 .toList();
-
-        // 원본 알림 목록의 isChecked 필드를 true로 설정하고, 데이터베이스에 변경 사항을 저장
-        for (Notification notification : notificationList) {
-            notification.checkNotification();
-        }
-        notificationRepository.saveAll(notificationList);
-
-        return notificationResDtoList;
     }
 }
