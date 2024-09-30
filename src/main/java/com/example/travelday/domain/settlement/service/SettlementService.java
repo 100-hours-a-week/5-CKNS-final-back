@@ -74,6 +74,18 @@ public class SettlementService {
     }
 
     @Transactional(readOnly = true)
+    public List<SettlementResDto> getAllSettlements(Long travelRoomId, String userId) {
+
+        validateMemberInTravelRoom(userId,travelRoomId);
+
+        List<Settlement> settlements = settlementRepository.findAllByTravelRoomId(travelRoomId);
+
+        return settlements.stream()
+                .map(SettlementResDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
     public List<SettlementDetailResDto> getSettlementDetailList(Long travelRoomId, Long settlementId, String userId) {
 
         validateMemberInTravelRoom(userId, travelRoomId);
