@@ -55,7 +55,6 @@ public class SettlementService {
         TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
                                     .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
 
-
         Settlement settlement = Settlement.builder()
                                     .travelRoom(travelRoom)
                                     .totalAmount(BigDecimal.ZERO)
@@ -145,13 +144,12 @@ public class SettlementService {
 
         // 여행방의 모든 멤버를 가져옴
         List<UserTravelRoom> userTravelRooms = userTravelRoomRepository.findByTravelRoomId(travelRoomId)
-                                                        .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+                                                        .orElseThrow(() -> new CustomException(ErrorCode.USER_DOES_NOT_JOIN_TRAVEL_ROOM));
 
         // 여행방의 모든 멤버들의 닉네임 목록을 가져옴
         List<String> memberNicknames = userTravelRooms.stream()
                                             .map(userTravelRoom -> userTravelRoom.getMember().getNickname())
                                             .collect(Collectors.toList());
-
 
         settlementNotificationReqDto.nicknameToPrice().keySet().stream()
                                 .filter(nickname -> !memberNicknames.contains(nickname))
