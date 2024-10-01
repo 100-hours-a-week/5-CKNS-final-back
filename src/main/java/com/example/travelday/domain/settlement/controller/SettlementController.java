@@ -38,9 +38,9 @@ public class SettlementController {
      * 정산 조회
      */
     @GetMapping("/{travelRoomId}")
-    public ResponseEntity<ApiResponseEntity<SettlementResDto>> getSettlement(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
-        SettlementResDto settlement = settlementService.getAllSettlement(travelRoomId, userDetails.getUsername());
-        return ResponseEntity.ok(ApiResponseEntity.of(settlement));
+    public ResponseEntity<ApiResponseEntity<List<SettlementResDto>>> getSettlement(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
+        List<SettlementResDto> settlements = settlementService.getAllSettlement(travelRoomId, userDetails.getUsername());
+        return ResponseEntity.ok(ApiResponseEntity.of(settlements));
     }
 
     /**

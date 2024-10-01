@@ -33,7 +33,7 @@ public class Settlement {
     @Temporal(TemporalType.DATE)
     private Date settledAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_room_id", nullable = false)
     private TravelRoom travelRoom;
 
