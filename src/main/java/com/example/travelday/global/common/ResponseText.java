@@ -30,11 +30,12 @@ public class ResponseText {
     public static final String SUCCESS_DELETE_TRAVELPLAN = "여행일정 삭제 성공";
 
     // settlement
-    public static final String SUCCESS_ADD_SETTLEMENT = "정산 내역 추가 성공";
-    public static final String SUCCESS_UPDATE_SETTLEMENT = "정산 내역 수정 성공";
+    public static final String SUCCESS_ADD_SETTLEMENTDETAIL = "정산 내역 추가 성공";
+    public static final String SUCCESS_UPDATE_SETTLEMENTDETAIL = "정산 내역 수정 성공";
     public static final String SUCCESS_CREATE_SETTLEMENT = "정산 생성 성공";
-    public static final String SUCCESS_DELETE_SETTLEMENT = "정산 내역 삭제 성공";
-    public static final String SUCCESS_NOTIFY_SETTLEMENT = "정산 내역 상태 변경 성공";
+    public static final String SUCCESS_DELETE_SETTLEMENT = "정산 삭제 성공";
+    public static final String SUCCESS_DELETE_SETTLEMENTDETAIL = "정산 내역 삭제 성공";
+    public static final String SUCCESS_NOTIFY_SETTLEMENTDETAIL = "정산 내역 상태 변경 성공";
 
   // invitation
     public static final String SUCCESS_CREATE_INVITATION = "여행방 초대 성공";
