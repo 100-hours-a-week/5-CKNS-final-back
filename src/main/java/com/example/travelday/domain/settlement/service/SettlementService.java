@@ -55,7 +55,6 @@ public class SettlementService {
         TravelRoom travelRoom = travelRoomRepository.findById(travelRoomId)
                                     .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
 
-
         Settlement settlement = Settlement.builder()
                                     .travelRoom(travelRoom)
                                     .totalAmount(BigDecimal.ZERO)
@@ -65,12 +64,17 @@ public class SettlementService {
     }
 
     @Transactional(readOnly = true)
-    public SettlementResDto getAllSettlement(Long travelRoomId, String userId) {
+    public List<SettlementResDto> getAllSettlement(Long travelRoomId, String userId) {
 
         validateMemberInTravelRoom(userId, travelRoomId);
 
-        return SettlementResDto.fromEntity(settlementRepository.findByTravelRoomId(travelRoomId)
-                                            .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND)));
+        List<Settlement> settlements = settlementRepository.findByTravelRoomId(travelRoomId)
+                                            .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND));
+
+        return settlements.stream()
+                    .map(settlement -> SettlementResDto.fromEntity(settlement))
+                    .collect(Collectors.toList());
+
     }
 
     @Transactional(readOnly = true)
@@ -137,6 +141,7 @@ public class SettlementService {
         eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
     }
 
+    @Transactional
     public void deleteSettlementDetail(Long travelRoomId, Long settlementId, Long settlementDetailId, String username) {
 
         validateMemberInTravelRoom(username, travelRoomId);
@@ -151,19 +156,30 @@ public class SettlementService {
         eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
     }
 
+    @Transactional
+    public void deleteSettlement(Long travelRoomId, Long settlementId, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
+
+        validateSettlementInTraveRoom(settlementId, travelRoomId);
+
+        Settlement settlement = settlementRepository.findById(settlementId)
+                                .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND));
+
+        settlementRepository.delete(settlement);
+    }
 
     public void notifySettlement(Long travelRoomId, SettlementNotificationReqDto settlementNotificationReqDto, String userId) {
         validateMemberInTravelRoom(userId, travelRoomId);
 
         // 여행방의 모든 멤버를 가져옴
         List<UserTravelRoom> userTravelRooms = userTravelRoomRepository.findByTravelRoomId(travelRoomId)
-                                                        .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
+                                                        .orElseThrow(() -> new CustomException(ErrorCode.USER_DOES_NOT_JOIN_TRAVEL_ROOM));
 
         // 여행방의 모든 멤버들의 닉네임 목록을 가져옴
         List<String> memberNicknames = userTravelRooms.stream()
                                             .map(userTravelRoom -> userTravelRoom.getMember().getNickname())
                                             .collect(Collectors.toList());
-
 
         settlementNotificationReqDto.nicknameToPrice().keySet().stream()
                                 .filter(nickname -> !memberNicknames.contains(nickname))

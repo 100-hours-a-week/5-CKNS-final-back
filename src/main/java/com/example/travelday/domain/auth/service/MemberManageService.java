@@ -24,12 +24,12 @@ public class MemberManageService {
 
     @Transactional
     public MemberInfoResDto getInfo(String userId) {
-
         Member member = memberRepository
                 .findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         return MemberInfoResDto.builder()
+                .userId(member.getUserId())
                 .nickname(member.getNickname())
                 .profileImagePath(member.getProfileImagePath())
                 .build();

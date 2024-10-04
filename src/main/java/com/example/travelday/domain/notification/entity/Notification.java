@@ -53,8 +53,4 @@ public class Notification {
     public void check() {
         this.isChecked = true;
     }
-
-    public void checkNotification() {
-        this.isChecked = true;
-    }
 }

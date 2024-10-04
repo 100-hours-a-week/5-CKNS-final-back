@@ -38,8 +38,8 @@ public class SettlementController {
      * 정산 조회
      */
     @GetMapping("/{travelRoomId}")
-    public ResponseEntity<ApiResponseEntity<List<SettlementResDto>>> getSettlements(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
-        List<SettlementResDto> settlements = settlementService.getAllSettlements(travelRoomId, userDetails.getUsername());
+    public ResponseEntity<ApiResponseEntity<List<SettlementResDto>>> getSettlement(@PathVariable Long travelRoomId, @AuthenticationPrincipal UserDetails userDetails) {
+        List<SettlementResDto> settlements = settlementService.getAllSettlement(travelRoomId, userDetails.getUsername());
         return ResponseEntity.ok(ApiResponseEntity.of(settlements));
     }
 
@@ -60,7 +60,7 @@ public class SettlementController {
     public ResponseEntity<ApiResponseEntity<String>> addSettlement(@PathVariable Long travelRoomId, @PathVariable Long settlementId,
                                                                    @RequestBody @Valid SettlementDetailReqDto settlementDetailReqDto, @AuthenticationPrincipal UserDetails userDetails) {
         settlementService.addSettlement(travelRoomId, settlementId, settlementDetailReqDto, userDetails.getUsername());
-        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_ADD_SETTLEMENT));
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_ADD_SETTLEMENTDETAIL));
     }
 
     /**
@@ -71,7 +71,16 @@ public class SettlementController {
                                                                       @PathVariable Long settlementDetailId, @RequestBody @Valid SettlementDetailReqDto settlementDetailReqDto,
                                                                       @AuthenticationPrincipal UserDetails userDetails) {
         settlementService.updateSettlementDetail(travelRoomId, settlementId, settlementDetailId, settlementDetailReqDto, userDetails.getUsername());
-        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_SETTLEMENT));
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_UPDATE_SETTLEMENTDETAIL));
+    }
+
+    /**
+     * 정산 삭제하기
+     */
+    @DeleteMapping("/{travelRoomId}/{settlementId}")
+    public ResponseEntity<ApiResponseEntity<String>> deleteSettlement(@PathVariable Long travelRoomId, @PathVariable Long settlementId, @AuthenticationPrincipal UserDetails userDetails) {
+        settlementService.deleteSettlement(travelRoomId, settlementId, userDetails.getUsername());
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_DELETE_SETTLEMENT));
     }
 
     /**
@@ -81,7 +90,7 @@ public class SettlementController {
     public ResponseEntity<ApiResponseEntity<String>> deleteSettlement(@PathVariable Long travelRoomId, @PathVariable Long settlementId,
                                                                       @PathVariable Long settlementDetailId, @AuthenticationPrincipal UserDetails userDetails) {
         settlementService.deleteSettlementDetail(travelRoomId, settlementId, settlementDetailId, userDetails.getUsername());
-        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_DELETE_SETTLEMENT));
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_DELETE_SETTLEMENTDETAIL));
     }
 
     /**
@@ -90,7 +99,6 @@ public class SettlementController {
     @PostMapping("/{travelRoomId}/notification")
     public ResponseEntity<ApiResponseEntity<String>> notifySettlement(@PathVariable Long travelRoomId, @RequestBody @Valid SettlementNotificationReqDto settlementNotificationReqDto, @AuthenticationPrincipal UserDetails userDetails) {
         settlementService.notifySettlement(travelRoomId, settlementNotificationReqDto, userDetails.getUsername());
-        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_NOTIFY_SETTLEMENT));
+        return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_NOTIFY_SETTLEMENTDETAIL));
     }
-
 }

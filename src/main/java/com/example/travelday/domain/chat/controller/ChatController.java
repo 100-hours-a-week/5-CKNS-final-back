@@ -1,12 +1,16 @@
 package com.example.travelday.domain.chat.controller;
 
 import com.example.travelday.domain.chat.dto.request.ChatReqDto;
+import com.example.travelday.domain.chat.dto.response.ChatMessageResDto;
 import com.example.travelday.domain.chat.dto.response.ChatResDto;
-import com.example.travelday.domain.chat.entity.Chat;
 import com.example.travelday.domain.chat.service.ChatService;
+import com.example.travelday.domain.chat.utils.ChatBucket;
 import com.example.travelday.global.common.ApiResponseEntity;
+import com.example.travelday.global.utils.BucketUtils;
+import io.github.bucket4j.Bucket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -14,6 +18,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,12 +39,24 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class ChatController {
 
+    @Value("${bucket.chat-ban-milliseconds}")
+    private long CHAT_BAN_MILLISECONDS;
+
+    @Value("${bucket.consume-count}")
+    private int CONSUME_BUCKET_COUNT;
+
     private final ChatService chatService;
 
+    private final BucketUtils bucketUtils;
+
+    private final ChatBucket chatBucket;
+
+    private final SimpMessagingTemplate messagingTemplate;
     // TODO: 세션아이디와 사용자정보 redis에 저장?
     // 사용자와 세션 ID 매핑
     private final Map<String, String> sessions = new ConcurrentHashMap<>();
 
+    private final Map<String, Long> userBanEndTime = new ConcurrentHashMap<>();  // 사용자별 제한 시간 기록
     /**
      * WebSocket 연결 시 세션 ID 가져오기
      */
@@ -70,13 +87,33 @@ public class ChatController {
      */
     @MessageMapping("/chat/rooms/{travelRoomId}")
     @SendTo("/sub/chat/rooms/{travelRoomId}")
-    public ChatResDto sendChatMessage(@DestinationVariable("travelRoomId") Long travelRoomId, @Payload String message, SimpMessageHeaderAccessor accessor) {
+    public ChatMessageResDto sendChatMessage(@DestinationVariable("travelRoomId") Long travelRoomId, @Payload String message, SimpMessageHeaderAccessor accessor) {
         String senderId = sessions.get(accessor.getSessionId());
 
+        // todo: 검증 코드 분리
         // 세션 ID나 사용자 정보가 없을 때 예외 처리
         if (senderId == null) {
             log.error("Invalid session ID or user is not authenticated.");
-            throw new IllegalStateException("User is not authenticated or session is invalid.");
+            throw new IllegalStateException("User is not authenticated or session is invalid."); // todo: 에러코드 정의
+        }
+
+        // 메시지 길이 제한 (최대 5000자)
+        if (message.length() > 5000) {
+            log.error("Message exceeds the maximum allowed length of 5000 characters.");
+            throw new IllegalArgumentException("Message exceeds the maximum allowed length of 5000 characters."); // todo: 에러코드 정의
+        }
+
+        if (userBanEndTime.containsKey(senderId) && System.currentTimeMillis() < userBanEndTime.get(senderId)) {
+            return null;
+        }
+
+        Bucket bucket = chatBucket.resolveBucket(senderId);
+        long leftBucketToken = bucket.getAvailableTokens();
+
+        if (!bucket.tryConsume(CONSUME_BUCKET_COUNT)) {
+            long banEndTime = System.currentTimeMillis() + CHAT_BAN_MILLISECONDS;
+            userBanEndTime.put(senderId, banEndTime);
+            return null;
         }
 
         ChatReqDto chatReqDto = ChatReqDto.builder()
@@ -84,7 +121,7 @@ public class ChatController {
                 .message(message)
                 .build();
 
-        return chatService.saveChat(travelRoomId, chatReqDto);
+        return ChatMessageResDto.of(chatService.saveChat(travelRoomId, chatReqDto), leftBucketToken);
     }
 
     /**

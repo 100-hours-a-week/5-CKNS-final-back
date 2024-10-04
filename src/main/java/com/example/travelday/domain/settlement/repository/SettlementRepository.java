@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface SettlementRepository extends JpaRepository<Settlement, Long> {
 
-    Optional<Settlement> findByTravelRoomId(Long travelRoomId);
+    Optional<List<Settlement>> findByTravelRoomId(Long travelRoomId);
 
     Optional<Settlement> findByIdAndTravelRoomId(Long id, Long travelRoomId);
 
