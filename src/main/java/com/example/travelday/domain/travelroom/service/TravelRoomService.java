@@ -15,14 +15,9 @@ import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -115,7 +110,7 @@ public class TravelRoomService {
                                             .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
 
         userTravelRoomRepository.delete(userTravelRoom);
-      
+
         boolean isUserRemaining = userTravelRoomRepository.existsByTravelRoomId(travelRoomId);
 
         // 만약 남은 유저가 없다면 여행방 자체 삭제
