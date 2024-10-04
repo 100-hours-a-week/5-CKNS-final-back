@@ -129,6 +129,7 @@ public class SettlementService {
         eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
     }
 
+    @Transactional
     public void deleteSettlementDetail(Long travelRoomId, Long settlementId, Long settlementDetailId, String username) {
 
         validateMemberInTravelRoom(username, travelRoomId);
@@ -143,6 +144,18 @@ public class SettlementService {
         eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
     }
 
+    @Transactional
+    public void deleteSettlement(Long travelRoomId, Long settlementId, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
+
+        validateSettlementInTraveRoom(settlementId, travelRoomId);
+
+        Settlement settlement = settlementRepository.findById(settlementId)
+                                .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND));
+
+        settlementRepository.delete(settlement);
+    }
 
     public void notifySettlement(Long travelRoomId, SettlementNotificationReqDto settlementNotificationReqDto, String userId) {
         validateMemberInTravelRoom(userId, travelRoomId);

@@ -8,6 +8,7 @@ import com.example.travelday.domain.supersale.entity.Airport;
 import com.example.travelday.domain.supersale.entity.FlightOffer;
 import com.example.travelday.domain.supersale.repository.AirportRepository;
 import com.example.travelday.domain.supersale.repository.FlightOfferRepository;
+import com.example.travelday.domain.supersale.repository.RawFlightOfferRepository;
 import com.example.travelday.domain.supersale.utils.AmadeusConnect;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
@@ -38,6 +39,7 @@ public class FlightService {
     private final FlightOfferRepository flightOfferRepository;
     private final AirportRepository airportRepository;
     private final BucketUtils bucketUtils;
+    private final RawFlightOfferRepository rawFlightOfferRepository;
 
     @Value("${spring.data.redis.timeout}")
     private long redisTTL;
@@ -83,8 +85,6 @@ public class FlightService {
                 log.error("Failed to store flight data in Redis for destination from {} to {} on {} - {}", origin, destination, departDate, e.getMessage(), e);
                 throw new CustomException(ErrorCode.REDIS_SAVE_ERROR);
             }
-
-
 
         } catch (ResponseException e) {
             log.info(e.getMessage());

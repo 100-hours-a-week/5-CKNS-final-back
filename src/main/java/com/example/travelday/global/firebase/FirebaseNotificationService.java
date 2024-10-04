@@ -58,7 +58,6 @@ public class FirebaseNotificationService {
     }
 
     public void notifySettlement(String userId, SettlementNotificationReqDto settlementNotificationReqDto, Long travelRoomId) {
-
         Member member = memberRepository.findByUserId(userId)
                             .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
