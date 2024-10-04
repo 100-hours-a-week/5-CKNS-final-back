@@ -64,12 +64,17 @@ public class SettlementService {
     }
 
     @Transactional(readOnly = true)
-    public SettlementResDto getAllSettlement(Long travelRoomId, String userId) {
+    public List<SettlementResDto> getAllSettlement(Long travelRoomId, String userId) {
 
         validateMemberInTravelRoom(userId, travelRoomId);
 
-        return SettlementResDto.fromEntity(settlementRepository.findByTravelRoomId(travelRoomId)
-                                            .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND)));
+        List<Settlement> settlements = settlementRepository.findByTravelRoomId(travelRoomId)
+                                            .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND));
+
+        return settlements.stream()
+                    .map(settlement -> SettlementResDto.fromEntity(settlement))
+                    .collect(Collectors.toList());
+
     }
 
     @Transactional(readOnly = true)
