@@ -64,12 +64,29 @@ public class SettlementService {
     }
 
     @Transactional(readOnly = true)
-    public SettlementResDto getAllSettlement(Long travelRoomId, String userId) {
+    public List<SettlementResDto> getAllSettlement(Long travelRoomId, String userId) {
 
         validateMemberInTravelRoom(userId, travelRoomId);
 
-        return SettlementResDto.fromEntity(settlementRepository.findByTravelRoomId(travelRoomId)
-                                            .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND)));
+        List<Settlement> settlements = settlementRepository.findByTravelRoomId(travelRoomId)
+                                            .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND));
+
+        return settlements.stream()
+                    .map(settlement -> SettlementResDto.fromEntity(settlement))
+                    .collect(Collectors.toList());
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<SettlementResDto> getAllSettlements(Long travelRoomId, String userId) {
+
+        validateMemberInTravelRoom(userId,travelRoomId);
+
+        List<Settlement> settlements = settlementRepository.findAllByTravelRoomId(travelRoomId);
+
+        return settlements.stream()
+                .map(SettlementResDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -124,6 +141,7 @@ public class SettlementService {
         eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
     }
 
+    @Transactional
     public void deleteSettlementDetail(Long travelRoomId, Long settlementId, Long settlementDetailId, String username) {
 
         validateMemberInTravelRoom(username, travelRoomId);
@@ -138,6 +156,18 @@ public class SettlementService {
         eventPublisher.publishEvent(new SettlementDetailChangedEvent(this, settlementId));
     }
 
+    @Transactional
+    public void deleteSettlement(Long travelRoomId, Long settlementId, String userId) {
+
+        validateMemberInTravelRoom(userId, travelRoomId);
+
+        validateSettlementInTraveRoom(settlementId, travelRoomId);
+
+        Settlement settlement = settlementRepository.findById(settlementId)
+                                .orElseThrow(() -> new CustomException(ErrorCode.SETTLEMENT_NOT_FOUND));
+
+        settlementRepository.delete(settlement);
+    }
 
     public void notifySettlement(Long travelRoomId, SettlementNotificationReqDto settlementNotificationReqDto, String userId) {
         validateMemberInTravelRoom(userId, travelRoomId);

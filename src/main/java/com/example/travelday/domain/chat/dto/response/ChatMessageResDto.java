@@ -11,6 +11,7 @@ public record ChatMessageResDto(
     Long travelRoomId,
     String senderNickname,
     String message,
+    String senderId,
     String createdAt,
     long leftBucketToken
 ) {
@@ -21,6 +22,7 @@ public record ChatMessageResDto(
                     .travelRoomId(chat.getTravelRoomId())
                     .senderNickname(chat.getSenderNickname())
                     .message(chat.getMessage())
+                    .senderId(chat.getSenderId())
                     .createdAt(chat.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                     .leftBucketToken(leftBucketToken)
                     .build();
