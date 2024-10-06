@@ -25,10 +25,13 @@ jobs:
 
       - name: Create application-my.yml file
         run: |
-          mkdir -p ./src/main/resources
+          mkdir -p ./src/main/resources/properties
           cd ./src/main/resources
           touch application-my.yml
           echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > application-my.yml
+          cd ./properties
+          touch TravelDayFirebaseService.json
+          echo "${{ secrets.APPLICATION_PROPERTIES_JSON }}" > TravelDayFirebaseService.json
         shell: bash
         # Create application-dev.yml and insert the dev-specific settings
 
