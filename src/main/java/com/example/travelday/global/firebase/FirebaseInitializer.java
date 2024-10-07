@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,8 +31,8 @@ public class FirebaseInitializer {
         try {
             log.info("========= 파이어베이스 초기화 시작==========");
             log.info(serviceAccountFile);
-            ClassLoader loader = FirebaseInitializer.class.getClassLoader();
-            FileInputStream serviceAccount = new FileInputStream(loader.getResource("properties/TravelDayFirebaseService.json").getFile());
+            File file = ResourceUtils.getFile("classpath:properties/TravelDayFirebaseService.json");
+            FileInputStream serviceAccount = new FileInputStream(file);
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(databaseUrl)
