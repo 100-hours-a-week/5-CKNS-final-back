@@ -28,19 +28,15 @@ public class FirebaseInitializer {
             InputStream serviceAccount =
                     new ClassPathResource(serviceAccountFile).getInputStream();
 
-            FirebaseOptions options = new FirebaseOptions.Builder()
-//                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(serviceAccountFile).getInputStream()))
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(databaseUrl)
                     .build();
 
             log.info("파일 스트링값으로 표시");
             log.info(serviceAccount.toString());
 
-            if (FirebaseApp.getApps().isEmpty()) {
-                FirebaseApp.initializeApp(options);
-                log.info("파이어베이스 성공");
-            }
+            FirebaseApp.initializeApp(options);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
