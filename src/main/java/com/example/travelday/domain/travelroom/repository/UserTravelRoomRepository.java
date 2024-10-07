@@ -22,4 +22,6 @@ public interface UserTravelRoomRepository extends JpaRepository<UserTravelRoom, 
     boolean existsByTravelRoomIdAndMember(Long travelRoomId, Member receiver);
 
     boolean existsByTravelRoomId(Long travelRoomId);
+
+    int countByTravelRoomId(Long travelRoomId);
 }
