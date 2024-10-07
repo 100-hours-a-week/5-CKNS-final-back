@@ -25,16 +25,20 @@ public class FirebaseInitializer {
     @PostConstruct
     public void initialize() {
         try {
+            log.info("========= 파이어베이스 초기화 시작 ==========");
+            log.info(serviceAccountFile);
             InputStream serviceAccount =
                     new ClassPathResource(serviceAccountFile).getInputStream();
+
+            log.info("파일 스트링값으로 표시");
+            log.info(serviceAccount.toString());
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(databaseUrl)
                     .build();
 
-            log.info("파일 스트링값으로 표시");
-            log.info(serviceAccount.toString());
+
 
             FirebaseApp.initializeApp(options);
         } catch (IOException e) {
