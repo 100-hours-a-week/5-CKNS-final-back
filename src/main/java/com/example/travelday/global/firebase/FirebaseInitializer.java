@@ -29,9 +29,8 @@ public class FirebaseInitializer {
         try {
             log.info("========= 파이어베이스 초기화 시작==========");
             log.info(serviceAccountFile);
-
-            FileInputStream serviceAccount = new FileInputStream("resources/properties/TravelDayFirebaseService.json");
-
+            ClassLoader loader = FirebaseInitializer.class.getClassLoader();
+            FileInputStream serviceAccount = new FileInputStream(loader.getResource("properties/TravelDayFirebaseService.json").getFile());
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(databaseUrl)
