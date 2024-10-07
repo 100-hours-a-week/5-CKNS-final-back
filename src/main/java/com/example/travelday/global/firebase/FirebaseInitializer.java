@@ -29,11 +29,12 @@ public class FirebaseInitializer {
                     new ClassPathResource(serviceAccountFile).getInputStream();
 
             FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(serviceAccountFile).getInputStream()))
                     .setDatabaseUrl(databaseUrl)
                     .build();
 
-            log.info("파일 스트링값으로 ㅉ기어보기");
+            log.info("파일 스트링값으로 표시");
             log.info(serviceAccount.toString());
 
             if (FirebaseApp.getApps().isEmpty()) {
