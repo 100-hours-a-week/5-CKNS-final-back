@@ -33,6 +33,7 @@ public class FirebaseInitializer {
                     .setDatabaseUrl(databaseUrl)
                     .build();
 
+            log.info("파일 스트링값으로 ㅉ기어보기");
             log.info(serviceAccount.toString());
 
             if (FirebaseApp.getApps().isEmpty()) {
