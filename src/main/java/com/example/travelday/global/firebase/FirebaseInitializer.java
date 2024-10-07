@@ -33,8 +33,11 @@ public class FirebaseInitializer {
                     .setDatabaseUrl(databaseUrl)
                     .build();
 
+            log.info(serviceAccount.toString());
+
             if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);
+                log.info("파이어베이스 성공");
             }
         } catch (IOException e) {
             log.error(e.getMessage());
