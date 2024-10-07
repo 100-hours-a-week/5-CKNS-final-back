@@ -27,7 +27,7 @@ public class FirebaseInitializer {
     @PostConstruct
     public void initialize() {
         try {
-            log.info("========= 파이어베이스 초기화 시작 ==========");
+            log.info("========= 파이어베이스 초기화 시작==========");
             log.info(serviceAccountFile);
 
             FileInputStream serviceAccount = new FileInputStream("./src/main/resources/properties/TravelDayFirebaseService.json");
