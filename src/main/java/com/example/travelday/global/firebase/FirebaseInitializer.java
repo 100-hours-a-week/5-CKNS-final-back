@@ -37,6 +37,10 @@ public class FirebaseInitializer {
                     .setDatabaseUrl(databaseUrl)
                     .build();
 
+            if (FirebaseApp.getApps().isEmpty()) {
+                throw new IllegalStateException("FirebaseApp not initialized yet.");
+            }
+
             FirebaseApp.initializeApp(options);
         } catch (IOException e) {
             log.error(e.getMessage());
