@@ -32,6 +32,8 @@ jobs:
           cd ./properties
           touch TravelDayFirebaseService.json
           echo "${{ secrets.APPLICATION_PROPERTIES_JSON }}" > TravelDayFirebaseService.json
+          apt install tree
+          tree
         shell: bash
         # Create application-dev.yml and insert the dev-specific settings
 
