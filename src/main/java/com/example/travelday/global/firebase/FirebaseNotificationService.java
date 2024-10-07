@@ -91,7 +91,6 @@ public class FirebaseNotificationService {
     }
 
     private void sendNotificationToUser(FcmToken fcmToken, String content) {
-        log.info("========== sendNotificationToUser ==============");
         String response = firebaseMessagingService.sendNotification(fcmToken.getToken(), content);
 
         if (MessagingErrorCode.INVALID_ARGUMENT.name().equals(response) || MessagingErrorCode.UNREGISTERED.name().equals(response)) {

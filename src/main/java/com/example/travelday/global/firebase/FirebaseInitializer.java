@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -29,8 +30,10 @@ public class FirebaseInitializer {
             log.info("========= 파이어베이스 초기화 시작 ==========");
             log.info(serviceAccountFile);
 
+            FileInputStream serviceAccount = new FileInputStream("./src/main/resources/properties/TravelDayFirebaseService.json");
+
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(getFirebaseInfo()))
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(databaseUrl)
                     .build();
 
@@ -38,14 +41,5 @@ public class FirebaseInitializer {
         } catch (IOException e) {
             log.error(e.getMessage());
         }
-    }
-    private InputStream getFirebaseInfo() throws IOException {
-        Resource resource = new ClassPathResource(serviceAccountFile);
-        if (resource.exists()) {
-            log.info("====== 리소스 getinputstream ======");
-            log.info(resource.getInputStream().toString());
-            return resource.getInputStream();
-        }
-        throw new RuntimeException("firebase 키가 존재하지 않습니다.");
     }
 }
