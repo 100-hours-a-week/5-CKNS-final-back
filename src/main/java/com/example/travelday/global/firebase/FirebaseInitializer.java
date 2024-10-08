@@ -11,10 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 @Slf4j
 @Configuration
@@ -31,10 +28,12 @@ public class FirebaseInitializer {
         try {
             log.info("========= 파이어베이스 초기화 시작==========");
             log.info(serviceAccountFile);
-            File file = ResourceUtils.getFile("classpath:/TravelDayFirebaseService.json");
-            FileInputStream serviceAccount = new FileInputStream(file);
 
+            ClassPathResource resource = new ClassPathResource("TravelDayFirebaseService.json");
+            InputStream serviceAccount = new FileInputStream(resource.getFile());
+            log.info("========== 파일 읽기 ==========");
             log.info(serviceAccount.toString());
+
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(databaseUrl)
