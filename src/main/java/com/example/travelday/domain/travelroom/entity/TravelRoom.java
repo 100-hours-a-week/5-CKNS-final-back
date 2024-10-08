@@ -31,6 +31,9 @@ public class TravelRoom extends BaseTimeEntity {
     @Column(name = "end_date")
     private String endDate;
 
+    @Column(name = "user_count", nullable = false)
+    private int userCount = 1;
+
     @Builder
     public TravelRoom(String name, String startDate, String endDate) {
         this.name = name;

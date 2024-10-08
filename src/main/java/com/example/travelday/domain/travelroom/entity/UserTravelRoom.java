@@ -27,6 +27,9 @@ public class UserTravelRoom {
     @ManyToOne(fetch = FetchType.LAZY)
     private TravelRoom travelRoom;
 
+    @Column(name = "travel_room_name")
+    private String travelRoomName;
+
     public static UserTravelRoom create(TravelRoom savedTravelRoom, Member member) {
         UserTravelRoom userTravelRoom = new UserTravelRoom();
         userTravelRoom.member = member;

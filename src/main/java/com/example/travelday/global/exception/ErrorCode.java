@@ -27,6 +27,7 @@ public enum ErrorCode {
     TRAVEL_ROOM_NOT_FOUND(HttpStatus.BAD_REQUEST, "TR001", "존재하지 않는 여행방입니다."),
     USER_NOT_IN_TRAVEL_ROOM(HttpStatus.BAD_REQUEST, "TR002", "해당 여행방에 없는 회원입니다."),
     USER_DOES_NOT_JOIN_TRAVEL_ROOM(HttpStatus.FORBIDDEN, "TR003", "해당 회원이 속해있는 여행방이 없습니다."),
+    TRAVEL_ROOM_CLOSED(HttpStatus.BAD_REQUEST, "TR004", "여행방 여행날짜가 지났습니다."),
 
     // travel plan error
     TRAVEL_PLAN_NOT_FOUND(HttpStatus.BAD_REQUEST, "TP001", "존재하지 않는 여행 일정입니다."),
@@ -55,6 +56,8 @@ public enum ErrorCode {
     BAD_REQUEST_FLAG(HttpStatus.BAD_REQUEST, "IV002", "초대장 수락 여부 요청 형식이 잘못되었습니다."),
     ALREADY_IN_TRAVELROOM(HttpStatus.BAD_REQUEST, "IV003", "이미 여행방에 있는 회원입니다."),
     ALREADY_SEND_INVITATION(HttpStatus.BAD_REQUEST, "IV004", "이미 초대장을 보냈습니다."),
+    CANNOT_INVITE_SELF(HttpStatus.BAD_REQUEST, "IV005", "자기 자신을 초대할 수 없습니다."),
+    INVALID_INVITATION_STATUS(HttpStatus.BAD_REQUEST, "IV006", "유효하지 않은 초대장 상태입니다."),
 
     // wish error
     WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WH001", "위시를 찾을 수 없습니다."),

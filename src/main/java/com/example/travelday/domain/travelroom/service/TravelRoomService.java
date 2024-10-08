@@ -111,10 +111,11 @@ public class TravelRoomService {
 
         userTravelRoomRepository.delete(userTravelRoom);
 
-        boolean isUserRemaining = userTravelRoomRepository.existsByTravelRoomId(travelRoomId);
+        // 남은 유저 수 계산
+        int remainingUsers = userTravelRoomRepository.countByTravelRoomId(travelRoomId);
 
-        // 만약 남은 유저가 없다면 여행방 자체 삭제
-        if (!isUserRemaining) {
+        // 남은 유저가 없으면 여행방 삭제
+        if (remainingUsers == 0) {
             travelRoomRepository.deleteById(travelRoomId);
         }
     }
