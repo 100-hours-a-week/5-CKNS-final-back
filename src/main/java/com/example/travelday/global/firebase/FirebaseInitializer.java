@@ -25,6 +25,9 @@ public class FirebaseInitializer {
     @Value("${firebase.database-url}")
     private String databaseUrl;
 
+    @Value("${firebase.key}")
+    private String serviceKey;
+
     @PostConstruct
     public void initialize() {
         try {
@@ -45,16 +48,24 @@ public class FirebaseInitializer {
             log.info("========== JSON 파일 내용 ==========");
             log.info(content);
 
+
+
+            //
+
+            // serviceKey를 InputStream으로 변환
+            InputStream serviceAccountV2 = new ByteArrayInputStream(serviceKey.getBytes(StandardCharsets.UTF_8));
+
+            //
+
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccountV2))
                     .setDatabaseUrl(databaseUrl)
                     .build();
-
+            FirebaseApp.initializeApp(options);
             if (FirebaseApp.getApps().isEmpty()) {
                 throw new IllegalStateException("FirebaseApp not initialized yet.");
             }
 
-            FirebaseApp.initializeApp(options);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
