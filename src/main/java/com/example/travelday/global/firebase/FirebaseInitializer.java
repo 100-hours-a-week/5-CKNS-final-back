@@ -34,19 +34,19 @@ public class FirebaseInitializer {
             log.info("========= 파이어베이스 초기화 시작==========");
             log.info(serviceAccountFile);
 
-            ClassPathResource resource = new ClassPathResource("TravelDayFirebaseService.json");
-            InputStream serviceAccount = resource.getInputStream();
-            log.info("========== 파일 읽기 ==========");
-            log.info(serviceAccount.toString());
-            String content = String.valueOf( new InputStreamReader(serviceAccount, StandardCharsets.UTF_8));
+//            ClassPathResource resource = new ClassPathResource("TravelDayFirebaseService.json");
+//            InputStream serviceAccount = resource.getInputStream();
+//            log.info("========== 파일 읽기 ==========");
+//            log.info(serviceAccount.toString());
+//            String content = String.valueOf( new InputStreamReader(serviceAccount, StandardCharsets.UTF_8));
 
 //            String jsonContent = new BufferedReader(new InputStreamReader(serviceAccount, StandardCharsets.UTF_8))
 //                    .lines()
 //                    .collect(Collectors.joining("\n"));
 
             // JSON 파일 내용 출력
-            log.info("========== JSON 파일 내용 ==========");
-            log.info(content);
+//            log.info("========== JSON 파일 내용 ==========");
+//            log.info(content);
 
 
 
