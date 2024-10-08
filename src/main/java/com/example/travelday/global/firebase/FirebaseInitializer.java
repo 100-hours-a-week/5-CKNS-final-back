@@ -54,7 +54,7 @@ public class FirebaseInitializer {
 
             // serviceKey를 InputStream으로 변환
             InputStream serviceAccountV2 = new ByteArrayInputStream(serviceKey.getBytes(StandardCharsets.UTF_8));
-
+            log.info(serviceKey);
             //
 
             FirebaseOptions options = FirebaseOptions.builder()
