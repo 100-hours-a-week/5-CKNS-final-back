@@ -12,6 +12,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Configuration
@@ -33,6 +35,14 @@ public class FirebaseInitializer {
             InputStream serviceAccount = resource.getInputStream();
             log.info("========== 파일 읽기 ==========");
             log.info(serviceAccount.toString());
+
+            String jsonContent = new BufferedReader(new InputStreamReader(serviceAccount, StandardCharsets.UTF_8))
+                    .lines()
+                    .collect(Collectors.joining("\n"));
+
+            // JSON 파일 내용 출력
+            log.info("========== JSON 파일 내용 ==========");
+            log.info(jsonContent);
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
