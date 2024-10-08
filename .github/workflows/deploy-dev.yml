@@ -29,8 +29,9 @@ jobs:
           cd ./src/main/resources
           touch application-my.yml
           echo "${{ secrets.APPLICATION_DEV_YML_CONTENT }}" > application-my.yml
-          touch TravelDayFirebaseService.json
-          echo "${{ secrets.APPLICATION_PROPERTIES_JSON }}" > TravelDayFirebaseService.json
+          touch ./TravelDayFirebaseService.json
+          echo "${{ secrets.APPLICATION_PROPERTIES_JSON }}" > ./TravelDayFirebaseService.json
+          ls -al .
           sudo apt install tree
           cd ../../../../
           tree
