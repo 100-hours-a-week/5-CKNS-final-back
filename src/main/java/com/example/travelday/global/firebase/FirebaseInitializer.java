@@ -30,7 +30,7 @@ public class FirebaseInitializer {
             log.info(serviceAccountFile);
 
             ClassPathResource resource = new ClassPathResource("TravelDayFirebaseService.json");
-            InputStream serviceAccount = new FileInputStream(resource.getFile());
+            InputStream serviceAccount = resource.getInputStream();
             log.info("========== 파일 읽기 ==========");
             log.info(serviceAccount.toString());
 
