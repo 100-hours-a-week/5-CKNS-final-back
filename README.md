@@ -148,7 +148,7 @@
 ## 📝 데이터베이스 설계 ERD
 
 ---
-![service_architecture.png](./docs/images/erd.png)
+<img width="1167" alt="image" src="https://github.com/user-attachments/assets/e977b2d2-95f9-4b70-a4a6-be6f843f38c5">
 
 ## ✅ 개발 문서 
 
