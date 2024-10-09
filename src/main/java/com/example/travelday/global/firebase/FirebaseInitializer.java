@@ -25,47 +25,20 @@ public class FirebaseInitializer {
     @Value("${firebase.database-url}")
     private String databaseUrl;
 
-    @Value("${firebase.key}")
-    private String serviceKey;
-
     @PostConstruct
     public void initialize() {
         try {
-            log.info("========= 파이어베이스 초기화 시작==========");
+            log.info("========= 파이어베이스 초기화 시작 ==========");
             log.info(serviceAccountFile);
 
-//            ClassPathResource resource = new ClassPathResource("TravelDayFirebaseService.json");
-//            InputStream serviceAccount = resource.getInputStream();
-//            log.info("========== 파일 읽기 ==========");
-//            log.info(serviceAccount.toString());
-//            String content = String.valueOf( new InputStreamReader(serviceAccount, StandardCharsets.UTF_8));
-
-//            String jsonContent = new BufferedReader(new InputStreamReader(serviceAccount, StandardCharsets.UTF_8))
-//                    .lines()
-//                    .collect(Collectors.joining("\n"));
-
-            // JSON 파일 내용 출력
-//            log.info("========== JSON 파일 내용 ==========");
-//            log.info(content);
-
-
-
-            //
-
-            // serviceKey를 InputStream으로 변환
-            InputStream serviceAccountV2 = new ByteArrayInputStream(serviceKey.getBytes(StandardCharsets.UTF_8));
-            log.info(serviceKey);
-            //
+            FileInputStream serviceAccount = new FileInputStream("./src/main/resources/properties/TravelDayFirebaseService.json");
 
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccountV2))
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(databaseUrl)
                     .build();
-            FirebaseApp.initializeApp(options);
-            if (FirebaseApp.getApps().isEmpty()) {
-                throw new IllegalStateException("FirebaseApp not initialized yet.");
-            }
 
+            FirebaseApp.initializeApp(options);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
