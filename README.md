@@ -135,8 +135,13 @@
 
 ## 🗺 서비스 아키텍처 Architecture
 
+### system flow
 ---
 ![service_architecture.png](./docs/images/service_architecture.png)
+
+### user flow
+---
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8b6f698e-8a67-4ad1-94b0-53ee956264c9/b5d3562b-8188-47b3-ae95-b3db603c57e1/image.png)
 
 ## 📝 데이터베이스 설계 ERD
 
