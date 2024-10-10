@@ -14,6 +14,7 @@ import com.example.travelday.global.exception.ErrorCode;
 import com.google.firebase.messaging.MessagingErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@DependsOn("firebaseInitializer")
 public class FirebaseNotificationService {
 
     private final MemberRepository memberRepository;

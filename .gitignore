@@ -13,6 +13,7 @@ application-dev.yml
 
 # Ignore TravelDayFirebaseService.json
 src/main/resources/properties/TravelDayFirebaseService.json
+src/main/resources
 
 # User-specific stuff
 .idea/**/workspace.xml

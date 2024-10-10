@@ -19,7 +19,6 @@ import java.util.Optional;
 public class FcmService {
 
     private final MemberRepository memberRepository;
-
     private final FcmTokenRepository fcmTokenRepository;
 
     @Transactional
