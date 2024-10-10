@@ -56,6 +56,7 @@ public class ChatService {
                     .toList();
     }
 
+    // TODO: n+1 문제 발생할 듯 => 쿼리 찍어보기
     public List<ChatResDto> getLastChatsByTravelRoomId(String userId) {
 
         Member member = memberRepository.findByUserId(userId)
@@ -64,10 +65,11 @@ public class ChatService {
         List<UserTravelRoom> userTravelRooms = userTravelRoomRepository.findByMember(member)
                                         .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
 
+        // TODO: usertravelroom이 늘어날때마다 늘어나는 문제가 생김.
         List<Chat> lastchats = userTravelRooms.stream()
                                 .map(userTravelRoom -> chatRepository.findTopByTravelRoomIdOrderByCreatedAtDesc(userTravelRoom.getTravelRoom().getId()))
                                 .filter(Optional::isPresent) // 채팅이 존재하는 경우만 필터링
-                                .map(Optional::get)           // Optional에서 Chat 객체 추출
+                                .map(Optional::get) // Optional에서 Chat 객체 추출
                                 .collect(Collectors.toList());
 
         return lastchats.stream()
