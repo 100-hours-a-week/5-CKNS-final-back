@@ -22,7 +22,7 @@ public class FcmController {
             @RequestBody FcmCreateReqDto fcmCreateReqDto,
             @AuthenticationPrincipal UserDetails userDetails
             ) {
-        fcmService.createFcmToken(userDetails.getUsername(), fcmCreateReqDto.fcmToken());
+//        fcmService.createFcmToken(userDetails.getUsername(), fcmCreateReqDto.fcmToken());
         return ResponseEntity.ok(ApiResponseEntity.of(ResponseText.SUCCESS_CREATE_FCM_TOKEN));
     }
 }
