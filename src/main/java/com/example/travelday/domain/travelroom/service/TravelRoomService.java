@@ -3,6 +3,7 @@ package com.example.travelday.domain.travelroom.service;
 import com.example.travelday.domain.auth.dto.response.MemberInfoResDto;
 import com.example.travelday.domain.auth.entity.Member;
 import com.example.travelday.domain.auth.repository.MemberRepository;
+import com.example.travelday.domain.invitation.repository.InvitationRepository;
 import com.example.travelday.domain.settlement.repository.SettlementRepository;
 import com.example.travelday.domain.travelroom.dto.request.TravelRoomReqDto;
 import com.example.travelday.domain.travelroom.dto.response.TravelRoomMembersResDto;
@@ -32,6 +33,8 @@ public class TravelRoomService {
     private final TravelRoomRepository travelRoomRepository;
 
     private final SettlementRepository settlementRepository;
+
+    private final InvitationRepository invitationRepository;
 
     private final UserTravelRoomRepository userTravelRoomRepository;
 
@@ -116,6 +119,7 @@ public class TravelRoomService {
 
         // 남은 유저가 없으면 여행방 삭제
         if (remainingUsers == 0) {
+            invitationRepository.deleteAllByTravelRoomId(travelRoomId);
             travelRoomRepository.deleteById(travelRoomId);
         }
     }
