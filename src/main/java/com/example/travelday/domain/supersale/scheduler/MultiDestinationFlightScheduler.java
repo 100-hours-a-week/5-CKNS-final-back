@@ -19,23 +19,20 @@ public class MultiDestinationFlightScheduler {
 
     private final FlightService flightService;
 
-    @Scheduled(cron = "0 1 0 * * ?", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 16 23 * * ?", zone = "Asia/Seoul")
     public void fetchAndStoreFlightOffers() {
 
         log.info("===== fetchAndStoreFlightOffers for Multiple Destinations =====");
 
-        String icn= "ICN";
+        String icn= "CJU";
         String adults = "1";
 
         // 대상 목적지 목록
-        String[] airportList = {"PQC", "OIT", "CNX", "TPE", "NRT",
-            "DPS", "OKA", "FUK", "JFK", "NGO",
-            "CDG", "KIX", "LGA", "SYD", "MAD",
-            "LHR", "VIE", "CDG", "FRA", "FCO"
+        String[] airportList = {"GMP"
         };
 
         // 현재 날짜 기준 하루 뒤 편도
-        LocalDate departureDate = LocalDate.now().plusDays(1);
+        LocalDate departureDate = LocalDate.now().plusDays(4);
         String departDate = departureDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
 
         // 각 목적지에 대해 검색 및 저장

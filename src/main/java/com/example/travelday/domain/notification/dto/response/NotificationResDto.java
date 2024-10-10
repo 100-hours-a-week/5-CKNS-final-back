@@ -3,7 +3,6 @@ package com.example.travelday.domain.notification.dto.response;
 import com.example.travelday.domain.notification.entity.Notification;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Builder

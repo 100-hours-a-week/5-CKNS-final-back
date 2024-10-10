@@ -51,6 +51,7 @@ public class NotificationService {
 
         List<Notification> notificationList = notificationRepository.findAllByMemberAndIsCheckedFalseOrderByCreatedTimeDesc(member);
         List<NotificationResDto> notificationResDtoList = new ArrayList<>();
+
         for (Notification notification : notificationList) {
             Invitation invitation = invitationRepository.findByInviteeAndTravelRoomId(notification.getMember(), notification.getTravelRoomId());
             notificationResDtoList.add(NotificationResDto.of(notification, invitation.getId()));
