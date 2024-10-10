@@ -8,6 +8,7 @@ import com.example.travelday.domain.supersale.entity.Airport;
 import com.example.travelday.domain.supersale.entity.FlightOffer;
 import com.example.travelday.domain.supersale.repository.AirportRepository;
 import com.example.travelday.domain.supersale.repository.FlightOfferRepository;
+import com.example.travelday.domain.supersale.repository.RawFlightOfferRepository;
 import com.example.travelday.domain.supersale.utils.AmadeusConnect;
 import com.example.travelday.global.exception.CustomException;
 import com.example.travelday.global.exception.ErrorCode;
@@ -38,6 +39,7 @@ public class FlightService {
     private final FlightOfferRepository flightOfferRepository;
     private final AirportRepository airportRepository;
     private final BucketUtils bucketUtils;
+    private final RawFlightOfferRepository rawFlightOfferRepository;
 
     @Value("${spring.data.redis.timeout}")
     private long redisTTL;
@@ -84,8 +86,6 @@ public class FlightService {
                 throw new CustomException(ErrorCode.REDIS_SAVE_ERROR);
             }
 
-
-
         } catch (ResponseException e) {
             log.info(e.getMessage());
         }
@@ -101,8 +101,6 @@ public class FlightService {
         List<FlightResDto> flightResDtos = new ArrayList<>();
         for (String des : destinations) {
             String redisKey = "flightOffer:ICN:" + des + ":" +  departDate;
-
-            log.info("redisKey: " + redisKey);
 
             ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
             String cachedDataJson = (String) valueOperations.get(redisKey);

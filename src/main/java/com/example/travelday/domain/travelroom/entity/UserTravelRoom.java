@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "user_travel_room")
+@Table(name = "user_travel_room", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "travel_room_id"})
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserTravelRoom {
 
@@ -24,6 +26,9 @@ public class UserTravelRoom {
     @JoinColumn(name = "travel_room_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private TravelRoom travelRoom;
+
+    @Column(name = "travel_room_name")
+    private String travelRoomName;
 
     public static UserTravelRoom create(TravelRoom savedTravelRoom, Member member) {
         UserTravelRoom userTravelRoom = new UserTravelRoom();

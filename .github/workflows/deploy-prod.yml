@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - test2  # test 브랜치 트리거 추가
 
 jobs:
   build:
@@ -30,10 +29,13 @@ jobs:
 
       - name: Create application-my.yml file
         run: |
-          mkdir -p ./src/main/resources
+          mkdir -p ./src/main/resources/properties
           cd ./src/main/resources
           touch application-my.yml
-          echo "${{ secrets.APPLICATION_MY_YML_CONTENT }}" > application-my.yml
+          echo "${{ secrets.APPLICATION_PROD_YML_CONTENT }}" > application-my.yml
+          cd ./properties
+          touch TravelDayFirebaseService.json
+          echo "${{ secrets.APPLICATION_PROPERTIES_JSON }}" > TravelDayFirebaseService.json
         shell: bash
         # application-my.yml 파일을 생성하고 설정을 삽입
 
