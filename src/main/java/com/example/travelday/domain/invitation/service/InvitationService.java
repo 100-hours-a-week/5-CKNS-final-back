@@ -45,10 +45,10 @@ public class InvitationService {
                         .orElseThrow(() -> new CustomException(ErrorCode.TRAVEL_ROOM_NOT_FOUND));
 
         // 여행방이 종료된 경우 예외 처리 (예시로 endDate와 비교)
-        LocalDate endDate = LocalDate.parse(travelRoom.getEndDate());
-        if (endDate.isBefore(LocalDate.now()) || endDate.equals(LocalDate.now())) {
-            throw new CustomException(ErrorCode.TRAVEL_ROOM_CLOSED);
-        }
+//        LocalDate endDate = LocalDate.parse(travelRoom.getEndDate());
+//        if (endDate.isBefore(LocalDate.now())) {
+//            throw new CustomException(ErrorCode.TRAVEL_ROOM_CLOSED);
+//        }
         // 보내는 이 Member에 있는 지 검증
         Member sender = memberRepository.findByUserId(userId)
                         .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
