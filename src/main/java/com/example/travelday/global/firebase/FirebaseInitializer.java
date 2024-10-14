@@ -8,9 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.util.ResourceUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Configuration
@@ -25,17 +28,17 @@ public class FirebaseInitializer {
     @PostConstruct
     public void initialize() {
         try {
-            InputStream serviceAccount =
-                    new ClassPathResource(serviceAccountFile).getInputStream();
+            log.info("========= 파이어베이스 초기화 시작 ==========");
+            log.info(serviceAccountFile);
 
-            FirebaseOptions options = new FirebaseOptions.Builder()
+            FileInputStream serviceAccount = new FileInputStream("./src/main/resources/properties/TravelDayFirebaseService.json");
+
+            FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl(databaseUrl)
                     .build();
 
-            if (FirebaseApp.getApps().isEmpty()) {
-                FirebaseApp.initializeApp(options);
-            }
+            FirebaseApp.initializeApp(options);
         } catch (IOException e) {
             log.error(e.getMessage());
         }

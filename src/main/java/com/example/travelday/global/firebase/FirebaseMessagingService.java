@@ -2,10 +2,12 @@ package com.example.travelday.global.firebase;
 
 import com.google.firebase.messaging.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@DependsOn("firebaseInitializer")
 public class FirebaseMessagingService {
 
     /**

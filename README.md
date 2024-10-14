@@ -135,13 +135,20 @@
 
 ## 🗺 서비스 아키텍처 Architecture
 
+### system flow
 ---
 ![service_architecture.png](./docs/images/service_architecture.png)
 
+---
+### user flow
+---
+![image](https://github.com/user-attachments/assets/fc07113d-16fe-40cf-a951-3cc66f2b692d)
+
+---
 ## 📝 데이터베이스 설계 ERD
 
 ---
-![service_architecture.png](./docs/images/erd.png)
+<img width="1167" alt="image" src="https://github.com/user-attachments/assets/e977b2d2-95f9-4b70-a4a6-be6f843f38c5">
 
 ## ✅ 개발 문서 
 
