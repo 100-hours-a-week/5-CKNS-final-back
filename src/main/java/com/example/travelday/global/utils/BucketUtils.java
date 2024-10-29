@@ -44,7 +44,6 @@ public class BucketUtils {
     public long getAvailableTokens() {
         long availableTokens = bucket.getAvailableTokens();
 
-        // 최대 토큰 수를 초과한 경우 알림 발송
         if (availableTokens > MAX_BUCKET_TOKENS) {
             discordWebhookNotifier.sendDiscordNotification("🚫 Error: Bucket tokens exceeded the limit.");
         }
